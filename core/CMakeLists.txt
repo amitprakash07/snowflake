@@ -8,6 +8,12 @@ set(VS_FILTER_NAME ${VS_FILTER_NAME}/Engine)
 include(${CMAKE_CURRENT_SOURCE_DIR}/algorithms/algorithms.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/common/common.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/graphics/graphics.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/physics/physics.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/networking/networking.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/maths/maths.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/input/input.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/os/win32/windowing/win32.windowing.cmake)
+
 
 set(CURRENT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/engine_defs.h
                     ${CMAKE_CURRENT_SOURCE_DIR}/engine_core.h
