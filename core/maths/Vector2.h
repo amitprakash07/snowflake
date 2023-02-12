@@ -8,75 +8,71 @@ This class represents a position or direction
 // Class Declaration
 //==================
 
-namespace Engine
-{
-	namespace Math
-	{
-		class Vector2
-		{
-			// Interface
-			//==========
+namespace Engine {
+namespace Math {
+class Vector2 {
+  // Interface
+  //==========
 
-		public:
+ public:
+  // Addition
+  Vector2 operator+(const Vector2& i_rhs) const;
+  Vector2& operator+=(const Vector2& i_rhs);
 
-			// Addition
-			Vector2 operator +(const Vector2& i_rhs) const;
-			Vector2& operator +=(const Vector2& i_rhs);
+  // Subtraction / Negation
+  Vector2 operator-(const Vector2& i_rhs) const;
+  Vector2& operator-=(const Vector2& i_rhs);
+  Vector2 operator-() const;
 
-			// Subtraction / Negation
-			Vector2 operator -(const Vector2& i_rhs) const;
-			Vector2& operator -=(const Vector2& i_rhs);
-			Vector2 operator -() const;
+  // Multiplication
+  Vector2 operator*(const float i_rhs) const;
+  Vector2& operator*=(const float i_rhs);
+  friend Vector2 operator*(const float i_lhs, const Vector2& i_rhs);
 
-			// Multiplication
-			Vector2 operator *(const float i_rhs) const;
-			Vector2& operator *=(const float i_rhs);
-			friend Vector2 operator *(const float i_lhs, const Vector2& i_rhs);
+  // Division
+  Vector2 operator/(const float i_rhs) const;
+  Vector2& operator/=(const float i_rhs);
 
-			// Division
-			Vector2 operator /(const float i_rhs) const;
-			Vector2& operator /=(const float i_rhs);
+  // Length / Normalization
+  float GetLength() const;
+  float Normalize();
+  Vector2 CreateNormalized() const;
 
-			// Length / Normalization
-			float GetLength() const;
-			float Normalize();
-			Vector2 CreateNormalized() const;
+  // Products
+  friend float Dot(const Vector2& i_lhs, const Vector2& i_rhs);
+  friend Vector2 Cross(const Vector2& i_lhs, const Vector2& i_rhs);
 
-			// Products
-			friend float Dot(const Vector2& i_lhs, const Vector2& i_rhs);
-			friend Vector2 Cross(const Vector2& i_lhs, const Vector2& i_rhs);
+  // Comparison
+  bool operator==(const Vector2& i_rhs) const;
+  bool operator!=(const Vector2& i_rhs) const;
 
-			// Comparison
-			bool operator ==(const Vector2& i_rhs) const;
-			bool operator !=(const Vector2& i_rhs) const;
+  // Initialization / Shut Down
+  //---------------------------
 
-			// Initialization / Shut Down
-			//---------------------------
+  Vector2(const float i_x = 0.0f, const float i_y = 0.0f,
+          const float i_z = 0.0f);
 
-			Vector2(const float i_x = 0.0f, const float i_y = 0.0f, const float i_z = 0.0f);
+  // Data
+  //=====
 
-			// Data
-			//=====
+  // A vector class is one of the very few examples where I make data public
+ public:
+  float x, y;
 
-			// A vector class is one of the very few examples where I make data public
-		public:
+  // Friend Classes
+  //===============
 
-			float x, y;
+  friend class Matrix4x4;
+  friend class Quaternion;
+};
 
-			// Friend Classes
-			//===============
+// Friend Function Declarations
+//=============================
 
-			friend class Matrix4x4;
-			friend class Quaternion;
-		};
+Vector2 operator*(const float i_lhs, const Vector2& i_rhs);
+float Dot(const Vector2& i_lhs, const Vector2& i_rhs);
+Vector2 Cross(const Vector2& i_lhs, const Vector2& i_rhs);
+}  // namespace Math
+}  // namespace Engine
 
-		// Friend Function Declarations
-		//=============================
-
-		Vector2 operator*(const float i_lhs, const Vector2& i_rhs);
-		float Dot(const Vector2& i_lhs, const Vector2& i_rhs);
-		Vector2 Cross(const Vector2& i_lhs, const Vector2& i_rhs);
-	}
-}
-
-#endif	// _MATH_CVECTOR_H
+#endif  // _MATH_CVECTOR_H

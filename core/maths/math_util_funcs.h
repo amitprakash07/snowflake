@@ -7,29 +7,22 @@ This file contains math-related functions
 
 #include "Math.h"
 
-namespace Engine
-{
-	namespace Math
-	{
-		// Interface
-		//==========
+namespace Engine {
+namespace Math {
+// Interface
+//==========
 
-		extern const float Pi;
+extern const float Pi;
 
-		float ConvertDegreesToRadians(const float i_degrees);
+float ConvertDegreesToRadians(const float i_degrees);
 
-		bool InRange(float valToCheck, float min, float max,
-			bool minInclusive = true, bool maxInclusive = true);
+bool InRange(float valToCheck, float min, float max, bool minInclusive = true,
+             bool maxInclusive = true);
 
-		float scaleAndBias(float valueToConvert,
-			float oldRangeMin,
-			float oldRangeMax,
-			float newRangeMin,
-			float newRangeMax);
+float scaleAndBias(float valueToConvert, float oldRangeMin, float oldRangeMax,
+                   float newRangeMin, float newRangeMax);
 
+}  // namespace Math
+}  // namespace Engine
 
-		
-	}
-}
-
-#endif	// EAE6320_MATH_FUNCTIONS_H
+#endif  // EAE6320_MATH_FUNCTIONS_H

@@ -10,221 +10,183 @@
 // Static Data Initialization
 //===========================
 
-
 // Interface
 //==========
 
 // Addition
-Engine::Math::Vector3 Engine::Math::Vector3::operator +( const Vector3& i_rhs ) const
-{
-	return Vector3( x + i_rhs.x, y + i_rhs.y, z + i_rhs.z );
+Engine::Math::Vector3 Engine::Math::Vector3::operator+(
+    const Vector3& i_rhs) const {
+  return Vector3(x + i_rhs.x, y + i_rhs.y, z + i_rhs.z);
 }
 
-
-Engine::Math::Vector3& Engine::Math::Vector3::operator +=( const Vector3& i_rhs )
-{
-	x += i_rhs.x;
-	y += i_rhs.y;
-	z += i_rhs.z;
-	return *this;
+Engine::Math::Vector3& Engine::Math::Vector3::operator+=(const Vector3& i_rhs) {
+  x += i_rhs.x;
+  y += i_rhs.y;
+  z += i_rhs.z;
+  return *this;
 }
 
 // Subtraction / Negation
-Engine::Math::Vector3 Engine::Math::Vector3::operator -( const Vector3& i_rhs ) const
-{
-	return Vector3( x - i_rhs.x, y - i_rhs.y, z - i_rhs.z );
+Engine::Math::Vector3 Engine::Math::Vector3::operator-(
+    const Vector3& i_rhs) const {
+  return Vector3(x - i_rhs.x, y - i_rhs.y, z - i_rhs.z);
 }
 
-
-Engine::Math::Vector3& Engine::Math::Vector3::operator -=( const Vector3& i_rhs )
-{
-	x -= i_rhs.x;
-	y -= i_rhs.y;
-	z -= i_rhs.z;
-	return *this;
+Engine::Math::Vector3& Engine::Math::Vector3::operator-=(const Vector3& i_rhs) {
+  x -= i_rhs.x;
+  y -= i_rhs.y;
+  z -= i_rhs.z;
+  return *this;
 }
 
-
-Engine::Math::Vector3 Engine::Math::Vector3::operator -() const
-{
-	return Vector3( -x, -y, -z );
+Engine::Math::Vector3 Engine::Math::Vector3::operator-() const {
+  return Vector3(-x, -y, -z);
 }
 
 // Multiplication
-Engine::Math::Vector3 Engine::Math::Vector3::operator *( const float i_rhs ) const
-{
-	return Vector3( x * i_rhs, y * i_rhs, z * i_rhs );
+Engine::Math::Vector3 Engine::Math::Vector3::operator*(
+    const float i_rhs) const {
+  return Vector3(x * i_rhs, y * i_rhs, z * i_rhs);
 }
 
-
-Engine::Math::Vector3& Engine::Math::Vector3::operator *=( const float i_rhs )
-{
-	x *= i_rhs;
-	y *= i_rhs;
-	z *= i_rhs;
-	return *this;
+Engine::Math::Vector3& Engine::Math::Vector3::operator*=(const float i_rhs) {
+  x *= i_rhs;
+  y *= i_rhs;
+  z *= i_rhs;
+  return *this;
 }
 
-Engine::Math::Vector3 Engine::Math::Vector3::operator*(const Vector3 i_rhs) const
-{
-	Vector3 tempVector;
-	tempVector.x = x * i_rhs.x;
-	tempVector.y = y * i_rhs.y;
-	tempVector.z = z * i_rhs.z;
-	return tempVector;
+Engine::Math::Vector3 Engine::Math::Vector3::operator*(
+    const Vector3 i_rhs) const {
+  Vector3 tempVector;
+  tempVector.x = x * i_rhs.x;
+  tempVector.y = y * i_rhs.y;
+  tempVector.z = z * i_rhs.z;
+  return tempVector;
 }
 
-
-
-Engine::Math::Vector3 operator *( const float i_lhs, const Engine::Math::Vector3& i_rhs )
-{
-	return i_rhs * i_lhs;
+Engine::Math::Vector3 operator*(const float i_lhs,
+                                const Engine::Math::Vector3& i_rhs) {
+  return i_rhs * i_lhs;
 }
 
 // Division
-Engine::Math::Vector3 Engine::Math::Vector3::operator /( const float i_rhs ) const
-{
-	assert( std::abs( i_rhs ) > Epsilon);
-	const float rhs_reciprocal = 1.0f / i_rhs;
-	return Vector3( x * rhs_reciprocal, y * rhs_reciprocal, z * rhs_reciprocal );
+Engine::Math::Vector3 Engine::Math::Vector3::operator/(
+    const float i_rhs) const {
+  assert(std::abs(i_rhs) > Epsilon);
+  const float rhs_reciprocal = 1.0f / i_rhs;
+  return Vector3(x * rhs_reciprocal, y * rhs_reciprocal, z * rhs_reciprocal);
 }
 
-Engine::Math::Vector3& Engine::Math::Vector3::operator /=( const float i_rhs )
-{
-	assert( std::abs( i_rhs ) > Epsilon);
-	const float rhs_reciprocal = 1.0f / i_rhs;
-	x *= rhs_reciprocal;
-	y *= rhs_reciprocal;
-	z *= rhs_reciprocal;
-	return *this;
+Engine::Math::Vector3& Engine::Math::Vector3::operator/=(const float i_rhs) {
+  assert(std::abs(i_rhs) > Epsilon);
+  const float rhs_reciprocal = 1.0f / i_rhs;
+  x *= rhs_reciprocal;
+  y *= rhs_reciprocal;
+  z *= rhs_reciprocal;
+  return *this;
 }
 
 // Length / Normalization
-float Engine::Math::Vector3::GetLength() const
-{
-	return std::sqrt( ( x * x ) + ( y * y ) + ( z * z ) );
+float Engine::Math::Vector3::GetLength() const {
+  return std::sqrt((x * x) + (y * y) + (z * z));
 }
 
-float Engine::Math::Vector3::Normalize()
-{
-	const float length = GetLength();
-	assert( length > Epsilon);
-	operator /=( length );
-	return length;
+float Engine::Math::Vector3::Normalize() {
+  const float length = GetLength();
+  assert(length > Epsilon);
+  operator/=(length);
+  return length;
 }
 
-Engine::Math::Vector3 Engine::Math::Vector3::CreateNormalized() const
-{
-	const float length = GetLength();
-	assert( length > Epsilon );
-	const float length_reciprocal = 1.0f / length;
-	return Vector3( x * length_reciprocal, y * length_reciprocal, z * length_reciprocal );
+Engine::Math::Vector3 Engine::Math::Vector3::CreateNormalized() const {
+  const float length = GetLength();
+  assert(length > Epsilon);
+  const float length_reciprocal = 1.0f / length;
+  return Vector3(x * length_reciprocal, y * length_reciprocal,
+                 z * length_reciprocal);
 }
 
 // Products
-float Engine::Math::Vector3::dot(const Vector3& i_rhs) const
-{
-	return (x*i_rhs.x + y* i_rhs.y + z* i_rhs.z);
+float Engine::Math::Vector3::dot(const Vector3& i_rhs) const {
+  return (x * i_rhs.x + y * i_rhs.y + z * i_rhs.z);
 }
 
+Engine::Math::Vector3 Engine::Math::Vector3::Cross(const Vector3& i_rhs) const {
+  /*
 
-Engine::Math::Vector3 Engine::Math::Vector3::Cross(const Vector3& i_rhs) const
-{
-	/*
+  r = ai + bj + ck
+  s = di + ej + fk
+  r cross(s) = (bf-ce)i + (cd-af)j + (ae-bd)k
+  or in determinant form
+  r cross(s) = b	c  i   + a	c  j  + a	b k
+  e	f		 d	f       d	e
 
-	r = ai + bj + ck
-	s = di + ej + fk
-	r cross(s) = (bf-ce)i + (cd-af)j + (ae-bd)k
-	or in determinant form
-	r cross(s) = b	c  i   + a	c  j  + a	b k
-	e	f		 d	f       d	e
-
-	*/
-	return Vector3(
-		(y * i_rhs.z) - (z * i_rhs.y),
-		(z * i_rhs.x) - (x * i_rhs.z),
-		(x * i_rhs.y) - (y * i_rhs.x));
+  */
+  return Vector3((y * i_rhs.z) - (z * i_rhs.y), (z * i_rhs.x) - (x * i_rhs.z),
+                 (x * i_rhs.y) - (y * i_rhs.x));
 }
-
 
 // Comparison
-bool Engine::Math::Vector3::operator ==( const Vector3& i_rhs ) const
-{
-	// Use & rather than && to prevent branches (all three comparisons will be evaluated)
-	return ( x == i_rhs.x ) & ( y == i_rhs.y ) & ( z == i_rhs.z );
+bool Engine::Math::Vector3::operator==(const Vector3& i_rhs) const {
+  // Use & rather than && to prevent branches (all three comparisons will be
+  // evaluated)
+  return (x == i_rhs.x) & (y == i_rhs.y) & (z == i_rhs.z);
 }
 
-bool Engine::Math::Vector3::operator !=( const Vector3& i_rhs ) const
-{
-	// Use | rather than || to prevent branches (all three comparisons will be evaluated)
-	return ( x != i_rhs.x ) | ( y != i_rhs.y ) | ( z != i_rhs.z );
+bool Engine::Math::Vector3::operator!=(const Vector3& i_rhs) const {
+  // Use | rather than || to prevent branches (all three comparisons will be
+  // evaluated)
+  return (x != i_rhs.x) | (y != i_rhs.y) | (z != i_rhs.z);
 }
 
 // Initialization / Shut Down
 //---------------------------
 
-Engine::Math::Vector3::Vector3( const float i_x, const float i_y, const float i_z )
-	:
-	x( i_x ), y( i_y ), z( i_z )
-{
+Engine::Math::Vector3::Vector3(const float i_x, const float i_y,
+                               const float i_z)
+    : x(i_x), y(i_y), z(i_z) {}
 
+std::string Engine::Math::Vector3::toString() const {
+  std::string returnString;
+  returnString = std::to_string(x) + std::to_string(y) + std::to_string(z);
+  return returnString;
 }
 
-
-std::string Engine::Math::Vector3::toString() const
-{
-	std::string returnString;
-	returnString = std::to_string(x) + std::to_string(y) + std::to_string(z);
-	return returnString;
+float* Engine::Math::Vector3::toFloatArray() const {
+  float floatArray[3];
+  floatArray[0] = x;
+  floatArray[1] = y;
+  floatArray[2] = z;
+  return floatArray;
 }
 
-
-
-float* Engine::Math::Vector3::toFloatArray() const
-{
-	float floatArray[3];
-	floatArray[0] = x;
-	floatArray[1] = y;
-	floatArray[2] = z;
-	return floatArray;
+void Engine::Math::Vector3::printVector() const {
+  std::cout << "x = " << x << ", y = " << y << ", z= " << z;
+  std::cout << std::endl;
 }
 
-
-
-void Engine::Math::Vector3::printVector() const
-{
-	std::cout << "x = " << x << ", y = " << y << ", z= " << z;
-	std::cout << std::endl;
+float& Engine::Math::Vector3::operator[](int iIndex) {
+  if (iIndex < 3 && iIndex >= 0) {
+    switch (iIndex) {
+      case 0:
+        return x;
+      case 1:
+        return y;
+      case 2:
+        return z;
+    }
+  }
+  float* garbage = new float;
+  *garbage = -1.0f;
+  return *garbage;
 }
 
-float& Engine::Math::Vector3::operator[](int iIndex)
-{
-	if(iIndex < 3 && iIndex >=0)
-	{
-		switch(iIndex)
-		{
-		case 0:
-			return x;			
-		case 1:
-			return y;			
-		case 2:
-			return z;			
-		}
-	}
-	float * garbage = new float;
-	*garbage = -1.0f;
-	return *garbage;
+float Engine::Math::Vector3::ScalarTripleProduct(Vector3 iA, Vector3 iB) const {
+  Vector3 temp = Vector3(x, y, z);
+  Vector3 m = temp.Cross(iA);
+  return iB.dot(m);
 }
-
-
-float Engine::Math::Vector3::ScalarTripleProduct(Vector3 iA, Vector3 iB) const
-{
-	Vector3 temp = Vector3(x, y, z);
-	Vector3 m = temp.Cross(iA);
-	return iB.dot(m);
-}
-
-
 
 /*
 int TestTriangleAABB(Point v0, Point v1, Point v2, AABB b)
@@ -264,4 +226,3 @@ p.d = Dot(p.n, v0);
 return TestAABBPlane(b, p);
 }
 */
-
