@@ -1,3 +1,4 @@
-bld*
-build*
-temp
+bld/
+build/
+temp/
+output/
