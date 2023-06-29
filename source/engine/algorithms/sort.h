@@ -1,5 +1,5 @@
-#ifndef ALGORITHMS_SORT_H
-#define ALGORITHMS_SORT_H
+#ifndef ENGINE_ALGORITHMS_SORT_H
+#define ENGINE_ALGORITHMS_SORT_H
 
 #include "common/defs.h"
 

@@ -1,5 +1,5 @@
-#ifndef __HASHED_STRING_H
-#define __HASHED_STRING_H
+#ifndef ENGINE_COMMON_HASHED_STRING_H
+#define ENGINE_COMMON_HASHED_STRING_H
 
 #include "RTTI.h"
 

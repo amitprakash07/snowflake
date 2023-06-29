@@ -1,5 +1,5 @@
-#ifndef ALGORITHMS_OCTREE_H
-#define ALGORITHMS_OCTREE_H
+#ifndef ENGINE_ALGORITHMS_OCTREE_H
+#define ENGINE_ALGORITHMS_OCTREE_H
 
 #include <vector>
 #include <algorithm>

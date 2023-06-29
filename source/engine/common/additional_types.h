@@ -1,5 +1,5 @@
-#ifndef ADDITIONAL_TYPES_H
-#define ADDITIONAL_TYPES_H
+#ifndef ENGINE_COMMON_ADDITIONAL_TYPES_H
+#define ENGINE_COMMON_ADDITIONAL_TYPES_H
 
 #include <cstdint>
 #include <cstring>

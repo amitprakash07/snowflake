@@ -1,5 +1,5 @@
-#ifndef __I_MESSAGE_HANDLER_H
-#define __I_MESSAGE_HANDLER_H
+#ifndef ENGINE_COMMON_MESSAGE_HANDLER_H
+#define ENGINE_COMMON_MESSAGE_HANDLER_H
 
 #include "../Utilities/HashedString.h"
 #include "../Utilities/RTTI.h"
