@@ -26,3 +26,4 @@ include(${PROJECT_CMAKE_MODULE_DIR}/build_config.cmake)
 
 add_subdirectory(${PROJECT_SRC_DIR}/engine ${PROJECT_INTERMEDIATE_DIR}/engine)
 add_subdirectory(${PROJECT_SRC_DIR}/tools ${PROJECT_INTERMEDIATE_DIR}/tools)
+add_subdirectory(${PROJECT_SRC_DIR}/leetcode ${PROJECT_INTERMEDIATE_DIR}/leetcode)
