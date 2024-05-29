@@ -8,6 +8,8 @@ message("Generating project files in ${PROJECT_BINARY_DIR}")
 include(${CMAKE_SOURCE_DIR}/cmake/build_global_defs.cmake)
 include(${PROJECT_CMAKE_MODULE_DIR}/build_options.cmake)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_CMAKE_MODULE_DIR})
+
 set(USE_CXX_COMPILER ${DEFAULT_CXX_COMPILER})
 set(USE_C_COMPILER ${DEFAULT_C_COMPILER})
 

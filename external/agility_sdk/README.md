@@ -1,0 +1,1 @@
+Agility SDK is downloaded via nuget package. See <project_root>/cmake/FindAgilitySDK.cmake for current version, and more details.
