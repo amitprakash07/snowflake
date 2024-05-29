@@ -1,0 +1,19 @@
+Triangle
+Cube
+Textured Cube
+Directional Light without shadows
+Point/Spot lights without shadows
+MVP support for loading a gltf mesh
+Sponza (even if it’s one giant mesh)
+Mipmaps
+Normal Maps
+Basic PBR (metalness/roughness)
+Basic HDR/tonemapping (even just reinhard)
+shadows for directional/spot/point lights
+bloom and some firefly suppression
+SSAO
+Autoexposure
+TAA
+clustered forward rendering and a depth pre-pass
+Indirect draw/bindless
+compute-based frustum/occlusion culling
