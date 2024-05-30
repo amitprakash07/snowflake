@@ -3,6 +3,7 @@
 bld/
 build/
 temp/
+tmp/
 output/
 bld*/
 external/agility_sdk/

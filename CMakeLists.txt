@@ -26,7 +26,9 @@ endif()
 project(${PROJECT_NAME} LANGUAGES C CXX)
 include(${PROJECT_CMAKE_MODULE_DIR}/build_config.cmake)
 
+# Required for CMake version < 3.29
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 add_subdirectory(${PROJECT_SRC_DIR}/engine ${PROJECT_INTERMEDIATE_DIR}/engine)
 add_subdirectory(${PROJECT_SRC_DIR}/tools ${PROJECT_INTERMEDIATE_DIR}/tools)
-add_subdirectory(${PROJECT_SRC_DIR}/leetcode ${PROJECT_INTERMEDIATE_DIR}/leetcode)
 add_subdirectory(${PROJECT_SRC_DIR}/../sandbox ${PROJECT_INTERMEDIATE_DIR}/sandbox)
