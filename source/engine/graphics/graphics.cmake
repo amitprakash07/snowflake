@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.21.7)
 
-set(VS_OLD_FILTER ${VS_FILTER_NAME})
-set(VS_FILTER_NAME ${VS_FILTER_NAME}/Graphics)
+append_src_group_folder(Graphics)
+include_source_list_from_file(debug_overlays/graphics_debug_overlays.cmake)
+include_source_list_from_file(common/graphics_common.cmake)
 
-include(${CMAKE_CURRENT_LIST_DIR}/common/graphics_common.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/debug_overlays/graphics_debug_overlays.cmake)
 
-set(VS_FILTER_NAME ${VS_OLD_FILTER})

@@ -7,6 +7,7 @@ message("Generating project files in ${PROJECT_BINARY_DIR}")
 
 include(${CMAKE_SOURCE_DIR}/cmake/build_global_defs.cmake)
 include(${PROJECT_CMAKE_MODULE_DIR}/build_options.cmake)
+include(${PROJECT_CMAKE_MODULE_DIR}/macros.cmake)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_CMAKE_MODULE_DIR})
 

@@ -1,29 +1,24 @@
 cmake_minimum_required(VERSION 3.21.7)
 
-set(CURRENT_SOURCES 
-    ${CMAKE_CURRENT_LIST_DIR}/additional_types.h
-    ${CMAKE_CURRENT_LIST_DIR}/hashed_string.h
-    ${CMAKE_CURRENT_LIST_DIR}/hashed_string.cc
-    ${CMAKE_CURRENT_LIST_DIR}/message_handler_interface.h
-    ${CMAKE_CURRENT_LIST_DIR}/messaging_system.h
-    ${CMAKE_CURRENT_LIST_DIR}/messaging_system.cc
-    ${CMAKE_CURRENT_LIST_DIR}/object_controller_interface.h
-    ${CMAKE_CURRENT_LIST_DIR}/rtti.h
-    ${CMAKE_CURRENT_LIST_DIR}/rtti.cc
-    ${CMAKE_CURRENT_LIST_DIR}/shared_pointer.h
-    ${CMAKE_CURRENT_LIST_DIR}/shared_pointer.cc
-    ${CMAKE_CURRENT_LIST_DIR}/string_pool.h
-    ${CMAKE_CURRENT_LIST_DIR}/string_pool.cc
-    ${CMAKE_CURRENT_LIST_DIR}/string_util.h
-    ${CMAKE_CURRENT_LIST_DIR}/string_util.cc
-    ${CMAKE_CURRENT_LIST_DIR}/time_helper.h
-    ${CMAKE_CURRENT_LIST_DIR}/time_helper.inl
-    ${CMAKE_CURRENT_LIST_DIR}/unique_ptr.h
-    ${CMAKE_CURRENT_LIST_DIR}/unique_ptr.cc
-    ${CMAKE_CURRENT_LIST_DIR}/defs.h)
+include_src(additional_types.h)
+include_src(hashed_string.h)
+include_src(hashed_string.cc)
+include_src(message_handler_interface.h)
+include_src(messaging_system.h)
+include_src(messaging_system.cc)
+include_src(object_controller_interface.h)
+include_src(rtti.h)
+include_src(rtti.cc)
+include_src(shared_pointer.h)
+include_src(shared_pointer.cc)
+include_src(string_pool.h)
+include_src(string_pool.cc)
+include_src(string_util.h)
+include_src(string_util.cc)
+include_src(time_helper.h)
+include_src(time_helper.inl)
+include_src(unique_ptr.h)
+include_src(unique_ptr.cc)
+include_src(defs.h)
 
-set(ENGINE_SOURCES ${ENGINE_SOURCES} ${CURRENT_SOURCES})
-
-if(WIN32)
-    source_group(${VS_FILTER_NAME}/Common FILES ${CURRENT_SOURCES})
-endif()
+group_sources(Common)

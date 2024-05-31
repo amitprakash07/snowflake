@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21.7)
 
-
+append_target_folder(Sandbox)
 add_subdirectory(leetcode ${PROJECT_INTERMEDIATE_DIR}/leetcode)
 
 find_package(CUDAToolkit)
