@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.21.7)
+cmake_minimum_required(VERSION 3.25.0)
 
-declare_project(LeetCode)
+declare_target(LeetCode)
 include_src(coding_problems.h)
 include_src(coding_problem_list.h)
 include_src(unique_email_address.h)

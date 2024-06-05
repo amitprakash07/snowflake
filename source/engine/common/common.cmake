@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21.7)
+cmake_minimum_required(VERSION 3.25.0)
 
 include_src(additional_types.h)
 include_src(hashed_string.h)

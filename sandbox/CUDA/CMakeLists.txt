@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21.7)
+cmake_minimum_required(VERSION 3.25.0)
 
 set(SANDBOX_CUDA ${PROJECT_PREFIX}Cuda)
 

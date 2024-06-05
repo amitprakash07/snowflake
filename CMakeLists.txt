@@ -1,11 +1,13 @@
-cmake_minimum_required(VERSION 3.21.7)
+cmake_minimum_required(VERSION 3.25.0)
 
-set(PROJECT_GIT_REPO_NAME "Snowflake")
-set(PROJECT_NAME ${PROJECT_GIT_REPO_NAME})
-
+block()
+set(PROJECT_NAME "Snowflake")
 message("Generating project files in ${PROJECT_BINARY_DIR}")
 
+#inlcude all the CMake global variables
 include(${CMAKE_SOURCE_DIR}/cmake/build_global_defs.cmake)
+
+message(DEBUG "Project CMake module dir is ${PROJECT_CMAKE_MODULE_DIR}")
 include(${PROJECT_CMAKE_MODULE_DIR}/build_options.cmake)
 include(${PROJECT_CMAKE_MODULE_DIR}/macros.cmake)
 
@@ -24,8 +26,8 @@ elseif(WIN32)
     endif()
 endif()
 
-project(${PROJECT_NAME} LANGUAGES C CXX)
 include(${PROJECT_CMAKE_MODULE_DIR}/build_config.cmake)
+project(${PROJECT_NAME} LANGUAGES C CXX)
 
 # Required for CMake version < 3.29
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -33,3 +35,4 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 add_subdirectory(${PROJECT_SRC_DIR}/engine ${PROJECT_INTERMEDIATE_DIR}/engine)
 add_subdirectory(${PROJECT_SRC_DIR}/tools ${PROJECT_INTERMEDIATE_DIR}/tools)
 add_subdirectory(${PROJECT_SRC_DIR}/../sandbox ${PROJECT_INTERMEDIATE_DIR}/sandbox)
+endblock()

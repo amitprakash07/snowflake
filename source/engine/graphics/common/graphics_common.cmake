@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21.7)
+cmake_minimum_required(VERSION 3.25.0)
 
 include_src(camera.h)
 include_src(camera.cc)
@@ -9,4 +9,4 @@ include_src(mesh_object.cc)
 include_src(object_interface.h)
 include_src(scene.h)
 include_src(scene.cc)
-group_sources(Common/Gfx/DX12)
+group_sources(Common)

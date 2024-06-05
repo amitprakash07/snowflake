@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 3.21.7)
+cmake_minimum_required(VERSION 3.25.0)
 
-append_target_folder(Sandbox)
-add_subdirectory(experiments/WriteToNetworkPort)
-
-set_target_properties(${LEET_CODE}${PROJECT_TARGET_SUFFIX} PROPERTIES FOLDER ${PROJECT_TARGET_FOLDER})
+message(STATUS "In Experiments")
+append_target_folder(Experiments)
+add_subdirectory(WriteToNetworkPort)
+add_subdirectory(PythonModules)
+revert_target_folder()

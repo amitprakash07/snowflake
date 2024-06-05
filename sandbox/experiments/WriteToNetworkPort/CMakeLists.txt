@@ -1,10 +1,8 @@
-cmake_minimum_required(VERSION 3.21.7)
+cmake_minimum_required(VERSION 3.25.0)
 
-set(LEET_CODE ${PROJECT_PREFIX}WriteToNetworkPort)
+declare_target(WriteToNetworkPort)
+include_src(write_to_network.cc)
+make_executable_target()
+group_sources("")
+group_target("")
 
-set(LEET_CODE_SOURCES   ${CMAKE_CURRENT_SOURCE_DIR}/coding_problems.h
-                        ${CMAKE_CURRENT_SOURCE_DIR}/coding_problem_list.h
-                        ${CMAKE_CURRENT_SOURCE_DIR}/unique_email_address.h
-                        ${CMAKE_CURRENT_SOURCE_DIR}/leet_code_main.cc)
-add_executable(${LEET_CODE}${PROJECT_TARGET_SUFFIX} ${LEET_CODE_SOURCES})
-set_target_properties(${LEET_CODE}${PROJECT_TARGET_SUFFIX} PROPERTIES FOLDER "SandBox")

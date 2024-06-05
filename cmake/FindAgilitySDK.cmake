@@ -5,11 +5,9 @@
 # Set the minimum required CMake version
 cmake_minimum_required(VERSION 3.21)
 
-include(${CMAKE_CURRENT_LIST_DIR}/build_global_defs.cmake)
-
 set(AgilitySDK_Found FALSE CACHE BOOL "Agility SDK exists" FORCE)
 set(AgilitySdk_Version "1.614.0" CACHE STRING "Agility SDK version" FORCE)
-set(AgilitySdk_Path "${EXTERNAL_SOURCE_DIR}/agility_sdk/${AgilitySdk_Version}/" CACHE PATH "Agility SDK path" FORCE)
+set(AgilitySdk_Path "${PROJECT_EXTERNAL_SOURCE_DIR}/agility_sdk/${AgilitySdk_Version}/" CACHE PATH "Agility SDK path" FORCE)
 set(AgilitySdk_Include "" CACHE PATH "Agility SDK include path" FORCE)
 set(AgilitySdk_Lib "" CACHE PATH "Agility SDK library path" FORCE)
 
@@ -40,7 +38,7 @@ function(download_agility_sdk)
 
     # Check if the download was successful
     if(result EQUAL 0)
-        message(STATUS "Agility SDK downloaded successfully")
+        message(STATUS "Agility SDK downloaded successfully in ${AgilitySdk_Path}")
     else()
         message(FATAL_ERROR "Failed to download Agility SDK")
     endif()

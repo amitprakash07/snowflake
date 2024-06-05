@@ -1,7 +1,8 @@
-cmake_minimum_required(VERSION 3.21.7)
+cmake_minimum_required(VERSION 3.25.0)
 
-set(TOOL_NAME ${PROJECT_PREFIX}ScratchPad)
+declare_target(ScratchPad)
 
-set(TOOL_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/scratch_pad.cc)
-add_executable(${TOOL_NAME}${PROJECT_TARGET_SUFFIX} ${TOOL_SOURCES})
-set_target_properties(${TOOL_NAME}${PROJECT_TARGET_SUFFIX} PROPERTIES FOLDER "Tools")
+include_src(scratch_pad.cc)
+make_executable_target()
+group_sources("")
+group_target(Tools)
