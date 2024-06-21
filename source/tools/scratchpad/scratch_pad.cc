@@ -21,16 +21,6 @@ struct Data {
 //     free(ptr);
 // }
 
-enum D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAGS : uint32_t {
-  D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_NONE = 0,
-  D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_ALLOW_UPDATE = 0x1,
-  D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_ALLOW_COMPACTION = 0x2,
-  D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_TRACE = 0x4,
-  D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PREFER_FAST_BUILD = 0x8,
-  D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_MINIMIZE_MEMORY = 0x10,
-  D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAG_PERFORM_UPDATE = 0x20
-};
-
 struct DataForTestClassForOverloading {
  private:
   uint8_t m_data;
@@ -117,16 +107,6 @@ class TestLambdaExecution {
 
 enum TestEnum { One = 0x1, Two = 0x2 };
 
-enum class ReplayPlugin { FrameAnalyzer, FrameModifer };
-
-//template <class Enum, bool is_enum = std::is_enum<Enum>::value>
-//class IReplayPlugin {};
-//
-//class ReplayPlugin : public IReplayPlugin<uint32_t>
-//{
-//    
-//};
-
 #include <iostream>
 #include <utility>
 
@@ -153,11 +133,49 @@ struct T {
   T(Floating) : type(float_t) {}  // OK
 };
 
+#include <cstdarg>
+#include <iostream>
+
+void simple_printf(
+    const char* fmt...)  // C-style "const char* fmt, ..." is also valid
+{
+  va_list args;
+  va_start(args, fmt);
+
+  while (*fmt != '\0') {
+    if (*fmt == 'd') {
+      int i = va_arg(args, int);
+      std::cout << i << '\n';
+    } else if (*fmt == 'c') {
+      // note automatic conversion to integral type
+      int c = va_arg(args, int);
+      std::cout << static_cast<char>(c) << '\n';
+    } else if (*fmt == 'f') {
+      double d = va_arg(args, double);
+      std::cout << d << '\n';
+    }
+    ++fmt;
+  }
+
+  va_end(args);
+}
+
 int main(int argcCount, char* argc[]) {
+  simple_printf("dcff", 3, 'a', 1.999, 42.5);
 
-    decltype(Default().foo()) n1 = 1;  // type of n1 is int
+  std::time_t todayTime;
+  todayTime = time(&todayTime);
 
-    constexpr bool void_type = std::is_void<decltype(Default().foo_void())>();
+  tm* localTime = std::localtime(&todayTime);
+  char timeAsStr[60];
+
+  size_t writtenSize =
+      strftime(timeAsStr, 60, "%Y_%m_%d_%Z_%H_%M_%S", localTime);
+  writtenSize;
+
+  decltype(Default().foo()) n1 = 1;  // type of n1 is int
+
+  constexpr bool void_type = std::is_void<decltype(Default().foo_void())>();
   //  decltype(NonDefault().foo()) n2 = n1;               // error: no default
   //  constructor
   decltype(std::declval<NonDefault>().foo()) n2 = n1;  // type of n2 is int
@@ -167,11 +185,9 @@ int main(int argcCount, char* argc[]) {
     std::cout << i << std::endl;
   }
 
-    for (uint32_t i = 0; i < 10; ++i) {
+  for (uint32_t i = 0; i < 10; ++i) {
     std::cout << i << std::endl;
   }
-
-
 
   TestLambdaExecution::Test();
   // TestLambdaExecution::UseLambdaToUpdate();
