@@ -1,0 +1,4 @@
+[submodule "sandbox/ML/ISLP_Study/ISLP_labs"]
+	path = sandbox/ML/ISLP_Study/ISLP_labs
+	url = https://github.com/intro-stat-learning/ISLP_labs
+	branch = stable
