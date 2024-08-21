@@ -34,5 +34,5 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 add_subdirectory(${PROJECT_SRC_DIR}/engine ${PROJECT_INTERMEDIATE_DIR}/engine)
 add_subdirectory(${PROJECT_SRC_DIR}/tools ${PROJECT_INTERMEDIATE_DIR}/tools)
-add_subdirectory(${PROJECT_SRC_DIR}/../sandbox ${PROJECT_INTERMEDIATE_DIR}/sandbox)
+add_subdirectory(${PROJECT_SRC_DIR}/sandbox ${PROJECT_INTERMEDIATE_DIR}/sandbox)
 endblock()
