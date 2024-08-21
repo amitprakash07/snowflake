@@ -31,7 +31,7 @@
 // Forward Declarations
 //=====================
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Math {
 class Vector3;
 class Quaternion;
@@ -43,7 +43,7 @@ class Quaternion;
 // Class Declaration
 //==================
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Math {
 class Matrix4x4 {
  public:

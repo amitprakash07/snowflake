@@ -7,7 +7,7 @@
 #include "../Utilities/IMessageHandler.h"
 #include "../Utilities/SharedPointer.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Debug {
 class DebugMenu : public IMessageHandler, Object {
  public:

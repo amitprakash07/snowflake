@@ -1,6 +1,6 @@
 
-namespace PROJECT_NAMESPACE {
-namespace Time {
+namespace engine {
+namespace time {
 inline uint64_t convertToMilliSeconds(const uint64_t i_seconds) {
   return (i_seconds * 1000);
 }
@@ -16,5 +16,5 @@ inline uint32_t getTimeDiff(uint64_t startTick, uint64_t endTick) {
 inline uint32_t getTickDifference(uint64_t i_startTick, uint64_t i_endTick) {
   return (getTimeDiff(i_startTick, i_endTick));
 }
-}  // namespace Time
+}  // namespace time
 }  

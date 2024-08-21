@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 template <typename T>
 class SharedPointer {
  public:

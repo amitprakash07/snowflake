@@ -6,7 +6,7 @@
 #include "../../Utilities/SharedPointer.h"
 #include "../enginedefs.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 class MouseController : public IMessageHandler {
  public:
   static SharedPointer<MouseController> getMouseController();

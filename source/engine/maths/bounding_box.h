@@ -2,7 +2,7 @@
 #define __BOUNDING_BOX_H
 #include "../Maths/Vector3.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Physics {
 class BoundingBox {
  public:

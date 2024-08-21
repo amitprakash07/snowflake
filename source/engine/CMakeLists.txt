@@ -22,4 +22,4 @@ include_src(engine_core.cc)
 
 make_library_target()
 group_sources("")
-group_target(Core)
+group_target(Engine)

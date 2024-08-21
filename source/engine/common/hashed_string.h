@@ -3,7 +3,7 @@
 
 #include "RTTI.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace utils {
 class StringHash : public RTTI {
  public:

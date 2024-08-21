@@ -8,7 +8,7 @@
 #include "../Utilities/IMessageHandler.h"
 #include "../Utilities/RTTI.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 class MessagingSystem : public RTTI {
  public:
   static SharedPointer<MessagingSystem> getMessagingSystem();

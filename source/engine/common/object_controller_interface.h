@@ -3,7 +3,7 @@
 
 #include "additionaltypes.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 class Object;
 class IObjectController {
  public:

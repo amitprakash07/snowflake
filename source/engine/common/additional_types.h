@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <cstring>
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace typedefs {
 enum Priority : uint8_t { HIGH = 0, MODERATE = 1, LOW = 2 };
 

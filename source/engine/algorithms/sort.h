@@ -3,7 +3,7 @@
 
 #include "common/defs.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 class Sort {
 public:
   template <typename T>

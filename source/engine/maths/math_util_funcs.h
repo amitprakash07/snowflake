@@ -7,7 +7,7 @@ This file contains math-related functions
 
 #include "Math.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Math {
 // Interface
 //==========

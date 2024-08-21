@@ -5,7 +5,7 @@
 #include "Quaternion.h"
 #include "Vector3.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Math {
 enum RotationAxis { Up, Right, Forward };
 class Transform {

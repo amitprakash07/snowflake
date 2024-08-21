@@ -7,7 +7,7 @@
 
 #define MAKE_STRING(X) #X
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 template <typename TypeName> 
   std::string ToString() { return MAKE_STRING(TypeName); }
 ;
@@ -20,6 +20,6 @@ public:
   RTTI(){};
 };
 
-} // namespace PROJECT_NAMESPACE
+} // namespace engine
 
 #endif

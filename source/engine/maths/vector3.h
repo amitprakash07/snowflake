@@ -9,7 +9,7 @@
 // Class Declaration
 //==================
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Math {
 const float Epsilon = 1.0e-9f;
 class Vector3 {

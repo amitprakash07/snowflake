@@ -7,7 +7,7 @@
 #include "../../Maths/Transform.h"
 #include "../../Utilities/SharedPointer.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 class IObjectController;
 class Object {
  public:

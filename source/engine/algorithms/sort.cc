@@ -1,7 +1,7 @@
 
 #include "sort.h"
 
-using namespace PROJECT_NAMESPACE;
+using namespace engine;
 
 template <typename T>
 void Sort::MergeSort(T* o_List, int iListlength,

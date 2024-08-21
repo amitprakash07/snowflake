@@ -1,7 +1,7 @@
 #ifndef __UNIQUE_PTR
 #define __UNIQUE_PTR
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 template <typename T>
 class UniquePtr {
  public:

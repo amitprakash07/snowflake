@@ -1,7 +1,7 @@
 #include <string>
 
 #include "HashedString.h"
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace utils {
 bool StringHash::isNil() const {
   return (mHash == StringHash("\0").getHash() ? true : false);

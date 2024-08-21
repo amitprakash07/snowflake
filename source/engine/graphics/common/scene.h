@@ -14,7 +14,7 @@
 #include "Camera.h"
 #include "MeshObject.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 class Scene : public Object, IMessageHandler {
  public:
   static SharedPointer<Scene> CreateNewScene(std::string);

@@ -3,7 +3,7 @@
 #include <assert.h>
 
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 template <typename T>
 UniquePtr<T>::UniquePtr() {
   m_WrappingObject = new T;

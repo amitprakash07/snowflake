@@ -13,7 +13,7 @@
 #include "../Physics/RayIntersection.h"
 #include "../Utilities/SharedPointer.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Physics {
 class HitInfo;
 

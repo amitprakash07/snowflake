@@ -6,7 +6,7 @@
 #include "../Utilities/RTTI.h"
 #include "../Utilities/additionaltypes.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 class StringPool : public RTTI {
  public:
   static SharedPointer<StringPool> getStringPool();

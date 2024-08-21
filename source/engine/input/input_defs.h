@@ -1,7 +1,7 @@
 #ifndef __MOUSE_CONTROLLER_H
 #define __MOUSE_CONTROLLER_H
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 struct MouseStates {
   bool leftButtonPressed;
   bool rightButtonPressed;

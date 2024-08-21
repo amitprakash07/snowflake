@@ -9,7 +9,7 @@
 #include "InputController/MouseController.h"
 #include "WindowingSystem/WindowsProgram.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 class EngineCore {
  public:
   static void Initialize(HINSTANCE hInstance, int windowLayout, bool isServer);

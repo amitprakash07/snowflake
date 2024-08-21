@@ -7,7 +7,7 @@
 
 #define BIG_FLOAT 1.0e30f
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Physics {
 class HitInfo {
  public:

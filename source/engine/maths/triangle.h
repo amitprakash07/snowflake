@@ -3,7 +3,7 @@
 
 #include "../../Graphics/typedefs.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Physics {
 class Triangle {
  public:

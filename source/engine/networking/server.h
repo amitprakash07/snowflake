@@ -4,7 +4,7 @@
 #include "../../../Externals/Raknet/src/NetworkIDManager.h"
 #include "NetworkPlayer.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Networking {
 class Server {
  public:

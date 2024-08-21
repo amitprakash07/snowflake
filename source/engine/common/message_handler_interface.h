@@ -6,7 +6,7 @@
 #include "../Utilities/additionaltypes.h"
 #include "SharedPointer.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 class IMessageHandler : public RTTI {
  public:
   virtual void HandleMessage(

@@ -6,8 +6,8 @@
 
 #include "../Utilities/RTTI.h"
 
-namespace PROJECT_NAMESPACE {
-namespace Time {
+namespace engine {
+namespace time {
 class FrameTime : public RTTI {
  public:
   static SharedPointer<FrameTime> getFrameTimeController();
@@ -30,8 +30,8 @@ class FrameTime : public RTTI {
   bool isTimerPaused;
   uint64_t frameTimeFrequency;
   FrameTime(LARGE_INTEGER *, LARGE_INTEGER *);
-};  // FrameTime
-}  // namespace Time
-}  
+};
+}
+}
 
 #endif

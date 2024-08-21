@@ -7,7 +7,7 @@
 
 #include "Vector3.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Math {
 class Quaternion {
  public:

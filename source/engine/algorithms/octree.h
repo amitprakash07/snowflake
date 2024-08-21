@@ -6,7 +6,7 @@
 
 #include "../Maths/Vector3.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Physics {
 struct TriangleIndex {
   TriangleIndex() = default;

@@ -6,7 +6,7 @@
 #include "../enginedefs.h"
 #include "Object.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 class Camera : public IMessageHandler, Object {
  public:
   static SharedPointer<Camera> CreateCamera(

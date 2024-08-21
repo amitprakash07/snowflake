@@ -5,4 +5,5 @@
 
 int main(int argCount, char *argc[]) {
   INSTANTIATE_PROBLEM(UniqueEmailAddress);
+  INSTANTIATE_PROBLEM(SortedSquareArray);
 }

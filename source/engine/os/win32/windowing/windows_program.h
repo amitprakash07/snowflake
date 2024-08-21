@@ -14,7 +14,7 @@ This file contains all of the function declarations for this example program
 #include "../../Utilities/RTTI.h"
 #include "../../Utilities/SharedPointer.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Windows {
 class WindowingSystem : public RTTI {
  public:

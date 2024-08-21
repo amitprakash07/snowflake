@@ -2,7 +2,7 @@
 #define __AABBV_H
 #include "../Maths/Vector3.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Physics {
 struct Plane {
   Plane() = default;

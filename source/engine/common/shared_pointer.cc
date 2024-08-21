@@ -2,7 +2,7 @@
 
 #include "shared_pointer.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 template <typename T>
 inline SharedPointer<T>::SharedPointer() {
   m_WrappingObject = nullptr;
@@ -118,4 +118,4 @@ SharedPointer<T2> SharedPointer<T>::CastSharedPointer() {
   return returnPointer;
 }
 
-}  // namespace PROJECT_NAMESPACE
+}  // namespace engine

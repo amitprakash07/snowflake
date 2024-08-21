@@ -9,7 +9,7 @@ This class represents a position or direction
 // Class Declaration
 //==================
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Math {
 class Vector4 {
   // Interface

@@ -7,7 +7,7 @@
 #include "../EngineCore/Objects/MeshObject.h"
 #include "NetworkPlayer.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 namespace Networking {
 class Client {
  public:

@@ -9,7 +9,7 @@
 #include "../../Utilities/IObjectController.h"
 #include "Object.h"
 
-namespace PROJECT_NAMESPACE {
+namespace engine {
 class MeshObject : public IMessageHandler, Object {
  public:
   static SharedPointer<MeshObject> CreateMeshObject(
