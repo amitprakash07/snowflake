@@ -1,10 +1,10 @@
-#ifndef __STRING_POOL_H
-#define __STRING_POOL_H
+#ifndef ENGINE_COMMON_STRING_POOL_H
+#define ENGINE_COMMON_STRING_POOL_H
 
 #include <vector>
 
-#include "../Utilities/RTTI.h"
-#include "../Utilities/additionaltypes.h"
+#include "rtti.h"
+#include "additional_types.h"
 
 namespace engine {
 class StringPool : public RTTI {

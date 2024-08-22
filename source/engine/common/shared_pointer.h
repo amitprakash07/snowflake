@@ -1,5 +1,5 @@
-#ifndef __SHARED_PTR_H
-#define __SHARED_PTR_H
+#ifndef ENGINE_COMMON_SHARED_PTR_H
+#define ENGINE_COMMON_SHARED_PTR_H
 
 #include <string>
 
@@ -30,6 +30,6 @@ class SharedPointer {
 };  // SharedPointer
 }  
 
-#include "SharedPointer.inl"
+#include "shared_pointer.inl"
 
 #endif  // SHARED_PTR_H

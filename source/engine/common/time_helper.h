@@ -1,5 +1,5 @@
-#ifndef __TIME_HELPER_H
-#define __TIME_HELPER_H
+#ifndef ENGINE_COMMON_TIME_HELPER_H
+#define ENGINE_COMMON_TIME_HELPER_H
 
 #include <stdint.h>
 
@@ -12,6 +12,6 @@ inline uint32_t getTickDifference(uint64_t, uint64_t);
 }  // namespace time
 }  
 
-#include "TimeHelper.inl"
+#include "time_helper.inl"
 
 #endif

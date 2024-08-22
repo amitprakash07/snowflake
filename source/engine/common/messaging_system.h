@@ -1,12 +1,12 @@
-#ifndef __MESSAGING_SYSTEM_H
-#define __MESSAGING_SYSTEM_H
+#ifndef ENGINE_COMMON_MESSAGING_SYSTEM_H
+#define ENGINE_COMMON_MESSAGING_SYSTEM_H
 
 #include <map>
 #include <vector>
 
-#include "../Utilities/HashedString.h"
-#include "../Utilities/IMessageHandler.h"
-#include "../Utilities/RTTI.h"
+#include "rtti.h"
+#include "hashed_string.h"
+#include "message_handler_interface.h"
 
 namespace engine {
 class MessagingSystem : public RTTI {

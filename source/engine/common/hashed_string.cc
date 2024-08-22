@@ -1,6 +1,6 @@
 #include <string>
 
-#include "HashedString.h"
+#include "hashed_string.h"
 namespace engine {
 namespace utils {
 bool StringHash::isNil() const {
@@ -51,7 +51,11 @@ unsigned __int32 StringHash::Hash(const char* i_string) {
 }  // end Hash(char*)
 
 unsigned __int32 StringHash::Hash(const void* i_bytes, size_t i_length) {
-  register const unsigned char* p = static_cast<const unsigned char*>(i_bytes);
+  /*
+   * register storage specifier is deprecated from c++17
+   * register const unsigned char* p = static_cast<const unsigned char*>(i_bytes);*/
+
+  const unsigned char* p = static_cast<const unsigned char*>(i_bytes);
   unsigned int hash = 2166136261;
 
   for (unsigned int i = 0; i < i_length; ++i) hash = 16777619 * (hash ^ p[i]);

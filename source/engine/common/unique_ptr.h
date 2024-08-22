@@ -1,5 +1,5 @@
-#ifndef __UNIQUE_PTR
-#define __UNIQUE_PTR
+#ifndef ENGINE_COMMON_UNIQUE_PTR
+#define ENGINE_COMMON_UNIQUE_PTR
 
 namespace engine {
 template <typename T>

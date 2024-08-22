@@ -1,6 +1,7 @@
-#include "StringUtil.h"
+#include "string_util.h"
 
-std::string Utils::RemoveString(std::string removeFrom,
+using namespace engine;
+std::string util::RemoveString(std::string removeFrom,
                                         std::string removeWith,
                                         bool beggining) {
   std::string returnString;

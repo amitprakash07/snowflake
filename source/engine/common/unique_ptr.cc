@@ -1,6 +1,6 @@
-#include "unique_ptr.h"
-
 #include <assert.h>
+
+#include "unique_ptr.h"
 
 
 namespace engine {

@@ -1,9 +1,9 @@
-#ifndef __RTTI_H
-#define __RTTI_H
+#ifndef ENGINE_COMMON_RTTI_H
+#define ENGINE_COMMON_RTTI_H
 
 #include <string>
 
-#include "SharedPointer.h"
+#include "shared_pointer.h"
 
 #define MAKE_STRING(X) #X
 
@@ -20,6 +20,6 @@ public:
   RTTI(){};
 };
 
-} // namespace engine
+}
 
 #endif

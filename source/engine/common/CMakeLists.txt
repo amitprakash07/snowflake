@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.25.0)
 
+declare_target(EngineShared)
+
 include_src(additional_types.h)
 include_src(hashed_string.h)
 include_src(hashed_string.cc)
@@ -20,5 +22,12 @@ include_src(time_helper.inl)
 include_src(unique_ptr.h)
 include_src(unique_ptr.cc)
 include_src(defs.h)
+include_src(octree.h)
+include_src(octree.cc)
+include_src(sort.h)
+include_src(sort.cc)
+include_src(util.h)
+include_src(util.cc)
 
-group_sources(Common)
+make_library_target()
+group_target(Engine)

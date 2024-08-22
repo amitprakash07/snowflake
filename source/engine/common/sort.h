@@ -1,7 +1,7 @@
-#ifndef ENGINE_ALGORITHMS_SORT_H
-#define ENGINE_ALGORITHMS_SORT_H
+#ifndef ENGINE_COMMON_SORT_H
+#define ENGINE_COMMON_SORT_H
 
-#include "common/defs.h"
+#include "defs.h"
 
 namespace engine {
 class Sort {

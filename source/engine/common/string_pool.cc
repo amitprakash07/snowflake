@@ -1,5 +1,7 @@
-#include "../Utilities/HashedString.h"
-#include "StringPool.h"
+#include "hashed_string.h"
+#include "string_pool.h"
+
+using namespace engine;
 
 SharedPointer<StringPool> StringPool::mStringPool;
 

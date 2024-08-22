@@ -1,10 +1,9 @@
-#ifndef ENGINE_ALGORITHMS_OCTREE_H
-#define ENGINE_ALGORITHMS_OCTREE_H
+#ifndef ENGINE_COMMON_ALGORITHMS_OCTREE_H
+#define ENGINE_COMMON_ALGORITHMS_OCTREE_H
 
 #include <vector>
-#include <algorithm>
 
-#include "../Maths/Vector3.h"
+#include "maths/vector3.h"
 
 namespace engine {
 namespace Physics {

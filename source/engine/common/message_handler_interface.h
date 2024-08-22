@@ -1,10 +1,10 @@
 #ifndef ENGINE_COMMON_MESSAGE_HANDLER_H
 #define ENGINE_COMMON_MESSAGE_HANDLER_H
 
-#include "../Utilities/HashedString.h"
-#include "../Utilities/RTTI.h"
-#include "../Utilities/additionaltypes.h"
-#include "SharedPointer.h"
+#include "rtti.h"
+#include "shared_pointer.h"
+#include "additional_types.h"
+#include "hashed_string.h"
 
 namespace engine {
 class IMessageHandler : public RTTI {
@@ -30,6 +30,13 @@ struct _IMessageHandle {
   bool operator<(_IMessageHandle i_other) const {
     return (mMessagePriority < i_other.mMessagePriority ? true : false);
   }
+
+  _IMessageHandle() = default;
+  _IMessageHandle operator=(const _IMessageHandle&) const
+  {
+        return _IMessageHandle();
+  }
+
 };
 typedef _IMessageHandle MessageHandle;
 }  

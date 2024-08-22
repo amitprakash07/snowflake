@@ -1,16 +1,15 @@
-#ifndef __IOBJECT_CONTROLLER
-#define __IOBJECT_CONTROLLER
+#ifndef ENGINE_COMMON_OBJECT_CONTROLLER_INTERFACE_H
+#define ENGINE_COMMON_OBJECT_CONTROLLER_INTERFACE_H
 
-#include "additionaltypes.h"
+#include "additional_types.h"
 
 namespace engine {
 class Object;
 class IObjectController {
  public:
-  virtual ~IObjectController(){};
+  virtual ~IObjectController() = default;
   virtual void updateObject(Object &,
-                            typedefs::ActionWithKeyBound iAction) = 0;
-  IObjectController() {}
+                            typedefs::ActionWithKeyBound iAction) = 0;  
 };
 }  
 

@@ -1,7 +1,8 @@
 #ifndef ENGINE_COMMON_HASHED_STRING_H
 #define ENGINE_COMMON_HASHED_STRING_H
 
-#include "RTTI.h"
+#include "rtti.h"
+#include "shared_pointer.h"
 
 namespace engine {
 namespace utils {
@@ -29,7 +30,7 @@ class StringHash : public RTTI {
   char *mString;
 #endif
 };
-}  // namespace utils
+}
 }  
 
-#endif  //__HASHED_STRING_H
+#endif 

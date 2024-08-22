@@ -2,7 +2,9 @@
 
 #include <algorithm>
 
-#include "MessagingSystem.h"
+#include "messaging_system.h"
+
+using namespace engine;
 
 SharedPointer<MessagingSystem>
     MessagingSystem::mMessagingSystem;

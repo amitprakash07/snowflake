@@ -1,7 +1,10 @@
-#include "Octree.h"
 
 #include <fstream>
 #include <iostream>
+
+#include "octree.h"
+
+using namespace engine;
 
 Physics::Octree::Octree() {
   mLevel = 0;
