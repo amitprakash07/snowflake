@@ -21,9 +21,9 @@ namespace util {
     {
         std::stringstream ss;
         ss << "{ ";
-        for(int val : input_array)
+        for(const int& val : input_array)
         {
-            ss << val;
+            ss << val << ",";
         }
 
         ss << " }\n";

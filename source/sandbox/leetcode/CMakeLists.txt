@@ -8,4 +8,5 @@ include_src(sorted_square_array.h)
 include_src(leet_code_main.cc)
 
 make_executable_target()
+target_link_libraries(LeetCode EngineShared)
 group_target(LeetCode)
