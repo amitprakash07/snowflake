@@ -5,8 +5,15 @@
 
 namespace engine {
 namespace util {
-std::string RemoveString(std::string removeFrom, std::string remmveWith,
+std::string RemoveString(std::string remove_from, std::string remvoe_with,
                          bool beginning = true);
-}
-}  
+
+std::string ReverseEachWordsInString(std::string sentence,
+                                     char separator = ' ');
+
+    std::string ReverseOnlyLetters(std::string s);
+
+    bool IsLetter(char ch);
+    }  // namespace util
+}  // namespace engine
 #endif

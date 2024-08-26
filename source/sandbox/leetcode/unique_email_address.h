@@ -1,5 +1,5 @@
-#ifndef LEETCODE_UNIQUE_EMAIL_ADDRESS_H
-#define LEETCODE_UNIQUE_EMAIL_ADDRESS_H
+#ifndef SANDBOX_LEETCODE_UNIQUE_EMAIL_ADDRESS_H
+#define SANDBOX_LEETCODE_UNIQUE_EMAIL_ADDRESS_H
 
 /*
  * Every valid email consists of a local name and a domain name, separated by
@@ -31,7 +31,7 @@ return the number of different addresses that actually receive mails.
 
 #include "coding_problems.h"
 
-class UniqueEmailAddress : public ICodingProblem {
+class UniqueEmailAddressProblem : public ICodingProblem {
  public:
   std::string GetValidEmail(std::string email) {
     std::string validEmail;

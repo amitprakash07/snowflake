@@ -1,5 +1,5 @@
-#ifndef LEETCODE_SORTED_SQUARE_ARRAY_H
-#define LEETCODE_SORTED_SQUARE_ARRAY_H
+#ifndef SANDBOX_LEETCODE_SORTED_SQUARE_ARRAY_H
+#define SANDBOX_LEETCODE_SORTED_SQUARE_ARRAY_H
 
 /*
  * Given an integer array nums sorted in non-decreasing order, 

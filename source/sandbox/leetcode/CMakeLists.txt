@@ -5,6 +5,8 @@ include_src(coding_problems.h)
 include_src(coding_problem_list.h)
 include_src(unique_email_address.h)
 include_src(sorted_square_array.h)
+include_src(min_start_value.h)
+include_src(k-radius_averages.h)
 include_src(leet_code_main.cc)
 
 make_executable_target()
