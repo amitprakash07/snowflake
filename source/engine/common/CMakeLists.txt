@@ -28,6 +28,8 @@ include_src(sort.h)
 include_src(sort.cc)
 include_src(util.h)
 include_src(util.cc)
+include_src(linked_list.h)
+include_src(linked_list.inl)
 
 make_library_target()
 group_target(Engine)

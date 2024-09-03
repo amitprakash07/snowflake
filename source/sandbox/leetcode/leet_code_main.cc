@@ -4,6 +4,8 @@
 #include <string>
 
 #include "coding_problem_list.h"
+#include "common/linked_list.h"
+#include "common/string_util.h"
 #include "common/util.h"
 
 int subarraySum(vector<int>& nums, int k) {
@@ -35,20 +37,20 @@ int numberOfSubarrays(vector<int>& nums, int k) {
 }
 
 int findMaxLength(std::vector<int> nums) {
-    std::map<int, int> count_map = { {0, -1} };
+  std::map<int, int> count_map = {{0, -1}};
 
-    int max_len = 0, count = 0;
+  int max_len = 0, count = 0;
 
-    for (int i = 0; i < nums.size(); i++) {
-        count = count + (nums[i] == 1 ? 1 : -1);
-        if (count_map.contains(count)) {
-            max_len = max_len < (i - count_map[count]) ? (i - count_map[count]) : max_len;
-        }
-        else {
-            count_map[count] = i;
-        }
+  for (int i = 0; i < nums.size(); i++) {
+    count = count + (nums[i] == 1 ? 1 : -1);
+    if (count_map.contains(count)) {
+      max_len =
+          max_len < (i - count_map[count]) ? (i - count_map[count]) : max_len;
+    } else {
+      count_map[count] = i;
     }
-    return max_len;
+  }
+  return max_len;
 }
 
 vector<vector<int>> findWinners(vector<vector<int>>& matches) {
@@ -64,8 +66,8 @@ vector<vector<int>> findWinners(vector<vector<int>>& matches) {
     loosers[matches[it][1]]++;
   }
 
-  for (std::set<int>::const_iterator it = winners.cbegin(); it != winners.cend();
-       it++) {
+  for (std::set<int>::const_iterator it = winners.cbegin();
+       it != winners.cend(); it++) {
     if (loosers.find(*it) == loosers.end()) {
       ret_vector[0].push_back(*it);
     }
@@ -82,33 +84,36 @@ vector<vector<int>> findWinners(vector<vector<int>>& matches) {
 }
 
 int lengthOfLongestSubstring(const string& str) {
-    size_t right = 0, left = 0;
-    std::map<char, int> char_last_index;
-    size_t max_length = 0;
+  size_t right = 0, left = 0;
+  std::map<char, int> char_last_index;
+  size_t max_length = 0;
 
-    while (right < str.size())
-    {
-        if(char_last_index.contains(str[right]))
-        {
-            left = max(left, static_cast<size_t>(char_last_index[str[right]]));
-        }
-
-        char_last_index[str[right]] = static_cast<int>(right) + 1;
-        max_length = max(max_length, right - left + 1);
-        right++;
+  while (right < str.size()) {
+    if (char_last_index.contains(str[right])) {
+      left = max(left, static_cast<size_t>(char_last_index[str[right]]));
     }
 
-    return static_cast<int>(max_length);
+    char_last_index[str[right]] = static_cast<int>(right) + 1;
+    max_length = max(max_length, right - left + 1);
+    right++;
+  }
+
+  return static_cast<int>(max_length);
 }
 
 int main(int argCount, char* argc[]) {
-
-    lengthOfLongestSubstring("tmmzuxt");
-    std::vector<int> array = { 0, 0, 1, 0, 0, 0, 1, 1 };
-    int max_length = findMaxLength(array);
+  std::cout << engine::util::SimplifyPath("/.../a/../b/c/../d/./");
+  std::cout << engine::util::SimplifyPath("/../");
+    std::cout << engine::util::SimplifyPath("/home/user/Documents/../Pictures");
+  
+    std::cout << engine::util::RemoveDuplicates("abbaca");
+    engine::LinkedList<int>::UnitTest();
+  lengthOfLongestSubstring("tmmzuxt");
+  std::vector<int> array = {0, 0, 1, 0, 0, 0, 1, 1};
+  int max_length = findMaxLength(array);
   numberOfSubarrays(array, 2);
-    std::vector<int> prefix_array = engine::util::PrefixArray(array);
-    std::cout << engine::util::ToStr(prefix_array);
+  std::vector<int> prefix_array = engine::util::PrefixArray(array);
+  std::cout << engine::util::ToStr(prefix_array);
   INSTANTIATE_PROBLEM(UniqueEmailAddressProblem);
   INSTANTIATE_PROBLEM(SortedSquareArray);
   INSTANTIATE_PROBLEM(MinStartValueProblem);
