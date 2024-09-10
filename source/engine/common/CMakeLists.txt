@@ -30,6 +30,8 @@ include_src(util.h)
 include_src(util.cc)
 include_src(linked_list.h)
 include_src(linked_list.inl)
+include_src(tree.h)
+include_src(tree.cc)
 
 make_library_target()
 group_target(Engine)
