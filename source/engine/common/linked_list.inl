@@ -97,6 +97,40 @@ DataType engine::LinkedList<DataType>::operator[](size_t index) const {
     return list_iter->data;
   }
 }
+template <typename DataType>
+DataType engine::LinkedList<DataType>::GetMiddle() const {
+  if (head_ && head_->next) {
+    Node* dummy = head_->next;  // start of link list
+
+    Node* slow_ptr = dummy;
+    Node* fast_ptr = dummy;
+
+    while (fast_ptr && fast_ptr->next) {
+      slow_ptr = slow_ptr->next;
+      fast_ptr = fast_ptr->next->next;
+    }
+
+    return slow_ptr->data;
+  }
+
+  return DataType();
+}
+template <typename DataType>
+void engine::LinkedList<DataType>::Reverse() {
+  if (head_ && head_->next) {
+    Node* prev = nullptr;
+    Node* current = head_->next;
+
+    while (current) {
+      Node* next = current->next;
+      current->next = prev;
+      prev = current;
+      current = next;
+    }
+
+    head_->next = prev;
+  }
+}
 
 template <typename DataType>
 std::string engine::LinkedList<DataType>::ToStr() const {
@@ -117,20 +151,21 @@ std::string engine::LinkedList<DataType>::ToStr() const {
 template <typename DataType>
 bool engine::LinkedList<DataType>::UnitTest() {
   LinkedList<int> list;
-  bool success = list.Add(10);
-  success |= list.Add(20);
-  success |= list.Add(25, 1);
 
-  std::cout << list[0] << list[1];
-
-  int out_of_range_int = list[20];
-
-  /* for (size_t i = 0; i < 100; i++) {
-     list.Add(i * 5 + i);
-   }*/
+  bool success = true;
+  for (int i = 1; i < 7; i++) {
+    success |= list.Add(i);
+  }
 
   std::string out = list.ToStr();
   std::cout << out.c_str();
+
+  std::cout << list.GetMiddle() << endl;
+
+  list.Reverse();
+  std::cout << list.ToStr();
+
+  std::cout << list.GetMiddle() << endl;
 
   return true;
 }

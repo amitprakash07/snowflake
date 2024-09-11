@@ -35,8 +35,8 @@ template<class DataType>
 class BinaryTree
 {
 public:
-    bool Construct(std::vector<DataType> data);
-    std::string Traverse(TreeTraverseOrder order);
+    void Construct(std::vector<DataType> data);
+    std::string Traverse(BinaryTreeNode<DataType>* tree_node, TreeTraverseOrder order);
     static void UnitTest();
 private:
     BinaryTreeNode<DataType>* root = nullptr;
@@ -44,6 +44,8 @@ private:
 
 template<class DataType>
 class BinarySearchTree : public BinaryTree<DataType>
-{};
+{
+public:
+};
 
 #endif

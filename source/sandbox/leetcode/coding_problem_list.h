@@ -6,5 +6,6 @@
 #include "sorted_square_array.h"
 #include "min_start_value.h"
 #include "k-radius_averages.h"
+#include "maximum_sub_array.h"
 
 #endif

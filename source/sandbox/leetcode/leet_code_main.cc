@@ -102,12 +102,14 @@ int lengthOfLongestSubstring(const string& str) {
 }
 
 int main(int argCount, char* argc[]) {
+  engine::LinkedList<int>::UnitTest();
+    INSTANTIATE_PROBLEM(MaxSubArrayFinder);
   std::cout << engine::util::SimplifyPath("/.../a/../b/c/../d/./");
   std::cout << engine::util::SimplifyPath("/../");
     std::cout << engine::util::SimplifyPath("/home/user/Documents/../Pictures");
   
     std::cout << engine::util::RemoveDuplicates("abbaca");
-    engine::LinkedList<int>::UnitTest();
+
   lengthOfLongestSubstring("tmmzuxt");
   std::vector<int> array = {0, 0, 1, 0, 0, 0, 1, 1};
   int max_length = findMaxLength(array);

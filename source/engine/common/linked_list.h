@@ -14,6 +14,8 @@ class LinkedList {
   size_t Size() const;
   DataType Remove(int index = -1);
   DataType operator[](size_t index) const;
+  DataType GetMiddle() const;
+  void Reverse();
 
   std::string ToStr() const;
 
