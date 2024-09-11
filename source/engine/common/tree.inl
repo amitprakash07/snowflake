@@ -2,7 +2,9 @@
 
 template <class DataType>
 void BinaryTree<DataType>::Construct(std::vector<DataType> data) {
-  if (!data.empty()) 
+    root = new BinaryTreeNode<DataType>();
+    root->data = data[0];
+    if (!data.empty()) 
   {
 
     for (int val : data)
