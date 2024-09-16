@@ -9,6 +9,7 @@
 #include "common/to_str.h"
 #include "common/util.h"
 #include "common/stack.h"
+#include "common/maths_util.h"
 
 int subarraySum(vector<int>& nums, int k) {
     unordered_map<int, int> counts;
@@ -105,6 +106,8 @@ int lengthOfLongestSubstring(const string& str) {
 }
 
 int main(int argCount, char* argc[]) {
+    INSTANTIATE_PROBLEM(RemoveDuplicateSortedArray);
+    std::cout << engine::maths::GetHCF(119, 544);
     engine::Stack<int>::UnitTest();
     char* to_char_array = engine::ToStr(32);
     std::string temp_string(to_char_array);
@@ -115,9 +118,7 @@ int main(int argCount, char* argc[]) {
     std::cout << engine::util::SimplifyPath("/.../a/../b/c/../d/./");
     std::cout << engine::util::SimplifyPath("/../");
     std::cout << engine::util::SimplifyPath("/home/user/Documents/../Pictures");
-
     std::cout << engine::util::RemoveDuplicates("abbaca");
-
     lengthOfLongestSubstring("tmmzuxt");
     std::vector<int> array = { 0, 0, 1, 0, 0, 0, 1, 1 };
     int max_length = findMaxLength(array);

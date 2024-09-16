@@ -7,5 +7,6 @@
 #include "min_start_value.h"
 #include "k-radius_averages.h"
 #include "maximum_sub_array.h"
+#include "remove_duplicate_sorted_array_2.h"
 
 #endif

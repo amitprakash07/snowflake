@@ -8,6 +8,7 @@ include_src(sorted_square_array.h)
 include_src(min_start_value.h)
 include_src(k-radius_averages.h)
 include_src(maximum_sub_array.h)
+include_src(remove_duplicate_sorted_array_2.h)
 include_src(leet_code_main.cc)
 
 make_executable_target()

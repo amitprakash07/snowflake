@@ -42,6 +42,7 @@ include_src(dequeue.h)
 include_src(dequeue.inl)
 include_src(to_str.h)
 include_src(to_str.inl)
+include_src(maths_util.h)
 
 make_library_target()
 group_target(Engine)
