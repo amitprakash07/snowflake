@@ -5,109 +5,113 @@
 
 #include "coding_problem_list.h"
 #include "common/linked_list.h"
+#include "common/queue.h"
+#include "common/stack.h"
 #include "common/string_util.h"
 #include "common/to_str.h"
+#include "common/tree.h"
 #include "common/util.h"
 #include "common/stack.h"
 #include "common/maths_util.h"
 
 int subarraySum(vector<int>& nums, int k) {
-    unordered_map<int, int> counts;
-    counts[0] = 1;
-    int ans = 0, curr = 0;
+  unordered_map<int, int> counts;
+  counts[0] = 1;
+  int ans = 0, curr = 0;
 
-    for (int num : nums) {
-        curr += num;
-        ans += counts[curr - k];
-        counts[curr]++;
-    }
+  for (int num : nums) {
+    curr += num;
+    ans += counts[curr - k];
+    counts[curr]++;
+  }
 
-    return ans;
+  return ans;
 }
 
 int numberOfSubarrays(vector<int>& nums, int k) {
-    unordered_map<int, int> counts;
-    counts[0] = 1;
-    int ans = 0, curr = 0;
+  unordered_map<int, int> counts;
+  counts[0] = 1;
+  int ans = 0, curr = 0;
 
-    for (int num : nums) {
-        curr += num % 2;
-        ans += counts[curr - k];
-        counts[curr] += 1;
-    }
+  for (int num : nums) {
+    curr += num % 2;
+    ans += counts[curr - k];
+    counts[curr] += 1;
+  }
 
-    return ans;
+  return ans;
 }
 
 int findMaxLength(std::vector<int> nums) {
-    std::map<int, int> count_map = { {0, -1} };
+  std::map<int, int> count_map = {{0, -1}};
 
-    int max_len = 0, count = 0;
+  int max_len = 0, count = 0;
 
-    for (int i = 0; i < nums.size(); i++) {
-        count = count + (nums[i] == 1 ? 1 : -1);
-        if (count_map.contains(count)) {
-            max_len =
-                max_len < (i - count_map[count]) ? (i - count_map[count]) : max_len;
-        }
-        else {
-            count_map[count] = i;
-        }
+  for (int i = 0; i < nums.size(); i++) {
+    count = count + (nums[i] == 1 ? 1 : -1);
+    if (count_map.contains(count)) {
+      max_len =
+          max_len < (i - count_map[count]) ? (i - count_map[count]) : max_len;
+    } else {
+      count_map[count] = i;
     }
-    return max_len;
+  }
+  return max_len;
 }
 
 vector<vector<int>> findWinners(vector<vector<int>>& matches) {
-    std::set<int> winners;
-    map<int, int> loosers;
+  std::set<int> winners;
+  map<int, int> loosers;
 
-    std::vector<std::vector<int>> ret_vector;
-    ret_vector.push_back(std::vector<int>());
-    ret_vector.push_back(std::vector<int>());
+  std::vector<std::vector<int>> ret_vector;
+  ret_vector.push_back(std::vector<int>());
+  ret_vector.push_back(std::vector<int>());
 
-    for (size_t it = 0; it < matches.size(); it++) {
-        winners.insert(matches[it][0]);
-        loosers[matches[it][1]]++;
+  for (size_t it = 0; it < matches.size(); it++) {
+    winners.insert(matches[it][0]);
+    loosers[matches[it][1]]++;
+  }
+
+  for (std::set<int>::const_iterator it = winners.cbegin();
+       it != winners.cend(); it++) {
+    if (loosers.find(*it) == loosers.end()) {
+      ret_vector[0].push_back(*it);
     }
+  }
 
-    for (std::set<int>::const_iterator it = winners.cbegin();
-        it != winners.cend(); it++) {
-        if (loosers.find(*it) == loosers.end()) {
-            ret_vector[0].push_back(*it);
-        }
+  for (std::map<int, int>::const_iterator it = loosers.cbegin();
+       it != loosers.cend(); it++) {
+    if (it->second == 1) {
+      ret_vector[1].push_back(it->first);
     }
+  }
 
-    for (std::map<int, int>::const_iterator it = loosers.cbegin();
-        it != loosers.cend(); it++) {
-        if (it->second == 1) {
-            ret_vector[1].push_back(it->first);
-        }
-    }
-
-    return ret_vector;
+  return ret_vector;
 }
 
 int lengthOfLongestSubstring(const string& str) {
-    size_t right = 0, left = 0;
-    std::map<char, int> char_last_index;
-    size_t max_length = 0;
+  size_t right = 0, left = 0;
+  std::map<char, int> char_last_index;
+  size_t max_length = 0;
 
-    while (right < str.size()) {
-        if (char_last_index.contains(str[right])) {
-            left = max(left, static_cast<size_t>(char_last_index[str[right]]));
-        }
-
-        char_last_index[str[right]] = static_cast<int>(right) + 1;
-        max_length = max(max_length, right - left + 1);
-        right++;
+  while (right < str.size()) {
+    if (char_last_index.contains(str[right])) {
+      left = max(left, static_cast<size_t>(char_last_index[str[right]]));
     }
 
-    return static_cast<int>(max_length);
+    char_last_index[str[right]] = static_cast<int>(right) + 1;
+    max_length = max(max_length, right - left + 1);
+    right++;
+  }
+
+  return static_cast<int>(max_length);
 }
 
 int main(int argCount, char* argc[]) {
     INSTANTIATE_PROBLEM(RemoveDuplicateSortedArray);
     std::cout << engine::maths::GetHCF(119, 544);
+    engine::BinaryTree<int>::UnitTest();
+    engine::Queue<int>::UnitTest();  
     engine::Stack<int>::UnitTest();
     char* to_char_array = engine::ToStr(32);
     std::string temp_string(to_char_array);

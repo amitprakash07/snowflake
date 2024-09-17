@@ -19,7 +19,7 @@ namespace engine {
     private:
         void ResizeAndMove(uint32_t new_size);
         DataType* storage_;
-        uint32_t container_size_;
+        uint32_t max_container_element_count_;
         uint32_t top_index_;
         bool empty_;
     };
