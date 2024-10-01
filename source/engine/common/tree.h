@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "doubly_linked_list.h"
+
 namespace engine {
 
 enum class TreeTraverseOrder { PreOrder, InOrder, PostOrder };
@@ -32,17 +34,27 @@ class BinaryTree {
  public:
   void Construct(std::vector<DataType> data);
   void Traverse(const BinaryTreeNode<DataType>* tree_node,
-                       TreeTraverseOrder order, std::vector<DataType>& out) const;
+                TreeTraverseOrder order, std::vector<DataType>& out) const;
   const BinaryTreeNode<DataType>* Root() const { return root; }
+  uint32_t FindDepth(BinaryTreeNode<DataType>* node_to_found);
+  uint32_t FindDepth(DataType node_to_found);
   static void UnitTest();
 
- private:
+ protected:
   BinaryTreeNode<DataType>* root = nullptr;
 };
 
 template <class DataType>
 class BinarySearchTree : public BinaryTree<DataType> {
  public:
+  void Construct(std::vector<DataType> data);
+  void Add(DataType data);
+  DoublyLinkedList<DataType> Convert();
+
+  static void UnitTest();
+
+ private:
+  void Add(BinaryTreeNode<DataType>* node, DataType data);
 };
 
 }  // namespace engine

@@ -1,11 +1,15 @@
 
 #include "sort.h"
 
+#include <iostream>
+
+#include "util.h"
+
 using namespace engine;
 
 template <typename T>
 void Sort::MergeSort(T* o_List, int iListlength,
-                                    int (*SortFunc)(T i_A, T i_B)) {
+                     int (*SortFunc)(T i_A, T i_B)) {
   InternalMergeSort(o_List, 0, iListlength - 1);
 }
 
@@ -17,9 +21,8 @@ mergesort(a, mid + 1, hi);
 */
 
 template <typename T>
-void Sort::InternalMergeSort(T* o_list, unsigned int iStart,
-                                            unsigned int iEnd,
-                                            int (*SortingFunc)(T i_A, T i_B)) {
+void Sort::InternalMergeSort(T* o_list, unsigned int iStart, unsigned int iEnd,
+                             int (*SortingFunc)(T i_A, T i_B)) {
   if (iEnd <= iStart) return;
   unsigned int mid = iStart + (iEnd - iStart) / 2;
   InternalMergeSort(o_list, iStart, mid, SortingFunc);
@@ -28,9 +31,8 @@ void Sort::InternalMergeSort(T* o_list, unsigned int iStart,
 }
 
 template <typename T>
-void Sort::Merge(T* o_list, unsigned int start,
-                                unsigned int middle, unsigned int end,
-                                int (*SortingFunc)(T i_A, T i_B)) {
+void Sort::Merge(T* o_list, unsigned int start, unsigned int middle,
+                 unsigned int end, int (*SortingFunc)(T i_A, T i_B)) {
   if (SortingFunc == nullptr) {
     T* leftArray = new T[(middle - start) + 1];
     for (int i = 0; i < ((middle - start) + 1); i++)
@@ -62,4 +64,16 @@ void Sort::Merge(T* o_list, unsigned int start,
 
 template <typename T>
 void Sort::QuickSort(T* o_list, int iListlength,
-                                    int (*SortFunc)(T i_A, T i_B)) {}
+                     int (*SortFunc)(T i_A, T i_B)) {}
+
+void Sort::BubbleSort(std::vector<int>& array) {
+  for (int outer = (static_cast<int>(array.size()) - 1); outer >= 0; outer--) {
+    for (int inner = 0; inner < outer; inner++) {
+      if (array[inner] > array[inner + 1]) {
+        int temp = array[inner + 1];
+        array[inner + 1] = array[inner];
+        array[inner] = temp;
+      }
+    }
+  }
+}

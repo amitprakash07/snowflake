@@ -1,6 +1,8 @@
 #ifndef ENGINE_COMMON_SORT_H
 #define ENGINE_COMMON_SORT_H
 
+#include <vector>
+
 #include "defs.h"
 
 namespace engine {
@@ -14,6 +16,8 @@ public:
   static void QuickSort(T* o_List, int iListlength,
                         int (*SortFunc)(T i_A, T i_B) = nullptr);
 
+    static void BubbleSort(std::vector<int>& array);
+
  private:
   template <typename T>
   static void InternalMergeSort(T* o_list, unsigned int iStart,
@@ -23,6 +27,8 @@ public:
   static void Merge(T* o_list, unsigned int iStart, unsigned int middle,
                     unsigned int iEnd,
                     int (*SortingFunc)(T i_A, T i_B) = nullptr);
+
+    
 };
 }
 

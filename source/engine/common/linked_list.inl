@@ -4,7 +4,20 @@
 #include <iostream>
 #include <sstream>
 
-//#include "linked_list.h"
+// #include "linked_list.h"
+
+template <typename DataType>
+engine::LinkedList<DataType>::Node::Node() : data(), next(nullptr) {}
+
+template <typename DataType>
+typename engine::LinkedList<DataType>::Node*
+engine::LinkedList<DataType>::Data() const {
+  if (head_ && head_->next) {
+    return head_->next;
+  }
+
+  return nullptr;
+}
 
 template <typename DataType>
 engine::LinkedList<DataType>::LinkedList() {
@@ -20,6 +33,7 @@ engine::LinkedList<DataType>::LinkedList(DataType data) : LinkedList() {
   head_->next = new_node;
   count_ = 1;
 }
+
 template <typename DataType>
 engine::LinkedList<DataType>::~LinkedList<DataType>() {
   while (head_) {
@@ -99,37 +113,11 @@ DataType engine::LinkedList<DataType>::operator[](size_t index) const {
 }
 template <typename DataType>
 DataType engine::LinkedList<DataType>::GetMiddle() const {
-  if (head_ && head_->next) {
-    Node* dummy = head_->next;  // start of link list
-
-    Node* slow_ptr = dummy;
-    Node* fast_ptr = dummy;
-
-    while (fast_ptr && fast_ptr->next) {
-      slow_ptr = slow_ptr->next;
-      fast_ptr = fast_ptr->next->next;
-    }
-
-    return slow_ptr->data;
+  if (Node* middle_node = GetMiddleNode()) {
+    return middle_node->data;
   }
 
   return DataType();
-}
-template <typename DataType>
-void engine::LinkedList<DataType>::Reverse() {
-  if (head_ && head_->next) {
-    Node* prev = nullptr;
-    Node* current = head_->next;
-
-    while (current) {
-      Node* next = current->next;
-      current->next = prev;
-      prev = current;
-      current = next;
-    }
-
-    head_->next = prev;
-  }
 }
 
 template <typename DataType>
@@ -160,12 +148,12 @@ bool engine::LinkedList<DataType>::UnitTest() {
   std::string out = list.ToStr();
   std::cout << out.c_str();
 
-  std::cout << list.GetMiddle() << endl;
+  std::cout << list.GetMiddle() << std::endl;
 
   list.Reverse();
   std::cout << list.ToStr();
 
-  std::cout << list.GetMiddle() << endl;
+  std::cout << list.GetMiddle() << std::endl;
 
   return true;
 }

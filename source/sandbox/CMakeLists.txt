@@ -12,7 +12,7 @@ else()
     message(STATUS "CUDA not found, skipping CUDA examples")
 endif()
 
-add_subdirectory(leetcode ${PROJECT_INTERMEDIATE_DIR}/leetcode)
+add_subdirectory(coding_problems ${PROJECT_INTERMEDIATE_DIR}/coding_problems)
 add_subdirectory(experiments ${PROJECT_INTERMEDIATE_DIR}/experiments)
 
 revert_target_folder()

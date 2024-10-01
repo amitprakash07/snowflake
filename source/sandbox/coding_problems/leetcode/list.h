@@ -1,7 +1,6 @@
-#ifndef SANDBOX_LEETCODE_PROBLEM_LIST_H
-#define SANDBOX_LEETCODE_PROBLEM_LIST_H
+#ifndef SANDBOX_CODING_PROBLEMS_LEETCODE_LIST_H
+#define SANDBOX_CODING_PROBLEMS_LEETCODE_LIST_H
 
-#include "coding_problems.h"
 #include "unique_email_address.h"
 #include "sorted_square_array.h"
 #include "min_start_value.h"

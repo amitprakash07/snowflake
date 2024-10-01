@@ -2,6 +2,7 @@
 #include <functional>
 #include <iostream>
 #include <vector>
+#include "decorator_pattern.h"
 
 struct Data {
   uint32_t InstanceID : 24;
@@ -161,6 +162,7 @@ void simple_printf(
 }
 
 int main(int argcCount, char* argc[]) {
+  decorator::RunTest();
   simple_printf("dcff", 3, 'a', 1.999, 42.5);
 
   std::time_t todayTime;

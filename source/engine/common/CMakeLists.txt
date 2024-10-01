@@ -43,6 +43,8 @@ include_src(dequeue.inl)
 include_src(to_str.h)
 include_src(to_str.inl)
 include_src(maths_util.h)
+include_src(doubly_linked_list.h)
+include_src(doubly_linked_list.inl)
 
 make_library_target()
 group_target(Engine)

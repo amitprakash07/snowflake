@@ -6,7 +6,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "coding_problems.h"
+#include "interface.h"
 
 using namespace std;
 

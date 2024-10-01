@@ -2,8 +2,8 @@
 This file contains math-related functions
 */
 
-#ifndef _MATH_FUNCTIONS_H
-#define _MATH_FUNCTIONS_H
+#ifndef ENGINE_MATHS_UTILS_H
+#define ENGINE_MATHS_UTILS_H
 
 #include "Math.h"
 
@@ -25,4 +25,4 @@ float scaleAndBias(float valueToConvert, float oldRangeMin, float oldRangeMax,
 }  // namespace Math
 }  
 
-#endif  // EAE6320_MATH_FUNCTIONS_H
+#endif

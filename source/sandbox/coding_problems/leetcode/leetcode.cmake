@@ -1,16 +1,11 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-declare_target(LeetCode)
-include_src(coding_problems.h)
-include_src(coding_problem_list.h)
 include_src(unique_email_address.h)
 include_src(sorted_square_array.h)
 include_src(min_start_value.h)
 include_src(k-radius_averages.h)
 include_src(maximum_sub_array.h)
 include_src(remove_duplicate_sorted_array_2.h)
-include_src(leet_code_main.cc)
+include_src(list.h)
 
-make_executable_target()
-target_link_libraries(LeetCode EngineShared)
-group_target(LeetCode)
+group_sources(/LeetCode)
