@@ -8,7 +8,7 @@ namespace engine
         int GetHCF(int a, int b)
         {
             int remainder = a % b;
-            if(remainder == 0)
+            if (remainder == 0)
             {
                 return b;
             }
@@ -17,6 +17,6 @@ namespace engine
             b = remainder;
             return GetHCF(a, b);
         }
-    }
-}
+    }  // namespace maths
+}  // namespace engine
 #endif

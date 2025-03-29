@@ -3,28 +3,30 @@
 
 #include <cstdint>
 
-namespace engine {
-template <class DataType, uint64_t initial_size = 100>
-class Queue {
- public:
-  Queue();
-  void Push(const DataType& data);
-  void Pop();
-  DataType Front() const;
-  DataType Back() const;
-  size_t Size() const;
-  bool Empty() const;
-  std::string Print() const;
+namespace engine
+{
+    template <class DataType, uint64_t initial_size = 100>
+    class Queue
+    {
+    public:
+        Queue();
+        void        Push(const DataType& data);
+        void        Pop();
+        DataType    Front() const;
+        DataType    Back() const;
+        size_t      Size() const;
+        bool        Empty() const;
+        std::string Print() const;
 
-  static void UnitTest();
+        static void UnitTest();
 
- private:
-  uint64_t back_;
-  uint64_t front_;
-  bool empty_;
-  DataType* storage_;
-  uint64_t max_container_element_count_;
-};
+    private:
+        uint64_t  back_;
+        uint64_t  front_;
+        bool      empty_;
+        DataType* storage_;
+        uint64_t  max_container_element_count_;
+    };
 
 }  // namespace engine
 
