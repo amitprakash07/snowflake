@@ -1,9 +1,12 @@
-#include "Camera.h"
 
-#include "../../../Core/EngineCore/EngineCore.h"
-#include "../../../Core/Utilities/HashedString.h"
-#include "../../Maths/Functions.h"
-#include "../../Utilities/IObjectController.h"
+#include "engine_core.h"
+#include "common/hashed_string.h"
+#include "maths/utils.h"
+#include "input/../../Utilities/IObjectController.h"
+
+#include "camera.h"
+
+using namespace engine;
 
 SharedPointer<Camera> Camera::CreateCamera(
     std::string i_name, Math::Vector3 i_position,

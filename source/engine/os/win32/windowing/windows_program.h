@@ -1,18 +1,12 @@
-/*
-This file contains all of the function declarations for this example program
-*/
 
-#ifndef __WINDOWSPROGRAM_H
-#define __WINDOWSPROGRAM_H
-
-// Header Files
-//=============
+#ifndef ENGINE_OS_WIN32_WINDOWING_WINDOWS_PROGRAM_H_
+#define ENGINE_OS_WIN32_WINDOWING_WINDOWS_PROGRAM_H_
 
 #include <string>
 
-#include "../../../Windows/WindowsIncludes.h"
-#include "../../Utilities/RTTI.h"
-#include "../../Utilities/SharedPointer.h"
+#include "common/rtti.h"
+#include "common/shared_pointer.h"
+#include "os/win32/os_win32_includes.h"
 
 namespace engine {
 namespace Windows {
@@ -24,8 +18,8 @@ class WindowingSystem : public RTTI {
   bool CreateMainWindow(const HINSTANCE i_thisInstanceOfTheProgram,
                         const int i_initialWindowDisplayState);
   static bool OnMainWindowClosed(const HINSTANCE i_thisInstanceOfTheProgram);
-  std::string getTypeInfo() const override;
-  bool isBothSameType(SharedPointer<RTTI>, std::string) const override;
+  std::string GetType() const override;
+  bool IsSameType(SharedPointer<RTTI>, std::string) const override;
   int getWindowHeight() const;
   int getWindowWidth() const;
   ~WindowingSystem();
@@ -49,6 +43,6 @@ class WindowingSystem : public RTTI {
   void AssignFullResolutionWindow();
 };
 }  // namespace Windows
-}  
+}  // namespace engine
 
-#endif  // __WINDOWSPROGRAM_H
+#endif  //

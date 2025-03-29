@@ -12,7 +12,7 @@ include_source_list_from_file(physics/physics.cmake)
 include_source_list_from_file(networking/networking.cmake)
 include_source_list_from_file(maths/maths.cmake)
 include_source_list_from_file(input/input.cmake)
-include_source_list_from_file(os/win32/windowing/win32.windowing.cmake)
+include_source_list_from_file(os/os_platform.cmake)
 
 include_src(engine_defs.h)
 include_src(engine_core.h)

@@ -19,8 +19,8 @@ class StringHash : public RTTI {
   static unsigned __int32 Hash(const char *);
   static unsigned __int32 Hash(const void *, size_t);
   bool isNil() const;
-  std::string getTypeInfo() const override { return ""; }
-  bool isBothSameType(SharedPointer<RTTI>, std::string) const override {
+  std::string GetType() const override { return ""; }
+  bool IsSameType(SharedPointer<RTTI>, std::string) const override {
     return true;
   }
 

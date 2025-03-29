@@ -22,8 +22,8 @@ class MessagingSystem : public RTTI {
   // template<typename T>
   void sendMessage(utils::StringHash&, SharedPointer<RTTI>,
                    void* message_data = nullptr);
-  std::string getTypeInfo() const override { return ""; }
-  bool isBothSameType(SharedPointer<RTTI>, std::string) const override {
+  std::string GetType() const override { return ""; }
+  bool IsSameType(SharedPointer<RTTI>, std::string) const override {
     return true;
   }
 

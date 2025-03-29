@@ -8,16 +8,23 @@
 #define MAKE_STRING(X) #X
 
 namespace engine {
-template <typename TypeName> 
-  std::string ToString() { return MAKE_STRING(TypeName); }
-;
+template <typename TypeName>
+std::string ToString() {
+  return MAKE_STRING(TypeName);
+};
 class RTTI {
-public:
-  virtual std::string getTypeInfo() const = 0;
-  virtual bool isBothSameType(SharedPointer<RTTI>, std::string) const = 0;
+ public:
+  virtual std::string GetType() const = 0;
+  virtual bool IsSameType(SharedPointer<RTTI>, std::string) const = 0;
 
-  virtual ~RTTI(){};
-  RTTI(){};
+  virtual ~RTTI() = default;
+  RTTI() = default;
+
+  RTTI(const RTTI&) = default;
+  RTTI& operator=(const RTTI&) = default;
+
+  RTTI(RTTI&&) = default;
+  RTTI& operator=(RTTI&&) = default;
 };
 
 }

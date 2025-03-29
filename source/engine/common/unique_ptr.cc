@@ -23,13 +23,13 @@ UniquePtr<T>::~UniquePtr() {
 }
 
 template <typename T>
-UniquePtr<T>::UniquePtr(UniquePtr<T>& i_ptr) {
+UniquePtr<T>::UniquePtr(const UniquePtr<T>& i_ptr) {
   m_WrappingObject = i_ptr.m_WrappingObject;
   i_ptr.deleteObject();
 }
 
 template <typename T>
-UniquePtr<T>& UniquePtr<T>::operator=(UniquePtr& i_other) {
+UniquePtr<T>& UniquePtr<T>::operator=(const UniquePtr& i_other) {
   if (m_WrappingObject != nullptr) {
     deleteObject(this);
     m_WrappingObject = i_other.m_WrappingObject;
