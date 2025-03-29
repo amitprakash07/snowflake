@@ -4,11 +4,13 @@
 #include <sstream>
 #include <vector>
 
-namespace engine {
-namespace util {
-std::vector<int> PrefixArray(const std::vector<int>& input);
-std::string ToStr(const std::vector<int>& input_array);
+namespace engine
+{
+    namespace util
+    {
+        std::vector<int> PrefixArray(const std::vector<int>& input);
+        std::string      ToStr(const std::vector<int>& input_array);
 
-}  // namespace util
+    }  // namespace util
 }  // namespace engine
 #endif

@@ -10,7 +10,7 @@ class EngineCore {
   bool StartUp();
   void ShutDown();
 
-    bool RegisterAssetPath(OSPath )
+    bool RegisterAssetPath(OSPath)
 
   /*
    bool StartUp(HINSTANCE hInstance, int windowLayout, bool isServer);
