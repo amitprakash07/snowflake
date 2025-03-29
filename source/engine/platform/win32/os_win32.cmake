@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-include_source_list_from_file(windowing/os_win32_windowing.cmake)
-
 include_src(os_win32_includes.h)
 include_src(os_win32_utils.h)
 include_src(os_win32_utils.cc)
+include_src(os_win32_window_handler.h)
+include_src(os_win32_window_handler.cc)
 
-group_sources(/OS/Win32)
+group_sources(/Platform/Win32)

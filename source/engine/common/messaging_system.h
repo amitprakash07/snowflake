@@ -8,31 +8,32 @@
 #include "hashed_string.h"
 #include "message_handler_interface.h"
 
-namespace engine {
-class MessagingSystem : public RTTI {
- public:
-  static SharedPointer<MessagingSystem> getMessagingSystem();
-  void addMessageHandler(utils::StringHash&,
-                         SharedPointer<IMessageHandler>,
-                         typedefs::Priority);
-  bool removeMessageHandler(utils::StringHash&,
-                            SharedPointer<IMessageHandler>);
-  ~MessagingSystem();
+namespace engine
+{
+    class MessagingSystem : public RTTI
+    {
+    public:
+        static SharedPointer<MessagingSystem> getMessagingSystem();
+        void                                  addMessageHandler(utils::StringHash&, SharedPointer<IMessageHandler>, typedefs::Priority);
+        bool                                  removeMessageHandler(utils::StringHash&, SharedPointer<IMessageHandler>);
+        ~MessagingSystem();
 
-  // template<typename T>
-  void sendMessage(utils::StringHash&, SharedPointer<RTTI>,
-                   void* message_data = nullptr);
-  std::string GetType() const override { return ""; }
-  bool IsSameType(SharedPointer<RTTI>, std::string) const override {
-    return true;
-  }
+        // template<typename T>
+        void        sendMessage(utils::StringHash&, SharedPointer<RTTI>, void* message_data = nullptr);
+        std::string GetType() const override
+        {
+            return "";
+        }
+        bool IsSameType(SharedPointer<RTTI>, std::string) const override
+        {
+            return true;
+        }
 
- private:
-  static SharedPointer<MessagingSystem> mMessagingSystem;
-  std::map<utils::StringHash, std::vector<MessageHandle>>
-      m_MessageHandlers;
-  MessagingSystem();
-};
-}  
+    private:
+        static SharedPointer<MessagingSystem>                   mMessagingSystem;
+        std::map<utils::StringHash, std::vector<MessageHandle>> m_MessageHandlers;
+        MessagingSystem();
+    };
+}  // namespace engine
 
 #endif
