@@ -48,3 +48,4 @@ include_src(doubly_linked_list.inl)
 
 make_library_target()
 group_target(Engine)
+group_sources(Common)

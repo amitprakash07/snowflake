@@ -1,3 +1,13 @@
+# List of Ideas/Projects
+
+|Category | Idea | Dependency |
+|-------- | ----------|------|
+
+
+- General Coding
+- Image Visualization 
+- Image Processing using CPU
+- Image Processing using GPU
 Triangle
 Cube
 Textured Cube

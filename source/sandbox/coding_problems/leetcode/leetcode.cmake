@@ -6,6 +6,7 @@ include_src(min_start_value.h)
 include_src(k-radius_averages.h)
 include_src(maximum_sub_array.h)
 include_src(remove_duplicate_sorted_array_2.h)
+include_src(triplet_sum.h)
 include_src(list.h)
 
 group_sources(/LeetCode)

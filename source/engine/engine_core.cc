@@ -6,8 +6,10 @@
 #include "..\..\Graphics/Mesh.h"
 #include "..\..\Graphics\Graphics.h"
 #include "..\..\Windows\WindowsFunctions.h"
-#include "EngineCore.h"
+
 #include "Objects/Scene.h"
+
+#include "engine_core.h"
 
 SharedPointer<MessagingSystem>
     EngineCore::mMessagingSystem;

@@ -1,5 +1,5 @@
-#ifndef __PHYSICS_SYSTEM_H
-#define __PHYSICS_SYSTEM_H
+#ifndef ENGINE_PHYSICS_PHYSICS_SYSTEM_H_
+#define ENGINE_PHYSICS_PHYSICS_SYSTEM_H_
 
 #ifdef PLATFORM_OPEN_GL
 #include "../../../Externals/OpenGLExtensions/OpenGlExtensions.h"
@@ -7,11 +7,15 @@
 #include <d3d9.h>
 #endif
 
+#include "common/shared_pointer.h"
+#include "maths/ray_intersection.h"
 #include "../../Graphics/Line.h"
 #include "../../Graphics/Mesh.h"
 #include "../EngineCore/Objects/MeshObject.h"
-#include "../Physics/RayIntersection.h"
-#include "../Utilities/SharedPointer.h"
+
+
+
+using namespace engine;
 
 namespace engine {
 namespace Physics {

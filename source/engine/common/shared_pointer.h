@@ -12,7 +12,7 @@ class SharedPointer {
   bool deleteObject();
   SharedPointer(const SharedPointer<T>&);
   SharedPointer<T>& operator=(SharedPointer<T>&);
-  // bool isBothSameType(SharedPointer<RTTI> i_ptr);
+  // bool IsSameType(SharedPointer<RTTI> i_ptr);
   bool isEqual(const SharedPointer<T>&) const;
   // SharedPointer(SharedPointer<T> *);
   T& operator*();

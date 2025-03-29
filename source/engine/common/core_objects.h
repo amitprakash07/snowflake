@@ -7,13 +7,24 @@
 
 namespace engine {
 
-enum class ObjectProperty : uint32_t { Default = 0 };
+// Enum for type of Object property
+enum class ObjectProperty : uint8_t { Default = 0 };
 
+// Interface IObjectPropertyAttributes class for describing object property
+// attributes
 class IObjectPropertyAttributes {
  public:
   virtual ~IObjectPropertyAttributes() = default;
+
+  IObjectPropertyAttributes(const IObjectPropertyAttributes&) = default;
+  IObjectPropertyAttributes& operator=(const IObjectPropertyAttributes&) =
+      default;
+
+  IObjectPropertyAttributes(IObjectPropertyAttributes&&) = default;
+  IObjectPropertyAttributes& operator=(IObjectPropertyAttributes&&) = default;
 };
 
+// Interface class for all objects
 class IObject {
  public:
   virtual ~IObject() = default;
@@ -21,20 +32,30 @@ class IObject {
       ObjectProperty property, IObjectPropertyAttributes* attributes) = 0;
   virtual IObjectPropertyAttributes* RemovePropertyAttributes(
       ObjectProperty property) = 0;
+
+  IObject(const IObject&) = default;
+  IObject& operator=(const IObject&) = default;
+
+  IObject(IObject&&) = default;
+  IObject& operator=(IObject&&) = default;
 };
 
+// Default Object Property
 class ObjectDefaultPropertyAttributes : public IObjectPropertyAttributes {
  public:
   ObjectDefaultPropertyAttributes() = default;
 };
 
-class DefaultObject : public IObject {
+// Default Object
+class CoreObject : public IObject {
  public:
-  DefaultObject() : default_attributes_() {
+  CoreObject() :
+    default_attributes_() {
     object_property_attributes_map_[ObjectProperty::Default] =
         &default_attributes_;
   }
-  ~DefaultObject() = default;
+
+  ~CoreObject() = default;
 
  private:
   ObjectDefaultPropertyAttributes default_attributes_;

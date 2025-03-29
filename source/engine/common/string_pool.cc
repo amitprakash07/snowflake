@@ -3,48 +3,48 @@
 
 using namespace engine;
 
-SharedPointer<StringPool> StringPool::mStringPool;
+SharedPointer<StringPool> StringPool::string_pool_instance_;
 
-SharedPointer<StringPool> StringPool::getStringPool() {
-  if (mStringPool.isNull()) {
-    /*mStringPool = EngineController::GameEngine::isEngineInitialized() ?
+SharedPointer<StringPool> StringPool::Instance() {
+  if (string_pool_instance_.isNull()) {
+    /*string_pool_instance_ = EngineController::GameEngine::isEngineInitialized() ?
             new
        (EngineController::GameEngine::getMemoryManager()->__alloc(sizeof(StringPool)))
        StringPool() :
     */
     SharedPointer<StringPool> tempPool(new StringPool(), "StringPool");
-    mStringPool = tempPool;
+    string_pool_instance_ = tempPool;
   }
-  return mStringPool;
-}  // getStringPool
+  return string_pool_instance_;
+}  // Instance
 
 StringPool::~StringPool() {
-  while (mStringList.size() != 0) {
-    delete (mStringList.at(0).mString);
-    mStringList.at(0).mString = nullptr;
-    mStringList.erase(mStringList.begin());
+  while (string_list_.size() != 0) {
+    delete (string_list_.at(0).mString);
+    string_list_.at(0).mString = nullptr;
+    string_list_.erase(string_list_.begin());
   }
 }
 
-StringPool::StringPool() { mStringList.reserve(200); }
+StringPool::StringPool() { string_list_.reserve(200); }
 
-char* StringPool::findString(char* i_string) {
+char* StringPool::FindString(const char* i_string) {
   if (i_string != nullptr) {
     size_t tempStringLength = strlen(i_string);
     bool isFound = false;
 
-    for (size_t i = 0; i < mStringList.size(); i++) {
-      if (utils::StringHash(mStringList[i].getAsChar()) ==
+    for (size_t i = 0; i < string_list_.size(); i++) {
+      if (utils::StringHash(string_list_[i].getAsChar()) ==
           utils::StringHash(i_string))
-        return mStringList[i].getAsChar();
+        return string_list_[i].getAsChar();
     }
-    return (addString(i_string));
+    return (AddString(i_string));
   }
   return nullptr;
 }  // end find function
 
-char* StringPool::addString(char* i_String) {
+char* StringPool::AddString(const char* i_String) {
   typedefs::String tempString = typedefs::String(i_String);
-  mStringList.push_back(tempString);
+  string_list_.push_back(tempString);
   return tempString.mString;
 }

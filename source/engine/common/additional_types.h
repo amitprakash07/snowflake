@@ -41,7 +41,7 @@ struct _String {
     mStringLength = 0;
   }
 
-  _String(char *i_char) {
+  _String(const char *i_char) {
     mString = _strdup(i_char);
     mStringLength = strlen(mString);
   }

@@ -11,8 +11,8 @@ class InputController : public IMessageHandler {
   static SharedPointer<InputController> getInputController();
   void HandleMessage(utils::StringHash&, SharedPointer<RTTI>,
                      void* i_pMessageData) override;
-  std::string getTypeInfo() const override;
-  bool isBothSameType(SharedPointer<RTTI>, std::string) const override;
+  std::string GetType() const override;
+  bool IsSameType(SharedPointer<RTTI>, std::string) const override;
 
  private:
   static SharedPointer<InputController> mInputController;

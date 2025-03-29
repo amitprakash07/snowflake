@@ -1,5 +1,7 @@
-#ifndef __MOUSE_CONTROLLER_H
-#define __MOUSE_CONTROLLER_H
+#ifndef ENGINE_INPUT_INPUT_DEFS_H_
+#define ENGINE_INPUT_INPUT_DEFS_H_
+
+#include "engine_core.h"
 
 namespace engine {
 struct MouseStates {
@@ -17,7 +19,7 @@ struct MouseStates {
 
 struct MouseEventAndPosition {
   int x;     // x-coordinate
-  int y;     // y-coordiante
+  int y;     // y-coordinate
   POINTS P;  // Point in screen coordinate - depending on screen size
   MouseStates mMouseStates;
 };
@@ -27,5 +29,5 @@ struct WindowsParam {
   WPARAM wParam;
   LPARAM lParam;
 };
-}  
+}  // namespace engine
 #endif

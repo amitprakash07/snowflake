@@ -1,18 +1,25 @@
 #include <iostream>
 
-#include "../../../Windows/WindowsFunctions.h"
-#include "../../MessagingSystem/MessagingSystem.h"
-#include "../../NetworkManager/NetworkManager.h"
-#include "../../StringPoolManager/StringPool.h"
-#include "../EngineCore.h"
+
+#include "engine_core.h"
+#include "common/messaging_system.h"
+#include "common/shared_pointer.h"
+#include "common/string_pool.h"
+
+#include "input/input_defs.h"
+
+#include "os/win32/os_win32_utils.h"
+#include "networking/network_manager.h"
+
 #include "Resources/Resource.h"
-#include "WindowsProgram.h"
+#include "windows_program.h"
 
-SharedPointer<Windows::WindowingSystem>
-    Windows::WindowingSystem::mWindowingSystem;
 
-SharedPointer<Windows::WindowingSystem>
-Windows::WindowingSystem::getWindowingSystem(bool fullScreen, int width,
+engine::SharedPointer<engine::Windows::WindowingSystem>
+engine::Windows::WindowingSystem::mWindowingSystem;
+
+engine::SharedPointer<engine::Windows::WindowingSystem>
+engine::Windows::WindowingSystem::getWindowingSystem(bool fullScreen, int width,
                                                      int height) {
   if (mWindowingSystem.isNull()) {
     SharedPointer<Windows::WindowingSystem> temp(
@@ -27,7 +34,7 @@ Windows::WindowingSystem::getWindowingSystem(bool fullScreen, int width,
   return mWindowingSystem;
 }
 
-bool Windows::WindowingSystem::CreateMainWindow(
+bool engine::Windows::WindowingSystem::CreateMainWindow(
     const HINSTANCE i_thisInstanceOfTheProgram,
     const int i_initialWindowDisplayState) {
   ATOM mainWindowClass = RegisterMainWindowClass(i_thisInstanceOfTheProgram);
@@ -40,7 +47,7 @@ bool Windows::WindowingSystem::CreateMainWindow(
   return false;
 }
 
-ATOM Windows::WindowingSystem::RegisterMainWindowClass(
+ATOM engine::Windows::WindowingSystem::RegisterMainWindowClass(
     const HINSTANCE i_thisInstanceOfTheProgram) const {
   WNDCLASSEX wndClassEx = {0};
   wndClassEx.cbSize = sizeof(WNDCLASSEX);
@@ -90,7 +97,7 @@ ATOM Windows::WindowingSystem::RegisterMainWindowClass(
   return mainWindowClass;
 }
 
-HWND Windows::WindowingSystem::CreateMainWindowHandle(
+HWND engine::Windows::WindowingSystem::CreateMainWindowHandle(
     const HINSTANCE i_thisInstanceOfTheProgram,
     const int i_initialWindowDisplayState) const {
   // Create the main window
@@ -236,7 +243,7 @@ HWND Windows::WindowingSystem::CreateMainWindowHandle(
   return mainWindow;
 }
 
-LRESULT CALLBACK Windows::WindowingSystem::OnMessageReceived(
+LRESULT CALLBACK engine::Windows::WindowingSystem::OnMessageReceived(
     HWND i_window, UINT i_message, WPARAM i_wParam, LPARAM i_lParam) {
   switch (i_message) {
     case WM_CHAR: {
@@ -285,65 +292,65 @@ LRESULT CALLBACK Windows::WindowingSystem::OnMessageReceived(
       //}
       // If the key press wasn't handled pass it on to Windows to process in the
       // default way
-      utils::StringHash temp =
-          EngineCore::getStringPool()->findString("KeyDown");
-      SharedPointer<WindowingSystem> tempWindowingSystem =
-          EngineCore::getWindowingSystem();
-      EngineCore::getMessagingSystem()->sendMessage(
-          temp, tempWindowingSystem.CastSharedPointer<RTTI>(),
+      engine::utils::StringHash temp =
+          engine::EngineCore::getStringPool()->FindString("KeyDown");
+      engine::SharedPointer<engine::Windows::WindowingSystem> tempWindowingSystem =
+          engine::EngineCore::getWindowingSystem();
+      engine::EngineCore::getMessagingSystem()->sendMessage(
+          temp, tempWindowingSystem.CastSharedPointer<engine::RTTI>(),
           reinterpret_cast<void*>(i_wParam));
       break;
     }
     case WM_KEYDOWN: {
-      utils::StringHash temp =
-          EngineCore::getStringPool()->findString("KeyDown");
-      SharedPointer<WindowingSystem> tempWindowingSystem =
-          EngineCore::getWindowingSystem();
-      EngineCore::getMessagingSystem()->sendMessage(
-          temp, tempWindowingSystem.CastSharedPointer<RTTI>(),
+        engine::utils::StringHash temp =
+            engine::EngineCore::getStringPool()->FindString("KeyDown");
+        engine::SharedPointer<engine::Windows::WindowingSystem> tempWindowingSystem =
+            engine::EngineCore::getWindowingSystem();
+        engine::EngineCore::getMessagingSystem()->sendMessage(
+          temp, tempWindowingSystem.CastSharedPointer<engine::RTTI>(),
           reinterpret_cast<void*>(i_wParam));
       break;
     }
     case WM_LBUTTONDOWN: {
-      utils::StringHash temp =
-          EngineCore::getStringPool()->findString(
+        engine::utils::StringHash temp =
+            engine::EngineCore::getStringPool()->FindString(
               "MouseButtonDownEvent");
-      SharedPointer<MouseController> tempMouseController =
-          EngineCore::getMouseInputController();
+        engine::SharedPointer<engine::MouseController> tempMouseController =
+            engine::EngineCore::getMouseInputController();
       WindowsParam windowsParameter;
       windowsParameter.windowsMessage = i_message;
       windowsParameter.wParam = i_wParam;
       windowsParameter.lParam = i_lParam;
-      EngineCore::getMessagingSystem()->sendMessage(
-          temp, tempMouseController.CastSharedPointer<RTTI>(),
+        engine::EngineCore::getMessagingSystem()->sendMessage(
+          temp, tempMouseController.CastSharedPointer<engine::RTTI>(),
           reinterpret_cast<void*>(&windowsParameter));
       break;
     }
     case WM_MOUSEMOVE: {
-      utils::StringHash temp =
-          EngineCore::getStringPool()->findString("MouseMoveEvent");
-      SharedPointer<MouseController> tempMouseController =
-          EngineCore::getMouseInputController();
+        engine::utils::StringHash temp =
+            engine::EngineCore::getStringPool()->FindString("MouseMoveEvent");
+        engine::SharedPointer<engine::MouseController> tempMouseController =
+            engine::EngineCore::getMouseInputController();
       WindowsParam windowsParameter;
       windowsParameter.windowsMessage = i_message;
       windowsParameter.wParam = i_wParam;
       windowsParameter.lParam = i_lParam;
-      EngineCore::getMessagingSystem()->sendMessage(
-          temp, tempMouseController.CastSharedPointer<RTTI>(),
+        engine::EngineCore::getMessagingSystem()->sendMessage(
+          temp, tempMouseController.CastSharedPointer<engine::RTTI>(),
           reinterpret_cast<void*>(&windowsParameter));
       break;
     }
     case WM_LBUTTONUP: {
-      utils::StringHash temp =
-          EngineCore::getStringPool()->findString("MouseButtonUpEvent");
-      SharedPointer<MouseController> tempMouseController =
-          EngineCore::getMouseInputController();
+        engine::utils::StringHash temp =
+            engine::EngineCore::getStringPool()->FindString("MouseButtonUpEvent");
+        engine::SharedPointer<engine::MouseController> tempMouseController =
+            engine::EngineCore::getMouseInputController();
       WindowsParam windowsParameter;
       windowsParameter.windowsMessage = i_message;
       windowsParameter.wParam = i_wParam;
       windowsParameter.lParam = i_lParam;
-      EngineCore::getMessagingSystem()->sendMessage(
-          temp, tempMouseController.CastSharedPointer<RTTI>(),
+        engine::EngineCore::getMessagingSystem()->sendMessage(
+          temp, tempMouseController.CastSharedPointer<engine::RTTI>(),
           reinterpret_cast<void*>(&windowsParameter));
       break;
     }
@@ -356,7 +363,7 @@ LRESULT CALLBACK Windows::WindowingSystem::OnMessageReceived(
       // (if this isn't done the application would continue to run with no
       // window). This is where the exitCode in WaitForShutdown() comes from:
       // mWindowingSystem->s_mainWindow = nullptr;
-      EngineCore::getWindowingSystem()->s_mainWindow = nullptr;
+      engine::EngineCore::getWindowingSystem()->s_mainWindow = nullptr;
       int exitCode = 0;           // Arbitrary de facto success code
       PostQuitMessage(exitCode);  // This sends a WM_QUIT message
                                   // For WM_NCDESTROY messages, return 0 to
@@ -369,7 +376,7 @@ LRESULT CALLBACK Windows::WindowingSystem::OnMessageReceived(
   return DefWindowProc(i_window, i_message, i_wParam, i_lParam);
 }
 
-bool Windows::WindowingSystem::UnregisterMainWindowClass(
+bool engine::Windows::WindowingSystem::UnregisterMainWindowClass(
     const HINSTANCE i_thisInstanceOfTheProgram) const {
   if (UnregisterClass(s_mainWindowClassName, i_thisInstanceOfTheProgram) !=
       FALSE)
@@ -385,12 +392,12 @@ bool Windows::WindowingSystem::UnregisterMainWindowClass(
   }
 }
 
-HWND Windows::WindowingSystem::getMainWindow() const {
+HWND engine::Windows::WindowingSystem::getMainWindow() const {
   if (s_mainWindow) return s_mainWindow;
   return nullptr;
 }
 
-bool Windows::WindowingSystem::CleanupMainWindow() {
+bool engine::Windows::WindowingSystem::CleanupMainWindow() {
   if (s_mainWindow != nullptr) {
     if (DestroyWindow(s_mainWindow) != FALSE) {
       s_mainWindow = nullptr;
@@ -406,7 +413,7 @@ bool Windows::WindowingSystem::CleanupMainWindow() {
   return true;
 }
 
-bool Windows::WindowingSystem::OnMainWindowClosed(
+bool engine::Windows::WindowingSystem::OnMainWindowClosed(
     const HINSTANCE i_thisInstanceOfTheProgram) {
   bool wereThereErrors = false;
   if (!EngineCore::getWindowingSystem()->CleanupMainWindow())
@@ -418,24 +425,24 @@ bool Windows::WindowingSystem::OnMainWindowClosed(
   return !wereThereErrors;
 }
 
-Windows::WindowingSystem::WindowingSystem() {
+engine::Windows::WindowingSystem::WindowingSystem() {
   s_mainWindow = nullptr;
   s_mainWindowClassName = "Amit Prakash - Main Window Class";
 }
 
-Windows::WindowingSystem::~WindowingSystem() {
+engine::Windows::WindowingSystem::~WindowingSystem() {
   /*std::cout << "Something";
   s_mainWindow = nullptr;*/
 }
 
-bool Windows::WindowingSystem::isBothSameType(SharedPointer<RTTI>,
+bool engine::Windows::WindowingSystem::IsSameType(engine::SharedPointer<RTTI>,
                                                       std::string) const {
   return true;
 }
 
-std::string Windows::WindowingSystem::getTypeInfo() const { return ""; }
+std::string engine::Windows::WindowingSystem::GetType() const { return ""; }
 
-void Windows::WindowingSystem::AssignFullResolutionWindow() {
+void engine::Windows::WindowingSystem::AssignFullResolutionWindow() {
   HWND desktopResolution = GetDesktopWindow();
   RECT fullResolution;
   GetWindowRect(desktopResolution, &fullResolution);
@@ -443,6 +450,6 @@ void Windows::WindowingSystem::AssignFullResolutionWindow() {
   height = fullResolution.bottom;
 }
 
-int Windows::WindowingSystem::getWindowHeight() const { return height; }
+int engine::Windows::WindowingSystem::getWindowHeight() const { return height; }
 
-int Windows::WindowingSystem::getWindowWidth() const { return width; }
+int engine::Windows::WindowingSystem::getWindowWidth() const { return width; }
