@@ -1,8 +1,3 @@
-/*
-        Any project that uses Windows should #include this file
-        to ensure consistency
-*/
-
 #ifndef ENGINE_OS_WIN32_OS_WIN32_INCLUDES_H_
 #define ENGINE_OS_WIN32_OS_WIN32_INCLUDES_H_
 
@@ -17,5 +12,7 @@
 
 #undef NOMINMAX
 #undef WIN32_LEAN_AND_MEAN
+
+
 
 #endif

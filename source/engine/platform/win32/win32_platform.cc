@@ -1,13 +1,114 @@
 
 
+#include <cassert>
 #include <iostream>
 #include <ShlObj.h>
 #include <sstream>
 #include <ctime>
 
-#include "win32_platform.h"
+#include "platform/platform.h"
 
-bool engine::Win32Platform::GetEnvVar(const char* const env_var, std::string& env_val, std::string* error_message)
+engine::Platform* engine::Platform::platform_ = nullptr;
+
+bool engine::Platform::Initialize(const EngineStartupInfo& engine_startup_info)
+{
+    if (platform_ == nullptr)
+    {
+        platform_ = new Platform();
+    }
+
+    if (platform_)
+    {
+        if (!platform_->initialized_)
+        {
+            bool success = true;
+            for (uint8_t i = 0; i < static_cast<uint8_t>(PlatformHandlerType::Count); i++)
+            {
+                IPlatformHandler*& platform_handler = platform_->platform_handlers_[i];
+
+                if (platform_handler == nullptr)
+                {
+                    switch (static_cast<PlatformHandlerType>(i))
+                    {
+                    case PlatformHandlerType::File:
+                        platform_handler = new FileSystem();
+                        break;
+                    case PlatformHandlerType::Process:
+                        platform_handler = new ProcessSystem();
+                        break;
+                    case PlatformHandlerType::Error:
+                        platform_handler = new ErrorSystem();
+                        break;
+                    case PlatformHandlerType::Logging:
+                        platform_handler = new LoggingSystem();
+                        break;
+                    case PlatformHandlerType::Windowing:
+                        platform_handler = new WindowingSystem(engine_startup_info.win_display_state);
+                        break;
+
+                    case PlatformHandlerType::UnRegistered:
+                    case PlatformHandlerType::Count:
+                        break;
+                    }
+                }
+
+                if (platform_handler != nullptr)
+                {
+                    if (!platform_handler->IsInitialized())
+                    {
+                        success &= platform_handler->StartUp();
+                    }
+                }
+            }
+
+            if (success)
+            {
+                platform_->initialized_ = true;
+            }
+        }
+
+        return platform_->initialized_;
+    }
+
+    return false;
+}
+
+engine::Platform* engine::Platform::Instance()
+{
+    return platform_;
+}
+
+bool engine::Platform::ShutDown()
+{
+    bool success = true;
+    if (platform_)
+    {
+        if (platform_->initialized_)
+        {
+            for (uint8_t i = 0; i < static_cast<uint8_t>(PlatformHandlerType::Count); i++)
+            {
+                IPlatformHandler*& platform_handler = platform_->platform_handlers_[i];
+
+                if (platform_handler != nullptr)
+                {
+                    if (platform_handler->IsInitialized())
+                    {
+                        success &= platform_handler->ShutDown();
+                        delete platform_handler;
+                        platform_handler = nullptr;
+                    }
+                }
+            }
+        }
+
+        delete platform_;
+        platform_ = nullptr;
+    }
+
+    return success;
+}
+
+bool engine::Platform::GetEnvVar(const char* const env_var, std::string& env_val, std::string* error_message)
 {
     // Windows requires a character buffer
     // to copy the environment variable into.
@@ -40,8 +141,9 @@ bool engine::Win32Platform::GetEnvVar(const char* const env_var, std::string& en
     {
         if (error_message)
         {
-            DWORD       error_code;
-            std::string error_string = GetLastWindowsError(&error_code);
+            ErrorCode   error_code;
+            std::string error_string;
+            error_code = ErrorHandler()->GetLastError(&error_string);
             if (error_code == ERROR_ENVVAR_NOT_FOUND)
             {
                 // If you're seeing this error and the environment variable is spelled correctly
@@ -66,17 +168,17 @@ bool engine::Win32Platform::GetEnvVar(const char* const env_var, std::string& en
     }
 }
 
-bool engine::Win32Platform::SetEnvVar(const char* env_var, const std::string& env_val, std::string* error_message)
+bool engine::Platform::SetEnvVar(const char* env_var, const std::string& env_val, std::string* error_message)
 {
     //Assert(env_var, "Null VAriable name");
     return (::SetEnvironmentVariable(env_var, env_val.c_str()));
 }
 
-bool engine::Win32Platform::CopyFile(const char* const path_source,
-                                   const char* const path_target,
-                                   bool              overwrite,
-                                   bool              modify_time,
-                                   std::string*      error_message)
+bool engine::FileSystem::Copy(const char* const path_source,
+                              const char* const path_target,
+                              bool              overwrite,
+                              bool              modify_time,
+                              std::string*      error_message)
 {
     if (::CopyFile(path_source, path_target, overwrite) != FALSE)
     {
@@ -90,7 +192,7 @@ bool engine::Win32Platform::CopyFile(const char* const path_source,
             {
                 if (error_message)
                 {
-                    *error_message = GetLastWindowsError();
+                    *error_message = ErrorHandler()->GetFormattedLastError();
                 }
 
                 return false;
@@ -117,7 +219,7 @@ bool engine::Win32Platform::CopyFile(const char* const path_source,
             {
                 if (error_message)
                 {
-                    *error_message = GetLastWindowsError();
+                    *error_message = ErrorHandler()->GetFormattedLastError();
                 }
 
                 if (file_handle != INVALID_HANDLE_VALUE)
@@ -128,7 +230,7 @@ bool engine::Win32Platform::CopyFile(const char* const path_source,
                         if (error_message)
                         {
                             *error_message += "\n";
-                            *error_message += GetLastWindowsError();
+                            *error_message += ErrorHandler()->GetFormattedLastError();
                         }
                     }
                 }
@@ -142,12 +244,12 @@ bool engine::Win32Platform::CopyFile(const char* const path_source,
 
     if (error_message)
     {
-        *error_message = GetLastWindowsError();
+        *error_message = ErrorHandler()->GetFormattedLastError();
     }
     return false;
 }
 
-bool engine::Win32Platform::CreateDirectoryIfNecessary(const std::string& directory_path, std::string* error_message)
+bool engine::FileSystem::CreateDirectoryIfNecessary(const std::string& directory_path, std::string* error_message)
 {
     // If the path is to a file (likely), remove it so that only the directory remains
     std::string directory;
@@ -186,7 +288,7 @@ bool engine::Win32Platform::CreateDirectoryIfNecessary(const std::string& direct
 
             if (error_message)
             {
-                *error_message = GetFormattedWindowsError(result);
+                *error_message = ErrorHandler()->GetFormattedErrorMessage(result);
             }
             return false;
         }
@@ -206,13 +308,13 @@ bool engine::Win32Platform::CreateDirectoryIfNecessary(const std::string& direct
 
     if (error_message)
     {
-        *error_message = GetLastWindowsError();
+        *error_message = ErrorHandler()->GetFormattedLastError();
     }
 
     return false;
 }
 
-bool engine::Win32Platform::DoesFileExist(const std::string& file_path, std::string* error_message)
+bool engine::FileSystem::DoesFileExist(const std::string& file_path, std::string* error_message)
 {
     // Try to get information about the file
     WIN32_FIND_DATA fileData;
@@ -222,8 +324,7 @@ bool engine::Win32Platform::DoesFileExist(const std::string& file_path, std::str
         if (FindClose(file) == FALSE)
         {
             std::stringstream errorMessage;
-            errorMessage << "Windows failed to close the file handle to \"" << file_path
-                         << "\": " << GetLastWindowsError();
+            errorMessage << "Windows failed to close the file handle to \"" << file_path << "\": " << GetLastError();
             MessageBox(nullptr, errorMessage.str().c_str(), "Error Closing File Handle", MB_OK | MB_ICONERROR);
         }
         return true;
@@ -231,14 +332,14 @@ bool engine::Win32Platform::DoesFileExist(const std::string& file_path, std::str
 
     if (error_message)
     {
-        *error_message = GetLastWindowsError();
+        *error_message = ErrorHandler()->GetFormattedLastError();
     }
     return false;
 }
 
-bool engine::Win32Platform::GetLastWriteTime(const std::string& file_path,
-                                           uint64_t&          last_write_time,
-                                           std::string*       error_message)
+bool engine::FileSystem::GetLastWriteTime(const std::string& file_path,
+                                          uint64_t&          last_write_time,
+                                          std::string*       error_message)
 {
     // Get the last time that the file was written to
     srand(time(nullptr));
@@ -253,7 +354,7 @@ bool engine::Win32Platform::GetLastWriteTime(const std::string& file_path,
                 {
                     if (error_message)
                     {
-                        *error_message = GetLastWindowsError();
+                        *error_message = ErrorHandler()->GetFormattedLastError();
                     }
                     return false;
                 }
@@ -262,7 +363,7 @@ bool engine::Win32Platform::GetLastWriteTime(const std::string& file_path,
             {
                 if (error_message)
                 {
-                    *error_message = GetLastWindowsError();
+                    *error_message = ErrorHandler()->GetFormattedLastError();
                 }
                 return false;
             }
@@ -275,9 +376,9 @@ bool engine::Win32Platform::GetLastWriteTime(const std::string& file_path,
     return true;
 }
 
-bool engine::Win32Platform::ExecuteCommand(const std::string& command,
-                                         const std::string* optional_arguments,
-                                         std::string*       error_message)
+bool engine::ProcessSystem::ExecuteCommand(const std::string& command,
+                                           const std::string* optional_arguments,
+                                           std::string*       error_message)
 {
     bool were_there_errors = false;
 
@@ -334,7 +435,7 @@ bool engine::Win32Platform::ExecuteCommand(const std::string& command,
                     std::stringstream errorMessage;
                     errorMessage << "Windows failed to get the exit code "
                                     "of the process \""
-                                 << command << "\": " << GetLastWindowsError();
+                                 << command << "\": " << GetLastError();
                     *error_message = errorMessage.str();
                 }
             }
@@ -346,7 +447,7 @@ bool engine::Win32Platform::ExecuteCommand(const std::string& command,
             {
                 std::stringstream errorMessage;
                 errorMessage << "Windows failed to wait for the process \"" << command
-                             << "\" to finish: " << GetLastWindowsError();
+                             << "\" to finish: " << GetLastError();
                 *error_message = errorMessage.str();
             }
         }
@@ -355,14 +456,14 @@ bool engine::Win32Platform::ExecuteCommand(const std::string& command,
         {
             std::stringstream errorMessage;
             errorMessage << "Windows failed to close the handle to the process \"" << command
-                         << "\": " << GetLastWindowsError();
+                         << "\": " << GetLastError();
             MessageBox(NULL, errorMessage.str().c_str(), "Error Closing Process Handle", MB_OK | MB_ICONERROR);
         }
         if (CloseHandle(processInformation.hThread) == FALSE)
         {
             std::stringstream errorMessage;
             errorMessage << "Windows failed to close the handle to the process \"" << command
-                         << "\" thread: " << GetLastWindowsError();
+                         << "\" thread: " << GetLastError();
             MessageBox(NULL, errorMessage.str().c_str(), "Error Closing Process Thread Handle", MB_OK | MB_ICONERROR);
         }
 
@@ -373,68 +474,69 @@ bool engine::Win32Platform::ExecuteCommand(const std::string& command,
         if (error_message)
         {
             std::stringstream errorMessage;
-            errorMessage << "Windows failed to start the process \"" << command << "\": " << GetLastWindowsError();
+            errorMessage << "Windows failed to start the process \"" << command << "\": " << GetLastError();
             *error_message = errorMessage.str();
         }
         return false;
     }
 }
 
-bool engine::Win32Platform::ExecuteCommand(const std::string& command, std::string* error_message)
+bool engine::ProcessSystem::ExecuteCommand(const std::string& command, std::string* error_message)
 {
     return ExecuteCommand(command, nullptr, error_message);
 }
 
-std::string engine::Win32Platform::GetFormattedWindowsError(DWORD error_code)
+std::string engine::ErrorSystem::GetFormattedErrorMessage(engine::ErrorCode error_code)
 {
+    DWORD       win_error_code = static_cast<DWORD>(error_code);
     std::string error_message;
+
+    constexpr DWORD formatting_options =
+        // Get the error message from Windows
+        FORMAT_MESSAGE_FROM_SYSTEM
+        // The space for the error message should be allocated by Windows
+        | FORMAT_MESSAGE_ALLOCATE_BUFFER
+        // Any potentially deferred inserts should be ignored
+        // (i.e. the error message should be in its final form)
+        | FORMAT_MESSAGE_IGNORE_INSERTS;
+    const void*     message_is_from_windows             = nullptr;
+    constexpr DWORD use_the_default_language            = 0;
+    char*           message_buffer                      = nullptr;
+    constexpr DWORD minimum_character_count_to_allocate = 1;
+    va_list*        inserts_are_ignored                 = nullptr;
+    const DWORD     stored_character_count              = FormatMessage(formatting_options,
+                                                       message_is_from_windows,
+                                                       win_error_code,
+                                                       use_the_default_language,
+                                                       reinterpret_cast<LPSTR>(&message_buffer),
+                                                       minimum_character_count_to_allocate,
+                                                       inserts_are_ignored);
+    if (stored_character_count != 0)
     {
-        constexpr DWORD formatting_options =
-            // Get the error message from Windows
-            FORMAT_MESSAGE_FROM_SYSTEM
-            // The space for the error message should be allocated by Windows
-            | FORMAT_MESSAGE_ALLOCATE_BUFFER
-            // Any potentially deferred inserts should be ignored
-            // (i.e. the error message should be in its final form)
-            | FORMAT_MESSAGE_IGNORE_INSERTS;
-        const void*     message_is_from_windows             = nullptr;
-        constexpr DWORD use_the_default_language            = 0;
-        char*           message_buffer                      = nullptr;
-        constexpr DWORD minimum_character_count_to_allocate = 1;
-        va_list*        inserts_are_ignored                 = nullptr;
-        const DWORD     stored_character_count              = FormatMessage(formatting_options,
-                                                           message_is_from_windows,
-                                                           error_code,
-                                                           use_the_default_language,
-                                                           reinterpret_cast<LPSTR>(&message_buffer),
-                                                           minimum_character_count_to_allocate,
-                                                           inserts_are_ignored);
-        if (stored_character_count != 0)
-        {
-            error_message = message_buffer;
-        }
-        else
-        {
-            // If there's an error GetLastError() can be called again,
-            // but that is too complicated for this program :)
-            error_message = "Unknown Windows Error";
-        }
-        // Try to free the memory regardless of whether formatting worked or not,
-        // and ignore any error messages
-        LocalFree(message_buffer);
+        error_message = message_buffer;
     }
+    else
+    {
+        // If there's an error GetLastError() can be called again,
+        // but that is too complicated for this program :)
+        error_message = "Unknown Windows Error";
+    }
+    // Try to free the memory regardless of whether formatting worked or not,
+    // and ignore any error messages
+    LocalFree(message_buffer);
+
     return error_message;
 }
 
-std::string engine::Win32Platform::GetLastWindowsError(DWORD* error_code)
+engine::ErrorCode engine::ErrorSystem::GetLastError(std::string* error_message)
 {
     // Windows stores the error as a code
-    const DWORD errorCode = GetLastError();
-    if (error_code)
+    const DWORD error_code = ::GetLastError();
+    if (error_message)
     {
-        *error_code = errorCode;
+        *error_message = GetFormattedErrorMessage(static_cast<ErrorCode>(error_code));
     }
-    return GetFormattedWindowsError(errorCode);
+    return error_code;
 }
 
 //void WindowsUtil::Print(std::string i_str,
