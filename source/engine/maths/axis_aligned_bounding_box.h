@@ -8,7 +8,7 @@ struct Plane {
   Plane() = default;
   Math::Vector3
       _normal;  // Plane normal. Points x on the plane satisfy Dot(n,x) = d
-  float _d;     // d = dot(n,p) for a given point p on the plane
+  float _d;     // d = Dot(n,p) for a given point p on the plane
 };
 
 struct Sphere {

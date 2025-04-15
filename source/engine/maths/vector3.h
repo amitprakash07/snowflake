@@ -1,76 +1,72 @@
-/*
-        This class represents a position or direction
-*/
-
-#ifndef _MATH_CVECTOR_H
-#define _MATH_CVECTOR_H
+#ifndef ENGINE_MATH_VECTOR_3_H_
+#define ENGINE_MATH_VECTOR_3_H_
 #include <string>
 
-// Class Declaration
-//==================
+namespace engine
+{
+    class Vector3
+    {
+    public:
+        Vector3  operator+(const Vector3& other) const;
+        Vector3& operator+=(const Vector3& other);
 
-namespace engine {
-namespace Math {
-const float Epsilon = 1.0e-9f;
-class Vector3 {
-  // Interface
-  //==========
+        Vector3  operator-(const Vector3& other) const;
+        Vector3& operator-=(const Vector3& other);
+        Vector3  operator-() const;
 
- public:
-  // Addition
-  Vector3 operator+(const Vector3& i_rhs) const;
-  Vector3& operator+=(const Vector3& i_rhs);
+        Vector3  operator*(float scalar) const;
+        Vector3& operator*=(float scalar);
 
-  // Subtraction / Negation
-  Vector3 operator-(const Vector3& i_rhs) const;
-  Vector3& operator-=(const Vector3& i_rhs);
-  Vector3 operator-() const;
+        Vector3 operator*(const Vector3& other) const;
 
-  // Scalar Multiplication
-  Vector3 operator*(const float i_rhs) const;
-  Vector3& operator*=(const float i_rhs);
+        Vector3  operator/(float scalar) const;
+        Vector3& operator/=(float scalar);
 
-  Vector3 operator*(const Vector3 i_rhs) const;
+        Vector3& operator=(const Vector3& other);
 
-  // Division
-  Vector3 operator/(const float i_rhs) const;
-  Vector3& operator/=(const float i_rhs);
+        float   GetLength() const;
+        float   Normalize();
+        Vector3 CreateNormalized() const;
 
-  // Length / Normalization
-  float GetLength() const;
-  float Normalize();
-  Vector3 CreateNormalized() const;
+        float Dot(const Vector3& other) const;
 
-  // Dot Product
-  float dot(const Vector3& i_rhs) const;
-  // Cross Product
-  Vector3 Cross(const Vector3& i_rhs) const;
+        Vector3 Cross(const Vector3& other) const;
 
-  // Comparison
-  bool operator==(const Vector3& i_rhs) const;
-  bool operator!=(const Vector3& i_rhs) const;
+        bool operator==(const Vector3& other) const;
+        bool operator!=(const Vector3& other) const;
 
-  float& operator[](int iindex);
+        float operator[](int index) const;
 
-  float ScalarTripleProduct(Vector3 iA, Vector3 iB) const;
+        float ScalarTripleProduct(const Vector3& vec_a, const Vector3& vec_b) const;
 
-  void printVector() const;
+        const float* AsFloatArray() const;
 
-  float* toFloatArray() const;
+        Vector3(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 
-  Vector3(const float i_x = 0.0f, const float i_y = 0.0f,
-          const float i_z = 0.0f);
+        std::string ToString() const;
 
-  std::string toString() const;
+        float x() const
+        {
+            return x_;
+        }
 
-  // Data
-  //=====
+        float y() const
+        {
+            return y_;
+        }
 
-  // A vector class is one of the very few examples where I make data public
- public:
-  float x, y, z;
-};
-}  // namespace Math
-}  
+        float z() const
+        {
+            return z_;
+        }
 
-#endif  // _MATH_CVECTOR_H
+    private:
+        float  data_[3];
+        float& x_ = data_[0];
+        float& y_ = data_[1];
+        float& z_ = data_[2];
+    };
+
+}  // namespace engine
+
+#endif  // ENGINE_MATH_VECTOR_3_H_

@@ -71,9 +71,9 @@ class Quaternion {
 
   // Dot Product
   /*
-  The geometric interpretation of the quaternion dot product is similar to
-  the interpretation of the vector dot product;
-  The larger the absolute value of the quaternion dot product ab, the more
+  The geometric interpretation of the quaternion Dot product is similar to
+  the interpretation of the vector Dot product;
+  The larger the absolute value of the quaternion Dot product ab, the more
   “similar” the angular displacements represented by a and b.
   */
   float dot(const Quaternion& i_rhs) const;

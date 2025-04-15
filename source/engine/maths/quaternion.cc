@@ -54,7 +54,7 @@ Math::Quaternion Math::Quaternion::slerp(
   // Omega angular diplacement between two quaternions
   float cosOmega = fromQuaternion.dot(toQuartenion);
 
-  // If negative dot, negate one of the input
+  // If negative Dot, negate one of the input
   // quaternions to take the shorter 4D "arc"
   if (cosOmega < 0.0f) {
     fromQuaternion = -fromQuaternion;
