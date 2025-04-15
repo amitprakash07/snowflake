@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-include_source_list_from_file(win32/os_win32.cmake)
+if(WIN32)
+    include_source_list_from_file(win32/win32_platform.cmake)
+endif()
 
-include_src(platform_info.h)
-include_src(platform_file_system.h)
-include_src(platform_file_system.cc)
+include_src(platform.h)
 
-group_sources(/OS)
+group_sources(/Platform)
