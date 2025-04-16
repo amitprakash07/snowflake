@@ -11,8 +11,8 @@ Physics::Octree::Octree()
     mLevel       = 0;
     mNodes       = nullptr;
     mCountOfNode = 0;
-    min          = Math::Vector3(0, 0, 0);
-    max          = Math::Vector3(0, 0, 0);
+    min          = Vector3(0, 0, 0);
+    max          = Vector3(0, 0, 0);
 }
 
 Physics::Octree::~Octree()
@@ -21,12 +21,12 @@ Physics::Octree::~Octree()
         delete mNodes;
 }
 
-Math::Vector3 Physics::Octree::GetMax() const
+Vector3 Physics::Octree::GetMax() const
 {
     return max;
 }
 
-Math::Vector3 Physics::Octree::GetMin() const
+Vector3 Physics::Octree::GetMin() const
 {
     return min;
 }
@@ -58,7 +58,7 @@ Physics::OctreeNode* Physics::Octree::GetNodesInLevel(uint32_t levelIndex) const
     return &mNodes[baseOfNodesInLevel];
 }
 
-void Physics::Octree::InitFromRange(uint32_t level, Math::Vector3 min, Math::Vector3 max)
+void Physics::Octree::InitFromRange(uint32_t level, Vector3 min, Vector3 max)
 {
     mLevel           = level;
     mCountOfNode     = static_cast<uint32_t>((std::pow(8.0f, mLevel) - 1) / (8 - 1));
@@ -69,22 +69,22 @@ void Physics::Octree::InitFromRange(uint32_t level, Math::Vector3 min, Math::Vec
     mNodes[0].extent = (max - min) * 0.5f;
     for (uint32_t levelIndex = 0; levelIndex < mLevel - 1; ++levelIndex)
     {
-        uint32_t      baseOfNodesInLevel  = static_cast<uint32_t>(std::pow(8.0f, levelIndex) - 1) / (8 - 1);
-        uint32_t      countOfNodesInLevel = static_cast<uint32_t>(std::pow(8.0f, levelIndex));
-        Math::Vector3 extentInNextLevel   = mNodes[baseOfNodesInLevel].extent * 0.5f;
+        uint32_t baseOfNodesInLevel  = static_cast<uint32_t>(std::pow(8.0f, levelIndex) - 1) / (8 - 1);
+        uint32_t countOfNodesInLevel = static_cast<uint32_t>(std::pow(8.0f, levelIndex));
+        Vector3  extentInNextLevel   = mNodes[baseOfNodesInLevel].extent * 0.5f;
         for (uint32_t nodeIndex = 0; nodeIndex < countOfNodesInLevel; ++nodeIndex)
         {
-            uint32_t      indexOfNode = baseOfNodesInLevel + nodeIndex;
-            Math::Vector3 centerPos   = mNodes[indexOfNode].pos;
-            OctreeNode*   pChildren   = &mNodes[indexOfNode * 8 + 1];
-            pChildren[0].pos          = centerPos + Math::Vector3(-extentInNextLevel.x, -extentInNextLevel.y, -extentInNextLevel.z);
-            pChildren[1].pos          = centerPos + Math::Vector3(-extentInNextLevel.x, -extentInNextLevel.y, +extentInNextLevel.z);
-            pChildren[2].pos          = centerPos + Math::Vector3(+extentInNextLevel.x, -extentInNextLevel.y, +extentInNextLevel.z);
-            pChildren[3].pos          = centerPos + Math::Vector3(+extentInNextLevel.x, -extentInNextLevel.y, -extentInNextLevel.z);
-            pChildren[4].pos          = centerPos + Math::Vector3(-extentInNextLevel.x, +extentInNextLevel.y, -extentInNextLevel.z);
-            pChildren[5].pos          = centerPos + Math::Vector3(-extentInNextLevel.x, +extentInNextLevel.y, +extentInNextLevel.z);
-            pChildren[6].pos          = centerPos + Math::Vector3(+extentInNextLevel.x, +extentInNextLevel.y, +extentInNextLevel.z);
-            pChildren[7].pos          = centerPos + Math::Vector3(+extentInNextLevel.x, +extentInNextLevel.y, -extentInNextLevel.z);
+            uint32_t    indexOfNode = baseOfNodesInLevel + nodeIndex;
+            Vector3     centerPos   = mNodes[indexOfNode].pos;
+            OctreeNode* pChildren   = &mNodes[indexOfNode * 8 + 1];
+            pChildren[0].pos        = centerPos + Vector3(-extentInNextLevel.x(), -extentInNextLevel.y(), -extentInNextLevel.z());
+            pChildren[1].pos        = centerPos + Vector3(-extentInNextLevel.x(), -extentInNextLevel.y(), +extentInNextLevel.z());
+            pChildren[2].pos        = centerPos + Vector3(+extentInNextLevel.x(), -extentInNextLevel.y(), +extentInNextLevel.z());
+            pChildren[3].pos        = centerPos + Vector3(+extentInNextLevel.x(), -extentInNextLevel.y(), -extentInNextLevel.z());
+            pChildren[4].pos        = centerPos + Vector3(-extentInNextLevel.x(), +extentInNextLevel.y(), -extentInNextLevel.z());
+            pChildren[5].pos        = centerPos + Vector3(-extentInNextLevel.x(), +extentInNextLevel.y(), +extentInNextLevel.z());
+            pChildren[6].pos        = centerPos + Vector3(+extentInNextLevel.x(), +extentInNextLevel.y(), +extentInNextLevel.z());
+            pChildren[7].pos        = centerPos + Vector3(+extentInNextLevel.x(), +extentInNextLevel.y(), -extentInNextLevel.z());
             for (uint32_t childIndex = 0; childIndex < 8; ++childIndex)
             {
                 pChildren[childIndex].extent = extentInNextLevel;
@@ -111,10 +111,10 @@ void Physics::Octree::InitFromFile(const char* pFile)
         offset += sizeof(uint32_t);
         memcpy(reinterpret_cast<uint8_t*>(pBuffer) + offset, reinterpret_cast<uint8_t*>(&mCountOfNode), sizeof(uint32_t));
         offset += sizeof(uint32_t);
-        memcpy(reinterpret_cast<uint8_t*>(pBuffer) + offset, reinterpret_cast<uint8_t*>(&min), sizeof(Math::Vector3));
-        offset += sizeof(Math::Vector3);
-        memcpy(reinterpret_cast<uint8_t*>(pBuffer) + offset, reinterpret_cast<uint8_t*>(&max), sizeof(Math::Vector3));
-        offset += sizeof(Math::Vector3);
+        memcpy(reinterpret_cast<uint8_t*>(pBuffer) + offset, reinterpret_cast<uint8_t*>(&min), sizeof(Vector3));
+        offset += sizeof(Vector3);
+        memcpy(reinterpret_cast<uint8_t*>(pBuffer) + offset, reinterpret_cast<uint8_t*>(&max), sizeof(Vector3));
+        offset += sizeof(Vector3);
 
         // Build the Octree
         InitFromRange(mLevel, min, max);

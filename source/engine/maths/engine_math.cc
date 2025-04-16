@@ -2,13 +2,7 @@
 #include "engine_math.h"
 #include "vector3.h"
 
-#include <numbers>
-
 using namespace engine;
-
-constexpr float kEpsilon = 1.0e-9f;
-constexpr float kPi      = std::numbers::pi_v<float>;
-
 
 // Given segment ab and point c, computes closest point d on ab.
 // Also returns t for the position of d, d(t) = a + t*(b - a)
@@ -58,11 +52,7 @@ bool math::InRange(float valToCheck, float min, float max, bool minInclusive, bo
         return (valToCheck > min && valToCheck <= max) ? true : false;
 }
 
-float math::scaleAndBias(float valueToConvert,
-                         float oldRangeMin,
-                         float oldRangeMax,
-                         float newRangeMin,
-                         float newRangeMax)
+float math::scaleAndBias(float valueToConvert, float oldRangeMin, float oldRangeMax, float newRangeMin, float newRangeMax)
 {
     /*
   Scale and Bias Operation Formulae

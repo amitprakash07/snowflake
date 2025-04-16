@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATH_VECTOR_3_H_
-#define ENGINE_MATH_VECTOR_3_H_
+#ifndef ENGINE_MATHS_VECTOR_3_H_
+#define ENGINE_MATHS_VECTOR_3_H_
 #include <string>
 
 namespace engine
@@ -36,6 +36,8 @@ namespace engine
         bool operator!=(const Vector3& other) const;
 
         float operator[](int index) const;
+
+        float& operator[](int index);
 
         float ScalarTripleProduct(const Vector3& vec_a, const Vector3& vec_b) const;
 

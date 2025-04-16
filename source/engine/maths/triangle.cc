@@ -1,6 +1,8 @@
 #include "Triangle.h"
 
-float Physics::Triangle::Signed2DTriArea() const {
-  return ((vertexA.X - vertexC.X) * (vertexB.Y - vertexC.Y)) -
-         ((vertexA.Y - vertexC.Y) * (vertexB.X - vertexC.X));
+using namespace engine;
+
+float Triangle::Signed2DTriArea() const
+{
+    return ((vert_a_.x() - vert_c_.x()) * (vert_b_.y() - vert_c_.y())) - ((vert_a_.y() - vert_c_.y()) * (vert_b_.x() - vert_c_.x()));
 }

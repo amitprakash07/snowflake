@@ -177,6 +177,14 @@ float Vector3::operator[](int index) const
     return 0xFFFF;
 }
 
+float& Vector3::operator[](int index)
+{
+    if (index < 3 && index >= 0)
+    {
+        return data_[index];
+    }
+}
+
 float Vector3::ScalarTripleProduct(const Vector3& vec_a, const Vector3& vec_b) const
 {
     Vector3 temp = Vector3{x_, y_, z_};

@@ -12,20 +12,10 @@ Plane::Plane(const Vector3& normal, const Vector3& point_on_plane)
     distance_ = a * point_on_plane.x() + b * point_on_plane.y() + c * point_on_plane.z();
 }
 
-float Plane::GetDistanceFromOrigin() const
-{
-    return distance_;
-}
-
 Vector3 Plane::ClosestPointFromPointOnPlane(const Vector3& point_on_plane) const
 {
     float t = (normal_.Dot(point_on_plane) - distance_) / normal_.Dot(normal_);
     return (point_on_plane - (normal_ * t));
-}
-
-Vector3 Plane::GetNormal() const
-{
-    return normal_;
 }
 
 Plane Plane::ComputePlane(const Vector3& vec_a, const Vector3& vec_b, const Vector3& vec_c)

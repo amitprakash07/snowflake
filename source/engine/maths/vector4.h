@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATH_VECTOR_4_H_
-#define ENGINE_MATH_VECTOR_4_H_
+#ifndef ENGINE_MATHS_VECTOR_4_H_
+#define ENGINE_MATHS_VECTOR_4_H_
 
 #include <string>
 

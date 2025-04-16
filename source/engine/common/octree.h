@@ -26,14 +26,14 @@ namespace engine
 
         struct OctreeNode
         {
-            Math::Vector3              pos;
-            Math::Vector3              extent;
+            Vector3              pos;
+            Vector3              extent;
             std::vector<TriangleIndex> triangles;
-            Math::Vector3              GetMin() const
+            Vector3              GetMin() const
             {
                 return pos - extent;
             }
-            Math::Vector3 GetMax() const
+            Vector3 GetMax() const
             {
                 return pos + extent;
             }
@@ -44,22 +44,22 @@ namespace engine
         public:
             Octree();
             ~Octree();
-            void          InitFromRange(uint32_t level, Math::Vector3 min, Math::Vector3 max);
+            void          InitFromRange(uint32_t level, Vector3 min, Vector3 max);
             void          InitFromFile(const char* pFile);
             OctreeNode*   GetNodesInLevel(uint32_t levelIndex) const;
             uint32_t      GetCountOfNodesInLevel(uint32_t levelIndex) const;
             uint32_t      GetNodeCount() const;
             OctreeNode*   GetNodes() const;
-            Math::Vector3 GetMin() const;
-            Math::Vector3 GetMax() const;
+            Vector3 GetMin() const;
+            Vector3 GetMax() const;
             uint32_t      Level() const;
 
         private:
             uint32_t      mLevel;
             OctreeNode*   mNodes;
             uint32_t      mCountOfNode;
-            Math::Vector3 min;
-            Math::Vector3 max;
+            Vector3 min;
+            Vector3 max;
         };
 
     }  // namespace Physics

@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATH_SPHERE_H_
-#define ENGINE_MATH_SPHERE_H_
+#ifndef ENGINE_MATHS_SPHERE_H_
+#define ENGINE_MATHS_SPHERE_H_
 
 #include "vector3.h"
 

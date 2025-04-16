@@ -1,36 +1,47 @@
-#ifndef __RAY_INTERSECTION_H
-#define __RAY_INTERSECTION_H
+#ifndef ENGINE_MATHS_RAY_INTERSECTION_H_
+#define ENGINE_MATHS_RAY_INTERSECTION_H_
 
-#include "../Maths/Math.h"
-#include "../Maths/Vector3.h"
-#include "BoundingBox.h"
+#include "sphere.h"
+#include "plane.h"
+#include "vector3.h"
+#include "bounding_box.h"
+#include "Triangle.h"
 
-#define BIG_FLOAT 1.0e30f
+namespace engine
+{
+    struct HitInfo
+    {
+        Vector3 hit_point;
+        Vector3 normal;
+        float   distance;
+        HitInfo();
+    };
 
-namespace engine {
-namespace Physics {
-class HitInfo {
- public:
-  Math::Vector3 hitPoint;
-  Math::Vector3 normal;
-  float distance;
-  HitInfo();
-};
+    class Ray
+    {
+    public:
+        template <class Primitive>
+        bool Intersect(const Primitive& primitive, HitInfo& hit_info) const
+        {
+            return false;
+        }
 
-class Ray {
- public:
-  bool IntersectTriangle(Math::Vector3 a, Math::Vector3 b, Math::Vector3 c,
-                         HitInfo &iHitInfo) const;
-  bool IntersectTriangle(Math::Vector3 vertexA, Math::Vector3 vertexB,
-                         Math::Vector3 vertexC, Math::Vector3 rayStartPoint,
-                         Math::Vector3 rayEndPoint, HitInfo &iHitInfo);
-  bool IntersectBox(BoundingBox, HitInfo &iHitInfo) const;
-  bool IntersectPlane(Math::Plane, HitInfo &iHitInfo) const;
-  bool InstersectSphere(Math::Sphere, HitInfo &iHitInfo) const;
-  Math::Vector3 origin;
-  Math::Vector3 direction;
-};
-}  // namespace Physics
-}  
+        Vector3 origin;
+        Vector3 direction;
+    };
+
+}  // namespace engine
+
+template <>
+bool engine::Ray::Intersect<engine::Plane>(const Plane& primitive, HitInfo& hit_info) const;
+
+template <>
+bool engine::Ray::Intersect<engine::Sphere>(const Sphere& primitive, HitInfo& hit_info) const;
+
+template <>
+bool engine::Ray::Intersect<engine::BoundingBox>(const BoundingBox& primitive, HitInfo& hit_info) const;
+
+template <>
+bool engine::Ray::Intersect<engine::Triangle>(const Triangle& primitive, HitInfo& hit_info) const;
 
 #endif
