@@ -8,10 +8,10 @@ include_directories(${AgilitySdk_Include})
 
 add_subdirectory(common)
 add_subdirectory(platform)
+add_subdirectory(maths)
 include_source_list_from_file(graphics/graphics.cmake)
 include_source_list_from_file(physics/physics.cmake)
 include_source_list_from_file(networking/networking.cmake)
-include_source_list_from_file(maths/maths.cmake)
 include_source_list_from_file(input/input.cmake)
 # include_source_list_from_file(platform/os_platform.cmake)
 

@@ -1,67 +1,66 @@
-/*
-This class represents a position or direction
-*/
+#ifndef ENGINE_MATHS_VECTOR_4_H_
+#define ENGINE_MATHS_VECTOR_4_H_
 
-#ifndef _MATH_CVECTOR_4_H
-#define _MATH_CVECTOR_4_H
 #include <string>
 
-// Class Declaration
-//==================
+namespace engine
+{
+    class Vector4
+    {
+    public:
+        Vector4  operator+(const Vector4& other) const;
+        Vector4& operator+=(const Vector4& other);
 
-namespace engine {
-namespace Math {
-class Vector4 {
-  // Interface
-  //==========
+        Vector4  operator-(const Vector4& other) const;
+        Vector4& operator-=(const Vector4& other);
+        Vector4  operator-() const;
 
- public:
-  // Addition
-  Vector4 operator+(const Vector4& i_rhs) const;
-  Vector4& operator+=(const Vector4& i_rhs);
+        Vector4  operator*(float scalar) const;
+        Vector4& operator*=(float scalar);
 
-  // Subtraction / Negation
-  Vector4 operator-(const Vector4& i_rhs) const;
-  Vector4& operator-=(const Vector4& i_rhs);
-  Vector4 operator-() const;
+        Vector4  operator/(float scalar) const;
+        Vector4& operator/=(float scalar);
 
-  // Scalar Multiplication
-  Vector4 operator*(const float i_rhs) const;
-  Vector4& operator*=(const float i_rhs);
+        Vector4& operator=(const Vector4& other);
 
-  // Division
-  Vector4 operator/(const float i_rhs) const;
-  Vector4& operator/=(const float i_rhs);
+        float   GetLength() const;
+        void    Normalize();
+        Vector4 GetNormalizedVec() const;
 
-  // Length / Normalization
-  float GetLength() const;
-  float Normalize();
-  Vector4 CreateNormalized() const;
+        float Dot(const Vector4& other) const;
 
-  // Dot Product
-  float dot(const Vector4& i_rhs) const;
+        bool operator==(const Vector4& other) const;
+        bool operator!=(const Vector4& other) const;
 
-  // Comparison
-  bool operator==(const Vector4& i_rhs) const;
-  bool operator!=(const Vector4& i_rhs) const;
+        const float* AsFloatArray() const;
 
-  void printVector() const;
+        Vector4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f);
 
-  float* toFloatArray() const;
+        std::string ToString() const;
 
-  Vector4(const float i_x = 0.0f, const float i_y = 0.0f,
-          const float i_z = 0.0f, const float i_w = 0.0f);
+        float x() const
+        {
+            return x_;
+        }
 
-  std::string toString() const;
+        float y() const
+        {
+            return y_;
+        }
 
-  // Data
-  //=====
+        float z() const
+        {
+            return z_;
+        }
 
-  // A vector class is one of the very few examples where I make data public
- public:
-  float x, y, z, w;
-};
-}  // namespace Math
-}  
+    private:
+        float  data_[4];
+        float& x_ = data_[0];
+        float& y_ = data_[1];
+        float& z_ = data_[2];
+        float& w_ = data_[3];
+    };
 
-#endif  // _MATH_CVECTOR_H
+}  // namespace engine
+
+#endif  // ENGINE_MATH_VECTOR_4_H_

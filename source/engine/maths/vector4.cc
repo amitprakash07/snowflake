@@ -1,153 +1,144 @@
-// Header Files
-//=============
-
 #include <cassert>
 #include <cmath>
 #include <iostream>
 
-#include "Vec4.h"
+#include "vector4.h"
 
-// Static Data Initialization
-//===========================
+#include "engine_math.h"
 
-namespace {
-const float s_epsilon = 1.0e-9f;
+using namespace engine;
+
+Vector4 Vector4::operator+(const Vector4& other) const
+{
+    return Vector4{x_ + other.x_, y_ + other.y_, z_ + other.z_, w_ + other.w_};
 }
 
-// Interface
-//==========
-
-// Addition
-Math::Vector4 Math::Vector4::operator+(
-    const Vector4& i_rhs) const {
-  return Vector4(x + i_rhs.x, y + i_rhs.y, z + i_rhs.z, w + i_rhs.w);
+Vector4& Vector4::operator+=(const Vector4& other)
+{
+    x_ += other.x_;
+    y_ += other.y_;
+    z_ += other.z_;
+    w_ += other.w_;
+    return *this;
 }
 
-Math::Vector4& Math::Vector4::operator+=(const Vector4& i_rhs) {
-  x += i_rhs.x;
-  y += i_rhs.y;
-  z += i_rhs.z;
-  w += i_rhs.w;
-  return *this;
+Vector4 Vector4::operator-(const Vector4& other) const
+{
+    return Vector4{x_ - other.x_, y_ - other.y_, z_ - other.z_, w_ - other.w_};
 }
 
-// Subtraction / Negation
-Math::Vector4 Math::Vector4::operator-(
-    const Vector4& i_rhs) const {
-  return Vector4(x - i_rhs.x, y - i_rhs.y, z - i_rhs.z, w - i_rhs.w);
+Vector4& Vector4::operator-=(const Vector4& other)
+{
+    x_ -= other.x_;
+    y_ -= other.y_;
+    z_ -= other.z_;
+    w_ -= other.w_;
+    return *this;
 }
 
-Math::Vector4& Math::Vector4::operator-=(const Vector4& i_rhs) {
-  x -= i_rhs.x;
-  y -= i_rhs.y;
-  z -= i_rhs.z;
-  w -= i_rhs.w;
-  return *this;
+Vector4 Vector4::operator-() const
+{
+    return Vector4{-x_, -y_, -z_, -w_};
 }
 
-Math::Vector4 Math::Vector4::operator-() const {
-  return Vector4(-x, -y, -z, -w);
+Vector4 Vector4::operator*(float scalar) const
+{
+    return Vector4{x_ * scalar, y_ * scalar, z_ * scalar, w_ * scalar};
 }
 
-// Multiplication
-Math::Vector4 Math::Vector4::operator*(
-    const float i_rhs) const {
-  return Vector4(x * i_rhs, y * i_rhs, z * i_rhs, w * i_rhs);
+Vector4& Vector4::operator*=(float scalar)
+{
+    x_ *= scalar;
+    y_ *= scalar;
+    z_ *= scalar;
+    w_ *= scalar;
+    return *this;
 }
 
-Math::Vector4& Math::Vector4::operator*=(const float i_rhs) {
-  x *= i_rhs;
-  y *= i_rhs;
-  z *= i_rhs;
-  w *= i_rhs;
-  return *this;
+Vector4 operator*(const float i_lhs, const Vector4& other)
+{
+    return other * i_lhs;
 }
 
-Math::Vector4 operator*(const float i_lhs,
-                                const Math::Vector4& i_rhs) {
-  return i_rhs * i_lhs;
+Vector4 Vector4::operator/(float scalar) const
+{
+    assert(std::abs(scalar) > kEpsilon);
+    const float rhs_reciprocal = 1.0f / scalar;
+    return Vector4{x_ * rhs_reciprocal, y_ * rhs_reciprocal, z_ * rhs_reciprocal, w_ * rhs_reciprocal};
 }
 
-// Division
-Math::Vector4 Math::Vector4::operator/(
-    const float i_rhs) const {
-  assert(std::abs(i_rhs) > s_epsilon);
-  const float rhs_reciprocal = 1.0f / i_rhs;
-  return Vector4(x * rhs_reciprocal, y * rhs_reciprocal, z * rhs_reciprocal,
-                 w * rhs_reciprocal);
+Vector4& Vector4::operator/=(float scalar)
+{
+    assert(std::abs(scalar) > kEpsilon);
+    const float rhs_reciprocal = 1.0f / scalar;
+    x_ *= rhs_reciprocal;
+    y_ *= rhs_reciprocal;
+    z_ *= rhs_reciprocal;
+    w_ *= rhs_reciprocal;
+    return *this;
 }
 
-Math::Vector4& Math::Vector4::operator/=(const float i_rhs) {
-  assert(std::abs(i_rhs) > s_epsilon);
-  const float rhs_reciprocal = 1.0f / i_rhs;
-  x *= rhs_reciprocal;
-  y *= rhs_reciprocal;
-  z *= rhs_reciprocal;
-  w *= rhs_reciprocal;
-  return *this;
+Vector4& Vector4::operator=(const Vector4& other)
+{
+    if (this != &other)
+    {
+        memcpy(data_, other.data_, sizeof(float) * 4);
+    }
+
+    return *this;
 }
 
-// Length / Normalization
-float Math::Vector4::GetLength() const {
-  return std::sqrt((x * x) + (y * y) + (z * z) + (w * w));
+float Vector4::GetLength() const
+{
+    return std::sqrt((x_ * x_) + (y_ * y_) + (z_ * z_) + (w_ * w_));
 }
 
-float Math::Vector4::Normalize() {
-  const float length = GetLength();
-  assert(length > s_epsilon);
-  operator/=(length);
-  return length;
+void Vector4::Normalize()
+{
+    const float length = GetLength();
+    assert(length > kEpsilon);
+    operator/=(length);
 }
 
-Math::Vector4 Math::Vector4::CreateNormalized() const {
-  const float length = GetLength();
-  assert(length > s_epsilon);
-  const float length_reciprocal = 1.0f / length;
-  return Vector4(x * length_reciprocal, y * length_reciprocal,
-                 z * length_reciprocal, w * length_reciprocal);
+Vector4 Vector4::GetNormalizedVec() const
+{
+    const float length = GetLength();
+    assert(length > kEpsilon);
+    const float length_reciprocal = 1.0f / length;
+    return Vector4{x_ * length_reciprocal, y_ * length_reciprocal, z_ * length_reciprocal, w_ * length_reciprocal};
 }
 
-// Products
-float Math::Vector4::dot(const Vector4& i_rhs) const {
-  return (x * i_rhs.x + y * i_rhs.y + z * i_rhs.z, w * i_rhs.w);
+float Vector4::Dot(const Vector4& other) const
+{
+    return (x_ * other.x_ + y_ * other.y_ + z_ * other.z_ + w_ * other.w_);
 }
 
-// Comparison
-bool Math::Vector4::operator==(const Vector4& i_rhs) const {
-  // Use & rather than && to prevent branches (all three comparisons will be
-  // evaluated)
-  return (x == i_rhs.x) & (y == i_rhs.y) & (z == i_rhs.z) & (z == i_rhs.w);
+bool Vector4::operator==(const Vector4& other) const
+{
+    return (x_ == other.x_) & (y_ == other.y_) & (z_ == other.z_) & (z_ == other.w_);
 }
 
-bool Math::Vector4::operator!=(const Vector4& i_rhs) const {
-  // Use | rather than || to prevent branches (all three comparisons will be
-  // evaluated)
-  return (x != i_rhs.x) | (y != i_rhs.y) | (z != i_rhs.z) | (w != i_rhs.w);
+bool Vector4::operator!=(const Vector4& other) const
+{
+    return (x_ != other.x_) | (y_ != other.y_) | (z_ != other.z_) | (w_ != other.w_);
 }
 
-// Initialization / Shut Down
-//---------------------------
-
-Math::Vector4::Vector4(const float i_x, const float i_y,
-                               const float i_z, const float i_w)
-    : x(i_x), y(i_y), z(i_z), w(i_w) {}
-
-std::string Math::Vector4::toString() const {
-  std::string returnString;
-  returnString = std::to_string(x) + std::to_string(y) + std::to_string(z);
-  return returnString;
+Vector4::Vector4(float x, float y, float z, float w)
+    : data_{}
+{
+    x_ = x;
+    y_ = y;
+    z_ = z;
+    w_ = w;
 }
 
-float* Math::Vector4::toFloatArray() const {
-  float floatArray[4];
-  floatArray[0] = x;
-  floatArray[1] = y;
-  floatArray[2] = z;
-  floatArray[3] = w;
-  return floatArray;
+std::string Vector4::ToString() const
+{
+    std::string returnString = std::to_string(x_) + std::to_string(y_) + std::to_string(z_);
+    return returnString;
 }
 
-void Math::Vector4::printVector() const {
-  std::cout << "x = " << x << ", y = " << y << ", z= " << z;
-  std::cout << std::endl;
+const float* Vector4::AsFloatArray() const
+{
+    return data_;
 }

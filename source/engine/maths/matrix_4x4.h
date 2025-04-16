@@ -1,3 +1,6 @@
+#ifndef ENGINE_MATHS_MATRIX_4x4_H_
+#define ENGINE_MATHS_MATRIX_4x4_H_
+
 /*
         This class represents a full Transform
         (i.e. a 4x4 matrix composed of a 3x3 rotation matrix and a 3 element
@@ -25,72 +28,60 @@
    standard OpenGL, and is backwards from standard Direct3D
 */
 
-#ifndef __MATH_CMATRIX_Transform_H
-#define __MATH_CMATRIX_Transform_H
+#include "vector3.h"
 
-// Forward Declarations
-//=====================
+namespace engine
+{
+    class Plane;
+    class Quaternion;
+    class Matrix4x4
+    {
+    public:
+        static Matrix4x4 CreateWorldToViewTransform(const Quaternion& camera_orientation, const Vector3& camera_position);
+        static Matrix4x4 CreateViewToScreenTransform(float field_of_View, float aspect_ratio, float z_near_plane = 0.1f, float z_far_plane = 100.0f);
+        static Matrix4x4 CreateOrthographicViewToScreenTransform(float left, float right, float top, float bottom, float near, float far);
+        static Matrix4x4 GetIdentityMatrix();
+        static Matrix4x4 CreateScaleMatrix(float x_scale, float y_scale, float z_scale);
+        static Matrix4x4 CreateLookAtMatrix(const Vector3& eye, const Vector3& target, const Vector3& up_vector);
+        static Matrix4x4 CreateScaleMatrix(const Vector3& scale_factor);
+        static Matrix4x4 CreateNormalMatrix(const Matrix4x4& model_matrix);
+        static Matrix4x4 CreateShadowMatrix(const Vector3& light_position, const Plane& plane);
+        Matrix4x4        operator*(float scalar) const;
+        Matrix4x4        operator*(Matrix4x4 other) const;
+        Vector3          Mul(const Vector3& vector, bool is_vector = false) const;
+        void             operator*=(const Matrix4x4& other);
+        Matrix4x4        GetTranspose() const;
+        void             Transpose();
+        Matrix4x4        GetInverse() const;
+        void             Inverse();
+        float           Determinant() const;
+        Matrix4x4();
+        Matrix4x4(const Quaternion& rotation, const Vector3& translation);
+        Matrix4x4(const Vector3& translation, bool direction = false);
+        Matrix4x4(const Quaternion& rotation, bool direction = false);
+        Matrix4x4(float i_00,
+                  float i_10,
+                  float i_20,
+                  float i_30,
+                  float i_01,
+                  float i_11,
+                  float i_21,
+                  float i_31,
+                  float i_02,
+                  float i_12,
+                  float i_22,
+                  float i_32,
+                  float i_03,
+                  float i_13,
+                  float i_23,
+                  float i_33);
+        void PrintMatrix4x4() const;
 
-namespace engine {
-namespace Math {
-class Vector3;
-class Quaternion;
-}  // namespace Math
-}  
+    private:
+        // Storage is column-major; see notes at the top of the file
+        float m_00, m_10, m_20, m_30, m_01, m_11, m_21, m_31, m_02, m_12, m_22, m_32, m_03, m_13, m_23, m_33;
+    };
 
-#include "Math.h"
+}  // namespace engine
 
-// Class Declaration
-//==================
-
-namespace engine {
-namespace Math {
-class Matrix4x4 {
- public:
-  static Matrix4x4 CreateWorldToViewTransform(
-      const Quaternion& i_cameraOrientation, const Vector3& i_cameraPosition);
-  static Matrix4x4 CreateViewToScreenTransform(const float i_fieldOfView_y,
-                                               const float i_aspectRatio,
-                                               const float i_z_nearPlane = 0.1,
-                                               const float i_z_farPlane = 100);
-  static Matrix4x4 CreateOrthographicViewToScreenTransform(
-      float left, float right, float top, float bottom, float near, float far);
-  static Matrix4x4 getIdentityMatrix();
-  static Matrix4x4 CreateScaleMatrix(const float scaleX, const float scaleY,
-                                     const float scaleZ);
-  static Matrix4x4 CreateLookAtMatrix(Vector3 eye, Vector3 target,
-                                      Vector3 upVector);
-  static Matrix4x4 CreateScaleMatrix(Vector3 iScaleFactor);
-  static Matrix4x4 CreateNormalMatrix(const Matrix4x4 modelMatrix);
-  static Matrix4x4 CreateShadowMatrix(const Math::Vector3 iLightPosition,
-                                      const Plane);
-  Matrix4x4 operator*(float scalar) const;
-  Matrix4x4 operator*(Matrix4x4 i_rhs) const;
-  Vector3 mul(Vector3 vector, bool isVector = false) const;
-  void operator*=(Matrix4x4 i_rhs);
-  Matrix4x4 getTranspose() const;
-  void transpose();
-  Matrix4x4 getInverse() const;
-  void inverse();
-  double determinant() const;
-  Matrix4x4();
-  Matrix4x4(const Quaternion& i_rotation, const Vector3& i_translation);
-  Matrix4x4(const Vector3& i_translation, bool direction = false);
-  Matrix4x4(const Quaternion& i_rotation, bool direction = false);
-  Matrix4x4(const float i_00, const float i_10, const float i_20,
-            const float i_30, const float i_01, const float i_11,
-            const float i_21, const float i_31, const float i_02,
-            const float i_12, const float i_22, const float i_32,
-            const float i_03, const float i_13, const float i_23,
-            const float i_33);
-  void printMatrix4x4() const;
-
- private:
-  // Storage is column-major; see notes at the top of the file
-  float m_00, m_10, m_20, m_30, m_01, m_11, m_21, m_31, m_02, m_12, m_22, m_32,
-      m_03, m_13, m_23, m_33;
-};
-}  // namespace Math
-}  
-
-#endif  // __MATH_CMATRIX_Transform_H
+#endif

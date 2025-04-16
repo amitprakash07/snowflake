@@ -1,246 +1,273 @@
-﻿#include "Quaternion.h"
-
+﻿
 #include <cassert>
 #include <cmath>
 #include <iostream>
 
-#include "Vector3.h"
+#include "engine_math.h"
+#include "Quaternion.h"
 
-namespace {
-const float s_epsilon = 1.0e-9f;
+using namespace engine;
+
+Quaternion::Quaternion()
+    : w_(1.0f)
+    , x_(0.0f)
+    , y_(0.0f)
+    , z_(0.0f)
+{
+    scalar = 1.0f;
+    vector = Vector3(0.0f, 0.0f, 0.0f);
 }
 
-Math::Quaternion::Quaternion()
-    : mW(1.0f), mX(0.0f), mY(0.0f), mZ(0.0f) {
-  scalar = 1.0f;
-  vector = Vector3(0.0f, 0.0f, 0.0f);
+Quaternion Quaternion::GetIdentityQuaternion()
+{
+    return Quaternion{};
 }
 
-Math::Quaternion Math::Quaternion::getIdentityQuartenion() {
-  return Quaternion();
+Quaternion& Quaternion::operator=(const Quaternion& other)
+{
+    w_     = other.w_;
+    x_     = other.x_;
+    y_     = other.y_;
+    z_     = other.z_;
+    scalar = other.scalar;
+    vector = other.vector;
+    return *this;
 }
 
-void Math::Quaternion::operator=(const Quaternion i_rhs) {
-  mW = i_rhs.mW;
-  mX = i_rhs.mX;
-  mY = i_rhs.mY;
-  mZ = i_rhs.mZ;
-  scalar = i_rhs.scalar;
-  vector = i_rhs.vector;
+bool Quaternion::operator!=(const Quaternion& other) const
+{
+    return !(*this == other);
 }
 
-bool Math::Quaternion::operator!=(Quaternion i_rhs) const {
-  return !(*this == i_rhs);
+bool Quaternion::operator==(const Quaternion& other) const
+{
+    bool isEqual = (w_ == other.w_ && x_ == other.x_ && y_ == other.y_ && z_ == other.z_);
+    return isEqual;
 }
 
-bool Math::Quaternion::operator==(Quaternion irhs) const {
-  bool isEqual = false;
-  isEqual = (mW == irhs.mW && mX == irhs.mX && mY == irhs.mY && mZ == irhs.mZ);
-  return isEqual;
-}
+Quaternion Quaternion::Slerp(const Quaternion& from, const Quaternion& to, float interpolation_factor)
+{
+    /*
+    Slerp formulae
+    omega  - angular displacement between two quaternions
+    Slerp(q1,q2,t) = ((sin(1-t)omega)/sin(omega))* q1 +
+                               (sin(t*omega)/sin(omega)) *q2
+    */
 
-Math::Quaternion Math::Quaternion::slerp(
-    Quaternion fromQuaternion, Quaternion toQuartenion,
-    float interpolationFactor) {
-  /*
-  Slerp formulae
-  omega  - angular diplacement between two quaternions
-  slerp(q1,q2,t) = ((sin(1-t)omega)/sin(omega))* q1 +
-                                          (sin(t*omega)/sin(omega)) *q2
-  */
+    Quaternion new_quaternion;
 
-  Quaternion slerpedQuaternion;
+    Quaternion from_quaternion = from;
 
-  // Omega angular diplacement between two quaternions
-  float cosOmega = fromQuaternion.dot(toQuartenion);
+    // Omega angular displacement between two quaternions
+    float cos_omega = from_quaternion.Dot(to);
 
-  // If negative dot, negate one of the input
-  // quaternions to take the shorter 4D "arc"
-  if (cosOmega < 0.0f) {
-    fromQuaternion = -fromQuaternion;
-    cosOmega = -cosOmega;
-  }
+    // If negative Dot, negate one of the input
+    // quaternions to take the shorter 4D "arc"
+    if (cos_omega < 0.0f)
+    {
+        from_quaternion = -from_quaternion;
+        cos_omega       = -cos_omega;
+    }
 
-  // Checking if they are very close together to protect
-  // against divide-by-zero
-  float k0, k1;
-  if (cosOmega > 0.9999f) {
-    // Very close - just use linear interpolation
-    k0 = 1.0f - interpolationFactor;
-    k1 = interpolationFactor;
-  } else {
-    float sinOmega = sqrt(1.0f - cosOmega * cosOmega);
+    // Checking if they are very close together to protect
+    // against divide-by-zero
+    float k0, k1;
+    if (cos_omega > 0.9999f)
+    {
+        // Very close - just use linear interpolation
+        k0 = 1.0f - interpolation_factor;
+        k1 = interpolation_factor;
+    }
+    else
+    {
+        float sinOmega = sqrt(1.0f - cos_omega * cos_omega);
 
-    // Computing the angle from its sin and cosine
-    float omega = atan2(sinOmega, cosOmega);
+        // Computing the angle from_quaternion its sin and cosine
+        float omega = atan2(sinOmega, cos_omega);
 
-    // Compute inverse of denominator, so we only have
-    // to divide once
-    float oneOverSinOmega = 1.0f / sinOmega;
+        // Compute inverse of denominator, so we only have
+        // to divide once
+        float oneOverSinOmega = 1.0f / sinOmega;
 
-    // Compute interpolation parameters
-    k0 = sin((1.0f - interpolationFactor) * omega) * oneOverSinOmega;
-    k1 = sin(interpolationFactor * omega) * oneOverSinOmega;
-  }
+        // Compute interpolation parameters
+        k0 = sin((1.0f - interpolation_factor) * omega) * oneOverSinOmega;
+        k1 = sin(interpolation_factor * omega) * oneOverSinOmega;
+    }
 
-  // Interpolate
-  slerpedQuaternion.mW = fromQuaternion.mW * k0 + toQuartenion.mW * k1;
-  slerpedQuaternion.mX = fromQuaternion.mX * k0 + toQuartenion.mX * k1;
-  slerpedQuaternion.mY = fromQuaternion.mY * k0 + toQuartenion.mY * k1;
-  slerpedQuaternion.mZ = fromQuaternion.mZ * k0 + toQuartenion.mZ * k1;
-  slerpedQuaternion.splitToScalarVector();
-  return slerpedQuaternion;
+    // Interpolate
+    new_quaternion.w_ = from_quaternion.w_ * k0 + to.w_ * k1;
+    new_quaternion.x_ = from_quaternion.x_ * k0 + to.x_ * k1;
+    new_quaternion.y_ = from_quaternion.y_ * k0 + to.y_ * k1;
+    new_quaternion.z_ = from_quaternion.z_ * k0 + to.z_ * k1;
+    new_quaternion.SplitToScalarVector();
+    return new_quaternion;
 }
 
 // Getters
-float Math::Quaternion::w() const { return mW; }
+float Quaternion::w() const
+{
+    return w_;
+}
 
-float Math::Quaternion::x() const { return mX; }
+float Quaternion::x() const
+{
+    return x_;
+}
 
-float Math::Quaternion::y() const { return mY; }
+float Quaternion::y() const
+{
+    return y_;
+}
 
-float Math::Quaternion::z() const { return mZ; }
-
-// Cross Product
-Math::Quaternion Math::Quaternion::operator*(
-    const Quaternion& i_rhs) const {
-  /*
-  q1 = [s1, v1]
-  q2 = [s2, v2]
-  q1*q2 = [s1S2 - v1.v2, s1v2+s2v1+ v1.Cross(v2)]
-  */
-  return Quaternion(
-      (mW * i_rhs.mW) - ((mX * i_rhs.mX) + (mY * i_rhs.mY) + (mZ * i_rhs.mZ)),
-      (mW * i_rhs.mX) + (mX * i_rhs.mW) + ((mY * i_rhs.mZ) - (mZ * i_rhs.mY)),
-      (mW * i_rhs.mY) + (mY * i_rhs.mW) + ((mZ * i_rhs.mX) - (mX * i_rhs.mZ)),
-      (mW * i_rhs.mZ) + (mZ * i_rhs.mW) + ((mX * i_rhs.mY) - (mY * i_rhs.mX)));
+float Quaternion::z() const
+{
+    return z_;
 }
 
 // Cross Product
-Math::Quaternion Math::Quaternion::cross(
-    const Quaternion& i_rhs) const {
-  /*
+Quaternion Quaternion::operator*(const Quaternion& other) const
+{
+    /*
   q1 = [s1, v1]
   q2 = [s2, v2]
   q1*q2 = [s1S2 - v1.v2, s1v2+s2v1+ v1.Cross(v2)]
   */
-  Quaternion tempQuaternion;
-  tempQuaternion.scalar = scalar * i_rhs.scalar + vector.dot(i_rhs.vector);
-  tempQuaternion.vector = vector * i_rhs.scalar + i_rhs.vector * scalar +
-                          vector.Cross(i_rhs.vector);
-  tempQuaternion.splitFromScalarVector();
-  return tempQuaternion;
+    return Quaternion((w_ * other.w_) - ((x_ * other.x_) + (y_ * other.y_) + (z_ * other.z_)),
+                      (w_ * other.x_) + (x_ * other.w_) + ((y_ * other.z_) - (z_ * other.y_)),
+                      (w_ * other.y_) + (y_ * other.w_) + ((z_ * other.x_) - (x_ * other.z_)),
+                      (w_ * other.z_) + (z_ * other.w_) + ((x_ * other.y_) - (y_ * other.x_)));
+}
+
+// Cross Product
+Quaternion Quaternion::cross(const Quaternion& other) const
+{
+    /*
+  q1 = [s1, v1]
+  q2 = [s2, v2]
+  q1*q2 = [s1S2 - v1.v2, s1v2+s2v1+ v1.Cross(v2)]
+  */
+    Quaternion tempQuaternion;
+    tempQuaternion.scalar = scalar * other.scalar + vector.Dot(other.vector);
+    tempQuaternion.vector = vector * other.scalar + other.vector * scalar + vector.Cross(other.vector);
+    tempQuaternion.SplitFromScalarVector();
+    return tempQuaternion;
 }
 
 // Inverse
-void Math::Quaternion::inverse() {
-  mX = -mX;
-  mY = -mY;
-  mZ = -mZ;
+void Quaternion::Inverse()
+{
+    x_ = -x_;
+    y_ = -y_;
+    z_ = -z_;
 }
 
 // Create Inverse
-Math::Quaternion Math::Quaternion::CreateInverse() const {
-  Quaternion tempQuartenion = Quaternion(mW, -mX, -mY, -mZ);
-  tempQuartenion.splitToScalarVector();
-  return tempQuartenion;
+Quaternion Quaternion::CreateInverse() const
+{
+    Quaternion tempQuartenion = Quaternion(w_, -x_, -y_, -z_);
+    tempQuartenion.SplitToScalarVector();
+    return tempQuartenion;
 }
 
-Math::Quaternion Math::Quaternion::operator-() const {
-  Quaternion negatedQuartenion;
-  negatedQuartenion.mW = -mW;
-  negatedQuartenion.mX = -mX;
-  negatedQuartenion.mY = -mY;
-  negatedQuartenion.mZ = -mZ;
-  negatedQuartenion.splitToScalarVector();
-  return negatedQuartenion;
+Quaternion Quaternion::operator-() const
+{
+    Quaternion negatedQuartenion;
+    negatedQuartenion.w_ = -w_;
+    negatedQuartenion.x_ = -x_;
+    negatedQuartenion.y_ = -y_;
+    negatedQuartenion.z_ = -z_;
+    negatedQuartenion.SplitToScalarVector();
+    return negatedQuartenion;
 }
 
-void Math::Quaternion::conjugate() {
-  mX = -mX;
-  mY = -mY;
-  mZ = -mZ;
-  splitToScalarVector();
+void Quaternion::Conjugate()
+{
+    x_ = -x_;
+    y_ = -y_;
+    z_ = -z_;
+    SplitToScalarVector();
 }
 
-float Math::Quaternion::magnitude() const {
-  return sqrt(mW * mW + mX * mX + mY * mY + mZ * mZ);
+float Quaternion::Magnitude() const
+{
+    return sqrt(w_ * w_ + x_ * x_ + y_ * y_ + z_ * z_);
 }
 
 // NormalimZation
-void Math::Quaternion::Normalize() {
-  const float length = magnitude();
-  assert(length > s_epsilon);
-  const float length_reciprocal = 1.0f / length;
-  mW *= length_reciprocal;
-  mX *= length_reciprocal;
-  mY *= length_reciprocal;
-  mZ *= length_reciprocal;
-  splitToScalarVector();
+void Quaternion::Normalize()
+{
+    const float length = Magnitude();
+    assert(length > kEpsilon);
+    const float length_reciprocal = 1.0f / length;
+    w_ *= length_reciprocal;
+    x_ *= length_reciprocal;
+    y_ *= length_reciprocal;
+    z_ *= length_reciprocal;
+    SplitToScalarVector();
 }
 
-Math::Quaternion Math::Quaternion::CreateNormalized() const {
-  const float length = magnitude();
-  assert(length > s_epsilon);
-  const float length_reciprocal = 1.0f / length;
-  Quaternion tempQuaternion =
-      Quaternion(mW * length_reciprocal, mX * length_reciprocal,
-                 mY * length_reciprocal, mZ * length_reciprocal);
-  tempQuaternion.splitToScalarVector();
-  return tempQuaternion;
+Quaternion Quaternion::CreateNormalized() const
+{
+    const float length = Magnitude();
+    assert(length > kEpsilon);
+    const float length_reciprocal = 1.0f / length;
+    Quaternion  tempQuaternion    = Quaternion(w_ * length_reciprocal, x_ * length_reciprocal, y_ * length_reciprocal, z_ * length_reciprocal);
+    tempQuaternion.SplitToScalarVector();
+    return tempQuaternion;
 }
 
 // angular Displacement
-Math::Quaternion Math::Quaternion::angularDisplacement(
-    Quaternion i_other) const {
-  // Angular Displacement
-  /*
+Quaternion Quaternion::AngularDisplacement(const Quaternion& other) const
+{
+    // Angular Displacement
+    /*
   Given orientations a and b, we can compute the angular displacement
   d which rotates from a to b i.e.
   ad = b => d - difference = inverse(a)b
   */
-  Quaternion difference;
-  difference = this->CreateInverse() * i_other;
-  difference.splitToScalarVector();
-  return difference;
+    Quaternion difference;
+    difference = this->CreateInverse() * other;
+    difference.SplitToScalarVector();
+    return difference;
 }
 
-Math::Quaternion Math::Quaternion::operator-(
-    const Quaternion& iRhs) const {
-  // Angular Displacement
-  /*
+Quaternion Quaternion::operator-(const Quaternion& other) const
+{
+    // Angular Displacement
+    /*
   Given orientations a and b, we can compute the angular displacement
   d which rotates from a to b i.e.
   ad = b => d - difference = inverse(a)b
   */
-  Quaternion difference;
-  difference = this->CreateInverse() * iRhs;
-  difference.splitToScalarVector();
-  return difference;
+    Quaternion difference;
+    difference = this->CreateInverse() * other;
+    difference.SplitToScalarVector();
+    return difference;
 }
 
-Math::Quaternion& Math::Quaternion::operator-=(
-    const Quaternion& iRhs) {
-  Quaternion difference;
-  difference = this->CreateInverse() * iRhs;
-  difference.splitToScalarVector();
-  mW = difference.mW;
-  mX = difference.mX;
-  mY = difference.mY;
-  mZ = difference.mZ;
-  this->splitToScalarVector();
-  return *this;
+Quaternion& Quaternion::operator-=(const Quaternion& other)
+{
+    Quaternion difference;
+    difference = this->CreateInverse() * other;
+    difference.SplitToScalarVector();
+    w_ = difference.w_;
+    x_ = difference.x_;
+    y_ = difference.y_;
+    z_ = difference.z_;
+    this->SplitToScalarVector();
+    return *this;
 }
 
 // Dot Product
-float Math::Quaternion::dot(const Quaternion& i_rhs) const {
-  return (mW * i_rhs.mW) + (mX * i_rhs.mX) + (mY * i_rhs.mY) + (mZ * i_rhs.mZ);
+float Quaternion::Dot(const Quaternion& other) const
+{
+    return (w_ * other.w_) + (x_ * other.x_) + (y_ * other.y_) + (z_ * other.z_);
 }
 
 // Exponent
-Math::Quaternion Math::Quaternion::operator^(
-    const float exponent) const {
-  /*
+Quaternion Quaternion::operator^(const float exponent) const
+{
+    /*
   Quaternion exponentiation is useful because it allows us to
   extract a “fraction” of an angular displacement.
   For example, to compute a quaternion that represents one-third
@@ -253,127 +280,125 @@ Math::Quaternion Math::Quaternion::operator^(
   x-axis as expected; it is an 80º counterclockwise rotation.
   */
 
-  // Quaternion (input and output)
-  Quaternion exponentResult;
+    // Quaternion (input and output)
+    Quaternion exponentResult;
 
-  // Check for the case of an identity quaternion.
-  // This will protect against divide by zero
-  if (fabs(mW) < .9999f) {
-    // Extracting the half angle alpha (alpha = theta/2)
-    float alpha = acos(mW);
-    // Compute new alpha value
-    float newAlpha = alpha * exponent;
-    // Compute new w value
-    exponentResult.mW = cos(newAlpha);
-    // Compute new xyz values
-    float mult = sin(newAlpha) / sin(alpha);
-    exponentResult.mX = mult;
-    exponentResult.mY = mult;
-    exponentResult.mZ = mult;
-  }
-  return exponentResult;
+    // Check for the case of an identity quaternion.
+    // This will protect against divide by zero
+    if (fabs(w_) < .9999f)
+    {
+        // Extracting the half angle alpha (alpha = theta/2)
+        float alpha = acos(w_);
+        // Compute new alpha value
+        float newAlpha = alpha * exponent;
+        // Compute new w value
+        exponentResult.w_ = cos(newAlpha);
+        // Compute new xyz values
+        float mult        = sin(newAlpha) / sin(alpha);
+        exponentResult.x_ = mult;
+        exponentResult.y_ = mult;
+        exponentResult.z_ = mult;
+    }
+    return exponentResult;
 }
 
-Math::Quaternion::Quaternion(const float i_angleInRadians,
-                                     const Vector3& i_axisOfRotation) {
-  /*
+Quaternion::Quaternion(float angle_in_radians, const Vector3& axis_of_rotation)
+{
+    /*
   q = [cos(θ /2)+sin(θ /2) ˆu].
   mWhere u is the normalimZed arbitrary axis vector
   */
-  if (i_axisOfRotation.GetLength() > 0) {
-    Vector3 axisOfRotation_normalized = i_axisOfRotation.CreateNormalized();
+    if (axis_of_rotation.GetLength() > 0)
+    {
+        Vector3 axisOfRotation_normalized = axis_of_rotation.CreateNormalized();
 
-    const float theta_half = i_angleInRadians * 0.5f;
-    mW = std::cos(theta_half);
-    const float sin_theta_half = std::sin(theta_half);
-    mX = axisOfRotation_normalized.x * sin_theta_half;
-    mY = axisOfRotation_normalized.y * sin_theta_half;
-    mZ = axisOfRotation_normalized.z * sin_theta_half;
-    splitToScalarVector();
-  } else {
-    mW = 1.0f;
-    mX = mY = mZ = 0.0f;
-    scalar = 1.0f;
-    vector = Vector3(0.0f, 0.0f, 0.0f);
-  }
+        const float theta_half     = angle_in_radians * 0.5f;
+        w_                         = std::cos(theta_half);
+        const float sin_theta_half = std::sin(theta_half);
+        x_                         = axisOfRotation_normalized.x() * sin_theta_half;
+        y_                         = axisOfRotation_normalized.y() * sin_theta_half;
+        z_                         = axisOfRotation_normalized.z() * sin_theta_half;
+        SplitToScalarVector();
+    }
+    else
+    {
+        w_ = 1.0f;
+        x_ = y_ = z_ = 0.0f;
+        scalar       = 1.0f;
+        vector       = Vector3(0.0f, 0.0f, 0.0f);
+    }
 }
 
 // About rightVector(x-axis)
-Math::Quaternion Math::Quaternion::getPitch(
-    const float angleInRadians) {
-  return Quaternion(angleInRadians, Vector3(1.0f, 0.0f, 0.0f));
+Quaternion Quaternion::GetPitch(float angle_in_radians)
+{
+    return Quaternion{angle_in_radians, Vector3(1.0f, 0.0f, 0.0f)};
 }
 
 // About forwardAxis (z-axis)
-Math::Quaternion Math::Quaternion::getRoll(
-    const float angleInRadians) {
-  return Quaternion(angleInRadians, Vector3(0.0f, 0.0f, 1.0f));
+Quaternion Quaternion::GetRoll(float angle_in_radians)
+{
+    return Quaternion{angle_in_radians, Vector3(0.0f, 0.0f, 1.0f)};
 }
 
 // About upVector (y-axis)
-Math::Quaternion Math::Quaternion::getYaw(
-    const float angleInRadians) {
-  return Quaternion(angleInRadians, Vector3(0.0f, 1.0f, 0.0f));
+Quaternion Quaternion::GetYaw(float angle_in_radians)
+{
+    return Quaternion{angle_in_radians, Vector3(0.0f, 1.0f, 0.0f)};
 }
 
-Math::Quaternion Math::Quaternion::getYawPitchRoll(float yaw,
-                                                                   float pitch,
-                                                                   float roll) {
-  /*
+Quaternion Quaternion::GetYawPitchRoll(float yaw, float pitch, float roll)
+{
+    /*
   q = q(yaw)q(pitch)q(roll) = [s+xi+yj+zk]
   s = cos(yaw/2)cos(pitch/2)cos(roll/2) + sin(yaw/2) sin(pitch/2) sin(roll/2)
   x = cos(yaw/2) sin(pitch/2)cos(roll/2) + sin(yaw/2)cos(pitch/2) sin(roll/2)
   y = sin(yaw/2)cos(pitch/2)cos(roll/2) − cos(yaw/2) sin(pitch/2) sin(roll/2)
   z = cos(yaw/2)cos(pitch/2) sin(roll/2) − sin(yaw/2) sin(pitch/2)cos(roll/2)
   */
-  Quaternion yawPitchRoll;
-  yawPitchRoll.mW = cos(yaw / 2) * cos(pitch / 2) * cos(roll / 2) +
-                    sin(yaw / 2) * sin(pitch / 2) * sin(roll / 2);
-  yawPitchRoll.mX = cos(yaw / 2) * sin(pitch / 2) * cos(roll / 2) +
-                    sin(yaw / 2) * cos(pitch / 2) * sin(roll / 2);
-  yawPitchRoll.mY = sin(yaw / 2) * cos(pitch / 2) * cos(roll / 2) -
-                    cos(yaw / 2) * sin(pitch / 2) * sin(roll / 2);
-  yawPitchRoll.mZ = cos(yaw / 2) * cos(pitch / 2) * sin(roll / 2) -
-                    sin(yaw / 2) * sin(pitch / 2) * cos(roll / 2);
-  yawPitchRoll.splitToScalarVector();
-  return yawPitchRoll;
+    Quaternion yawPitchRoll;
+    yawPitchRoll.w_ = cos(yaw / 2) * cos(pitch / 2) * cos(roll / 2) + sin(yaw / 2) * sin(pitch / 2) * sin(roll / 2);
+    yawPitchRoll.x_ = cos(yaw / 2) * sin(pitch / 2) * cos(roll / 2) + sin(yaw / 2) * cos(pitch / 2) * sin(roll / 2);
+    yawPitchRoll.y_ = sin(yaw / 2) * cos(pitch / 2) * cos(roll / 2) - cos(yaw / 2) * sin(pitch / 2) * sin(roll / 2);
+    yawPitchRoll.z_ = cos(yaw / 2) * cos(pitch / 2) * sin(roll / 2) - sin(yaw / 2) * sin(pitch / 2) * cos(roll / 2);
+    yawPitchRoll.SplitToScalarVector();
+    return yawPitchRoll;
 }
 
-Math::Quaternion::Quaternion(const float i_mW, const float i_mX,
-                                     const float i_mY, const float i_mZ)
-    : mW(i_mW), mX(i_mX), mY(i_mY), mZ(i_mZ) {
-  splitToScalarVector();
+Quaternion::Quaternion(float w, float x, float y, float z)
+    : w_(w)
+    , x_(x)
+    , y_(y)
+    , z_(z)
+{
+    SplitToScalarVector();
 }
 
-void Math::Quaternion::splitToScalarVector() {
-  scalar = mW;
-  vector.x = mX;
-  vector.y = mY;
-  vector.z = mZ;
+void Quaternion::SplitToScalarVector()
+{
+    scalar    = w_;
+    vector[0] = x_;
+    vector[1] = y_;
+    vector[2] = z_;
 }
 
-void Math::Quaternion::splitFromScalarVector() {
-  mW = scalar;
-  mX = vector.x;
-  mY = vector.y;
-  mZ = vector.z;
+void Quaternion::SplitFromScalarVector()
+{
+    w_ = scalar;
+    x_ = vector.x();
+    y_ = vector.y();
+    z_ = vector.z();
 }
 
-void Math::Quaternion::printQuaternion() const {
-  std::cout << "w = " << scalar << " ";
-  vector.printVector();
-  std::cout << std::endl;
+std::string Quaternion::ToString() const
+{
+    return (std::to_string(w_) + std::to_string(x_) + std::to_string(y_) + std::to_string(z_));
 }
 
-std::string Math::Quaternion::toString() const {
-  return (std::to_string(mW) + std::to_string(mX) + std::to_string(mY) +
-          std::to_string(mZ));
-}
-
-Math::Vector3 Math::Quaternion::operator*(const Vector3 i_rhs) {
-  Quaternion tempQuaternion = Quaternion(0.0f, i_rhs.x, i_rhs.y, i_rhs.z);
-  Quaternion crossQuaternion = (*(this)) * tempQuaternion;
-  Quaternion final_quaternion = crossQuaternion * this->CreateInverse();
-  return (Vector3(final_quaternion.x(), final_quaternion.y(),
-                  final_quaternion.z()));
+Vector3 Quaternion::operator*(const Vector3& other)
+{
+    Quaternion tempQuaternion   = Quaternion(0.0f, other.x(), other.y(), other.z());
+    Quaternion crossQuaternion  = (*(this)) * tempQuaternion;
+    Quaternion final_quaternion = crossQuaternion * this->CreateInverse();
+    return (Vector3{final_quaternion.x(), final_quaternion.y(), final_quaternion.z()});
 }

@@ -1,121 +1,118 @@
-/*
-        This class represents a rotation
-*/
-
-#ifndef _MATH_CQUATERNION_H
-#define _MATH_CQUATERNION_H
+#ifndef ENGINE_MATHS_QUATERNION_H_
+#define ENGINE_MATHS_QUATERNION_H_
 
 #include "Vector3.h"
 
-namespace engine {
-namespace Math {
-class Quaternion {
- public:
-  Quaternion();
-  static Quaternion getIdentityQuartenion();
-  static Quaternion slerp(Quaternion fromQuaternion, Quaternion toQuartenion,
-                          float interpolationFactor);
+namespace engine
+{
+    class Quaternion
+    {
+    public:
+        Quaternion();
 
-  float w() const;
-  float x() const;
-  float y() const;
-  float z() const;
+        static Quaternion GetIdentityQuaternion();
+        static Quaternion Slerp(const Quaternion& from, const Quaternion& to, float interpolation_factor);
 
-  void w(float iW) { mW = iW; }
-  void x(float iX) { mX = iX; }
-  void y(float iY) { mY = iY; }
-  void z(float iZ) { mZ = iZ; }
+        float w() const;
+        float x() const;
+        float y() const;
+        float z() const;
 
-  // Assignment
-  void operator=(const Quaternion i_rhs);
+        void w(float iW)
+        {
+            w_ = iW;
+        }
+        void x(float iX)
+        {
+            x_ = iX;
+        }
+        void y(float iY)
+        {
+            y_ = iY;
+        }
+        void z(float iZ)
+        {
+            z_ = iZ;
+        }
 
-  // Cross Product
-  Quaternion operator*(const Quaternion& i_rhs) const;
-  Quaternion cross(const Quaternion& i_rhs) const;
+        Quaternion& operator=(const Quaternion& other);
 
-  Vector3 operator*(const Vector3 i_rhs);
+        Quaternion operator*(const Quaternion& other) const;
+        Quaternion cross(const Quaternion& other) const;
 
-  // Inverse
-  void inverse();
-  Quaternion CreateInverse() const;
+        Vector3 operator*(const Vector3& other);
 
-  // Equality
-  bool operator==(Quaternion irhs) const;
-  bool operator!=(Quaternion i_rhs) const;
+        void       Inverse();
+        Quaternion CreateInverse() const;
 
-  // Negate
-  Quaternion operator-() const;
-  void conjugate();
+        bool operator==(const Quaternion& other) const;
+        bool operator!=(const Quaternion& other) const;
 
-  // Magnitude
-  float magnitude() const;
+        Quaternion operator-() const;
+        void       Conjugate();
 
-  // Normalization
-  /*
-  q = [s,v] = [s,x,y,z]
-  magnitude = length = sqrt(s*s + x*x + y*y + z*z)
-  normalize = magnitude * q
-  */
-  void Normalize();
-  Quaternion CreateNormalized() const;
+        float Magnitude() const;
 
-  // Angular Displacement
-  /*
-  Given orientations a and b, we can compute the angular displacement
-  d which rotates from a to b i.e.
-  ad = b => d(difference) = inverse(a)b
-  */
-  Quaternion angularDisplacement(Quaternion i_other) const;
-  Quaternion operator-(const Quaternion& iRhs) const;
-  Quaternion& operator-=(const Quaternion& iRhs);
+        // Normalization
+        /*
+            q = [s,v] = [s,x,y,z]
+            magnitude = length = sqrt(s*s + x*x + y*y + z*z)
+            normalize = magnitude * q
+        */
+        void       Normalize();
+        Quaternion CreateNormalized() const;
 
-  // Dot Product
-  /*
-  The geometric interpretation of the quaternion dot product is similar to
-  the interpretation of the vector dot product;
-  The larger the absolute value of the quaternion dot product ab, the more
-  “similar” the angular displacements represented by a and b.
-  */
-  float dot(const Quaternion& i_rhs) const;
+        // Angular Displacement
+        /*
+              Given orientations a and b, we can compute the angular displacement
+              d which rotates from a to b i.e.
+              ad = b => d(difference) = inverse(a)b
+        */
+        Quaternion  AngularDisplacement(const Quaternion& other) const;
+        Quaternion  operator-(const Quaternion& other) const;
+        Quaternion& operator-=(const Quaternion& other);
 
-  // Exponent
-  /*
-  Quaternion exponentiation is useful because it allows us to
-  extract a “fraction” of an angular displacement.
-  For example, to compute a quaternion that represents one-third
-  of the angular displacement represented by the quaternion q,
-  we would compute q1/3.
+        // Dot Product
+        /*
+          The geometric interpretation of the quaternion Dot product is similar to
+          the interpretation of the vector Dot product;
+          The larger the absolute value of the quaternion Dot product ab, the more
+          “similar” the angular displacements represented by a and b.
+        */
+        float Dot(const Quaternion& other) const;
 
-  The caveat we here is this: a quaternion represents angular displacements
-  using the shortest arc. “Multiple spins” cannot be represented.
-  For our example from above, q4 is not a 240º clockwise rotation about the
-  x-axis as expected; it is an 80º counterclockwise rotation.
-  */
-  Quaternion operator^(const float power) const;
+        // Exponent
+        /*
+          Quaternion exponentiation is useful because it allows us to
+          extract a “fraction” of an angular displacement.
+          For example, to compute a quaternion that represents one-third
+          of the angular displacement represented by the quaternion q,
+          we would compute q1/3.
 
-  // Rotation Quartenion
-  Quaternion(const float i_angleInRadians, const Vector3& i_axisOfRotation);
-  static Quaternion getYaw(const float angleInRadians);    // About y-axis
-  static Quaternion getPitch(const float angleInRadians);  // About x-axis
-  static Quaternion getRoll(const float angleInRadians);   // About z-axis
-  static Quaternion getYawPitchRoll(const float angleInRadiansForPitch,
-                                    const float angleInRadiansForYaw,
-                                    const float angleInRadiansForRoll);
+          The caveat we here is this: a quaternion represents angular displacements
+          using the shortest arc. “Multiple spins” cannot be represented.
+          For our example from above, q4 is not a 240º clockwise rotation about the
+          x-axis as expected; it is an 80º counterclockwise rotation.
+        */
+        Quaternion operator^(const float power) const;
 
-  void printQuaternion() const;
+        Quaternion(float angle_in_radians, const Vector3& axis_of_rotation);
+        static Quaternion GetYaw(float angle_in_radians);    // About y-axis
+        static Quaternion GetPitch(float angle_in_radians);  // About x-axis
+        static Quaternion GetRoll(float angle_in_radians);   // About z-axis
+        static Quaternion GetYawPitchRoll(const float angle_in_radians_for_pitch, const float angle_in_radians_for_yaw, const float angle_in_radians_for_roll);
 
-  std::string toString() const;
+        std::string ToString() const;
 
- private:
-  float mW, mX, mY, mZ;
-  float scalar;
-  Vector3 vector;
-  Quaternion(const float i_w, const float i_x, const float i_y,
-             const float i_z);
-  void splitToScalarVector();
-  void splitFromScalarVector();
-};
-}  // namespace Math
-}  
+    private:
+        float   w_, x_, y_, z_;
+        float   scalar;
+        Vector3 vector;
+        Quaternion(float w, float x, float y, float z);
+        void SplitToScalarVector();
+        void SplitFromScalarVector();
+    };
+
+}  // namespace engine
 
 #endif  // _MATH_CQUATERNION_H

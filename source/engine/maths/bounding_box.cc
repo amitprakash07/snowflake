@@ -1,47 +1,73 @@
-#include "BoundingBox.h"
+#include "bounding_box.h"
 
-bool Physics::BoundingBox::CheckCollisionWithOther(
-    BoundingBox iOther) const {
-  if (max.x < iOther.min.x || min.x > iOther.max.x) return 0;
-  if (max.y < iOther.min.y || min.y > iOther.max.y) return 0;
-  if (max.z < iOther.min.z || min.z > iOther.max.z) return 0;
+using namespace engine;
 
-  return true;
+bool BoundingBox::DoesCollides(const BoundingBox& other) const
+{
+    if (max.x() < other.min.x() || min.x() > other.max.x())
+    {
+        return false;
+    }
+
+    if (max.y() < other.min.y() || min.y() > other.max.y())
+    {
+        return false;
+    }
+
+    if (max.z() < other.min.z() || min.z() > other.max.z())
+    {
+        return false;
+    }
+
+    return true;
 }
 
 // Computes the square distance between a point p and an AABB b
-float Physics::BoundingBox::SquareDistancePoint(Math::Vector3 iPoint) {
-  float sqDist = 0.0f;
-  for (int i = 0; i < 3; i++) {
-    // For each axis count any excess distance outside box extents
-    float v = iPoint[i];
-    if (v < min[i]) sqDist += (min[i] - v) * (min[i] - v);
-    if (v > max[i]) sqDist += (v - max[i]) * (v - max[i]);
-  }
-  return sqDist;
+float BoundingBox::SquareDistancePoint(const Vector3& point) const
+{
+    float sqDist = 0.0f;
+    for (int i = 0; i < 3; i++)
+    {
+        // For each axis count any excess distance outside box extents
+        float v = point[i];
+        if (v < min[i])
+            sqDist += (min[i] - v) * (min[i] - v);
+        if (v > max[i])
+            sqDist += (v - max[i]) * (v - max[i]);
+    }
+    return sqDist;
 }
 
-void Physics::BoundingBox::ClosestPtPointAABB(Math::Vector3 p,
-                                                      Math::Vector3& q) {
-  // For each coordinate axis, if the point coordinate value is
-  // outside box, clamp it to the box, else keep it as is
+Vector3 BoundingBox::ClosestPtPointAABB(const Vector3& p) const
+{
+    // For each coordinate axis, if the point coordinate value is
+    // outside box, clamp it to the box, else keep it as is
+    Vector3 q;
+    for (int i = 0; i < 3; i++)
+    {
+        float v = p[i];
+        if (v < min[i])
+            v = min[i];  // v = max(v, b.min[i])
+        if (v > max[i])
+            v = max[i];  // v = min(v, b.max[i])
+        q[i] = v;
+    }
 
-  for (int i = 0; i < 3; i++) {
-    float v = p[i];
-    if (v < min[i]) v = min[i];  // v = max(v, b.min[i])
-    if (v > max[i]) v = max[i];  // v = min(v, b.max[i])
-    q[i] = v;
-  }
+    return q;
 }
 
-float Physics::BoundingBox::SqDistPointAABB(Math::Vector3 iPoint) {
-  // Computes the square distance between a point p and an AABB b
-  float sqDist = 0.0f;
-  for (int i = 0; i < 3; i++) {
-    // For each axis count any excess distance outside box extents
-    float v = iPoint[i];
-    if (v < min[i]) sqDist += (min[i] - v) * (min[i] - v);
-    if (v > max[i]) sqDist += (v - max[i]) * (v - max[i]);
-  }
-  return sqDist;
+float BoundingBox::SqDistPointAABB(Vector3 point) const
+{
+    // Computes the square distance between a point p and an AABB b
+    float sqDist = 0.0f;
+    for (int i = 0; i < 3; i++)
+    {
+        // For each axis count any excess distance outside box extents
+        float v = point[i];
+        if (v < min[i])
+            sqDist += (min[i] - v) * (min[i] - v);
+        if (v > max[i])
+            sqDist += (v - max[i]) * (v - max[i]);
+    }
+    return sqDist;
 }
