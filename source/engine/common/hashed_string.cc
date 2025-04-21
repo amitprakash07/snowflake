@@ -82,5 +82,5 @@ namespace engine
 
             return hash ^ (hash >> 16);
         }  // end Hash(void*, size_t)
-    }      // end namespace utils
+    }  // end namespace utils
 }  // namespace engine

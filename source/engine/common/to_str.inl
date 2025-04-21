@@ -37,4 +37,12 @@ char* engine::ToStr<int>(const int& data)
     char* ret_ptr = ret_char_array + begin;
     return ret_ptr;
 }
+
+
+template <>
+char* engine::ToStr<std::vector<int>>(const std::vector<int>& data)
+{
+    return nullptr;
+}
+
 #endif

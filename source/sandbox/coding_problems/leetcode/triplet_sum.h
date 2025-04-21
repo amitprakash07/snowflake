@@ -34,54 +34,59 @@ return the number of different addresses that actually receive mails.
 
 using namespace std;
 
-class UniqueEmailAddressProblem : public ICodingProblem {
- public:
-  struct Triplet {
-   public:
-    Triplet() = delete;
-    Triplet(int a, int b, int c) {
-      vals.resize(3);
-      vals[0] = a;
-      vals[1] = b;
-      vals[2] = c;
-      sort(vals.begin(), vals.end());
+class TripletSumProblem : public ICodingProblem
+{
+public:
+    struct Triplet
+    {
+    public:
+        Triplet() = delete;
+        Triplet(int a, int b, int c)
+        {
+            vals.resize(3);
+            vals[0] = a;
+            vals[1] = b;
+            vals[2] = c;
+            sort(vals.begin(), vals.end());
+        }
+
+        bool operator==(const Triplet& other) const
+        {
+            if (vals[0] == other.vals[0] && vals[1] == other.vals[1] && vals[2] == other.vals[2])
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        bool operator<(const Triplet& other) const
+        {
+            if (vals[0] > other.vals[0] || vals[1] > other.vals[2] || vals[2] > other.vals[2])
+            {
+                return false;
+            }
+
+            if (*this == other)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        vector<int> ToVec() const
+        {
+            return vals;
+        }
+
+    private:
+        vector<int> vals;
+    };
+
+    void RunTests() override
+    {
     }
-
-    bool operator==(const Triplet& other) const {
-      if (vals[0] == other.vals[0] && vals[1] == other.vals[1] &&
-          vals[2] == other.vals[2]) {
-        return true;
-      }
-
-      return false;
-    }
-
-    bool operator<(const Triplet& other) const {
-      if (vals[0] > other.vals[0] || vals[1] > other.vals[2] ||
-          vals[2] > other.vals[2]) {
-        return false;
-      }
-
-      if (*this == other) {
-        return false;
-      }
-
-      return true;
-    }
-
-    vector<int> ToVec() const { return vals; }
-
-   private:
-    vector<int> vals;
-  };
-
-  void RunTests() override {
-    std::vector<std::string> emails = {"test.email+alex@leetcode.com",
-                                       "test.e.mail+bob.cathy@leetcode.com",
-                                       "testemail+david@lee.tcode.com"};
-
-    std::cout << "Unique email count " << GetUniqueEmailCount(emails);
-  }
 };
 
 #endif

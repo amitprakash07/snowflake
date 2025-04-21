@@ -4,15 +4,15 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "heap.h"
+#include "HeapContainer.h"
 #include "util.h"
 
 namespace engine
 {
 
     template <typename DataType, HeapType type, size_t init_size>
-    Heap<DataType, type, init_size>::Heap(std::vector<DataType> init_data)
-        : Heap()
+    HeapContainer<DataType, type, init_size>::HeapContainer(std::vector<DataType> init_data)
+        : HeapContainer()
     {
         if (init_data.size() > buffer_size_)
         {
@@ -27,7 +27,7 @@ namespace engine
     }
 
     template <typename DataType, HeapType type, size_t init_size>
-    void Heap<DataType, type, init_size>::Push(DataType data)
+    void HeapContainer<DataType, type, init_size>::Push(DataType data)
     {
         if (buffer_size_ < current_size_ + 1)
         {
@@ -49,12 +49,12 @@ namespace engine
     }
 
     template <typename DataType, HeapType type, size_t init_size>
-    void Heap<DataType, type, init_size>::Pop()
+    void HeapContainer<DataType, type, init_size>::Pop()
     {
     }
 
     template <typename DataType, HeapType type, size_t init_size>
-    DataType Heap<DataType, type, init_size>::Top() const
+    DataType HeapContainer<DataType, type, init_size>::Top() const
     {
         if (!Empty())
         {
@@ -65,15 +65,15 @@ namespace engine
     }
 
     template <typename DataType, HeapType type, size_t init_size>
-    std::string Heap<DataType, type, init_size>::ToStr() const
+    std::string HeapContainer<DataType, type, init_size>::ToStr() const
     {
         return util::ToStr(data_);
     }
 
     template <typename DataType, HeapType type, size_t init_size>
-    void Heap<DataType, type, init_size>::UnitTest()
+    void HeapContainer<DataType, type, init_size>::UnitTest()
     {
-        Heap<int> int_heap({3, 2, 4, 1, 5, 9});
+        HeapContainer<int> int_heap({3, 2, 4, 1, 5, 9});
         std::cout << int_heap.ToStr().c_str();
     }
 }  // namespace engine

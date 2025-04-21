@@ -59,6 +59,10 @@ macro(make_executable_target)
     add_executable(${PROJECT_TARGET_NAME} ${PROJECT_TARGET_SOURCES})
 endmacro()
 
+macro(make_win32_executable_target)
+    add_executable(${PROJECT_TARGET_NAME} WIN32 ${PROJECT_TARGET_SOURCES})
+endmacro()
+
 macro(link_target lib_name)
     target_link_libraries(${PROJECT_TARGET_NAME} ${lib_name})
 endmacro()
