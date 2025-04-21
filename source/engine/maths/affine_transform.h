@@ -29,7 +29,9 @@ namespace engine
         void SetPosition(const Vector3& new_position);
         void SetOrientation(const Quaternion& new_orientation);
 
-        void RotateByEulerAngles(float angle_in_radians_for_pitch, float angle_in_radians_for_yaw, float angle_in_radians_for_roll);
+        void RotateByEulerAngles(float angle_in_radians_for_pitch,
+                                 float angle_in_radians_for_yaw,
+                                 float angle_in_radians_for_roll);
         void GetEulerAngles() const;
 
         void MoveForward(float unit);
@@ -41,16 +43,16 @@ namespace engine
         void Move(Vector3 along, float unit);
 
         // void Slide(Vector3 along, float unit);
-        void      Rotate(float angle_in_radians, RotationAxis rotation_axis);
-        void      Rotate(float angle_in_radians, Vector3 arbitrary_axis);
-        void      Rotate(const Quaternion& rotor);
+        void Rotate(float angle_in_radians, RotationAxis rotation_axis);
+        void Rotate(float angle_in_radians, Vector3 arbitrary_axis);
+        void Rotate(const Quaternion& rotor);
 
         Matrix4x4 GetLocalToWorldMatrix() const;
 
-        void      TransformTo(Vector3& point) const;
-        void      TransformFrom(Vector3& point) const;
-        void      VectorTransformTo(Vector3& direction) const;
-        void      VectorTransformFrom(Vector3& direction) const;
+        void TransformTo(Vector3& point) const;
+        void TransformFrom(Vector3& point) const;
+        void VectorTransformTo(Vector3& direction) const;
+        void VectorTransformFrom(Vector3& direction) const;
 
     private:
         Vector3    position_;
