@@ -12,6 +12,8 @@ include_src(gpu_cmd_list.h)
 include_src(gpu_cmd_list.cc)
 include_src(gpu_resource.h)
 include_src(gpu_resource.cc)
+include_src(gpu_pipeline.h)
+include_src(gpu_pipeline.cc)
 
 make_library_target()
 link_target(d3d12.dll)

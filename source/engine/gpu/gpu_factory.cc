@@ -9,6 +9,10 @@ engine::GpuFactory::GpuFactory()
 {
 }
 
+engine::GpuFactory::~GpuFactory()
+{
+}
+
 uint8_t engine::GpuFactory::GetDeviceCount() const
 {
     return static_cast<uint8_t>(available_adapters_.size());

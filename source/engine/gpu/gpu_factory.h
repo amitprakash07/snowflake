@@ -15,6 +15,8 @@ namespace engine
         [[nodiscard]] bool Initialize();
         GpuFactory();
 
+        ~GpuFactory();
+
         [[nodiscard]] uint8_t GetDeviceCount() const;
 
         [[nodiscard]] GpuDevice* GetDevice(uint8_t device_adapter = 0) const;
