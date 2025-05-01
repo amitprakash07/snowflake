@@ -1,6 +1,6 @@
-#include "gpu_device.h"
-
 #include <cassert>
+
+#include "gpu_device.h"
 
 engine::GpuDevice::GpuDevice(ID3D12Device10* d3d12_device)
     : d3d12_device_(d3d12_device)
@@ -20,13 +20,17 @@ engine::GpuDevice::~GpuDevice()
     }
 }
 
-engine::GpuQueue* engine::GpuDevice::CreateQueue(const GpuQueueDesc* desc)
+#define DEFINE_SPECIALIZED_CREATE(resource_type, resource_ptr_type, resource_desc) \
+    template <>                                                                    \
+    engine::GpuDeviceResource<resource_ptr_type>*                                  \
+    engine::GpuDevice::Create<engine::GpuDeviceResource<resource_ptr_type>,        \
+                              engine::GpuDeviceResourceDesc<resource_desc>>(       \
+        const engine::GpuDeviceResourceDesc<resource_desc>& desc)
+
+DEFINE_SPECIALIZED_CREATE(CmdQueue, ID3D12CommandQueue, D3D12_COMMAND_QUEUE_DESC)
 {
-    GpuQueueDesc queue_desc;
-    if (desc)
-    {
-        queue_desc = *desc;
-    }
+    GpuDeviceResourceDesc<D3D12_COMMAND_QUEUE_DESC> queue_desc = desc;
+    GpuDeviceResource<ID3D12CommandQueue>*          ret_queue  = nullptr;
 
     if (d3d12_device_)
     {
@@ -34,25 +38,20 @@ engine::GpuQueue* engine::GpuDevice::CreateQueue(const GpuQueueDesc* desc)
         if (SUCCEEDED(d3d12_device_->CreateCommandQueue(
                 &queue_desc, __uuidof(ID3D12CommandQueue), reinterpret_cast<void**>(&cmd_queue))))
         {
-            GpuQueue* new_queue = new GpuQueue(cmd_queue);
-            gpu_queues_.push_back(new_queue);
-            return new_queue;
+            ret_queue =
+                new GpuDeviceResContainer<CmdQueue, ID3D12CommandQueue, D3D12_COMMAND_QUEUE_DESC>(cmd_queue, desc);
+            device_resources_map_[CmdList].push_back(ret_queue);
         }
     }
 
-    return nullptr;
+    return ret_queue;
 }
 
-engine::GpuCommandList* engine::GpuDevice::CreateCmdList(const GpuCmdListDesc* desc)
+DEFINE_SPECIALIZED_CREATE(CmdList, ID3D12CommandList, engine::GpuCmdListDesc)
 {
-    ID3D12CommandAllocator* cmd_allocator = nullptr;
-    GpuCmdListDesc          cmd_desc;
-    GpuCommandList*         ret_list = nullptr;
-
-    if (desc)
-    {
-        cmd_desc = *desc;
-    }
+    ID3D12CommandAllocator*               cmd_allocator = nullptr;
+    GpuDeviceResourceDesc<GpuCmdListDesc> cmd_desc      = desc;
+    GpuDeviceResource<ID3D12CommandList>* ret_list      = nullptr;
 
     if (!cmd_allocators_map_by_type_.contains(cmd_desc.Type))
     {
@@ -75,48 +74,44 @@ engine::GpuCommandList* engine::GpuDevice::CreateCmdList(const GpuCmdListDesc* d
                                                        __uuidof(ID3D12CommandList),
                                                        reinterpret_cast<void**>(&cmd_list))))
         {
-            ret_list = new GpuCommandList(cmd_list);
+            ret_list = new GpuDeviceResContainer<CmdList, ID3D12CommandList, engine::GpuCmdListDesc>(cmd_list, desc);
+            device_resources_map_[CmdList].push_back(ret_list);
         }
     }
 
     return ret_list;
 }
 
-engine::GpuResource* engine::GpuDevice::CreateResource(const GpuResourceDesc* desc)
+DEFINE_SPECIALIZED_CREATE(GraphicsPipeline, ID3D12PipelineState, D3D12_GRAPHICS_PIPELINE_STATE_DESC)
 {
+    GpuDeviceResource<ID3D12PipelineState>* ret_pipeline = nullptr;
+
+    ID3D12PipelineState* pipeline_state = nullptr;
+    if ((SUCCEEDED(d3d12_device_->CreateGraphicsPipelineState(
+            &desc, __uuidof(ID3D12PipelineState), reinterpret_cast<void**>(&pipeline_state)))))
+    {
+        ret_pipeline =
+            new GpuDeviceResContainer<GraphicsPipeline, ID3D12PipelineState, D3D12_GRAPHICS_PIPELINE_STATE_DESC>(
+                pipeline_state, desc);
+        device_resources_map_[GraphicsPipeline].push_back(ret_pipeline);
+    }
+
+    return ret_pipeline;
 }
 
-engine::GpuPipeline* engine::GpuDevice::CreatePipeline(const GpuPipelineDesc* desc)
+DEFINE_SPECIALIZED_CREATE(ComputePipeline, ID3D12PipelineState, D3D12_COMPUTE_PIPELINE_STATE_DESC)
 {
-    GpuPipeline*         pipeline        = nullptr;
-    ID3D12PipelineState* driver_pipeline = nullptr;
+    GpuDeviceResource<ID3D12PipelineState>* ret_pipeline = nullptr;
 
-    if (desc)
+    ID3D12PipelineState* pipeline_state = nullptr;
+    if ((SUCCEEDED(d3d12_device_->CreateComputePipelineState(
+            &desc, __uuidof(ID3D12PipelineState), reinterpret_cast<void**>(&pipeline_state)))))
     {
-        switch (desc->type)
-        {
-        case Graphics:
-        {
-            assert(SUCCEEDED(d3d12_device_->CreateGraphicsPipelineState(&desc->graphics_pipeline_desc,
-                                                                        __uuidof(ID3D12PipelineState),
-                                                                        reinterpret_cast<void**>(&driver_pipeline))));
-        }
-        break;
-        case Compute:
-        {
-            assert(SUCCEEDED(d3d12_device_->CreateComputePipelineState(&desc->compute_pipeline_desc,
-                                                                       __uuidof(ID3D12PipelineState),
-                                                                       reinterpret_cast<void**>(&driver_pipeline))));
-        }
-        break;
-        }
+        ret_pipeline =
+            new GpuDeviceResContainer<GraphicsPipeline, ID3D12PipelineState, D3D12_COMPUTE_PIPELINE_STATE_DESC>(
+                pipeline_state, desc);
+        device_resources_map_[ComputePipeline].push_back(ret_pipeline);
     }
 
-    if (driver_pipeline)
-    {
-        pipeline = new GpuPipeline(desc, driver_pipeline);
-        gpu_pipelines_.push_back(pipeline);
-    }
-
-    return pipeline;
+    return ret_pipeline;
 }

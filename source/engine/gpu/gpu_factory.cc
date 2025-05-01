@@ -48,7 +48,7 @@ bool engine::GpuFactory::Initialize()
         IDXGIFactory2* temp    = nullptr;
         IDXGIAdapter1* adapter = nullptr;
 
-        if (CreateDXGIFactory2(0, __uuidof(IDXGIFactory2), reinterpret_cast<void**>(&temp) == S_OK))
+        if (CreateDXGIFactory2(0, __uuidof(IDXGIFactory2), reinterpret_cast<void**>(&temp)) == S_OK)
         {
             dxgi_factory_ = temp;
             for (uint8_t i = 0; temp->EnumAdapters1(i, &adapter) == DXGI_ERROR_NOT_FOUND; i++)
