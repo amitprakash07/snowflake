@@ -27,8 +27,8 @@ void engine::BinaryTree<DataType>::Construct(std::vector<DataType> data)
                     current->left       = new BinaryTreeNode<DataType>();
                     current->left->data = data[iter];
                     queue.Push(current->left);
+                    iter++;
                 }
-                iter++;
             }
 
             if (current->right == nullptr)
@@ -38,15 +38,17 @@ void engine::BinaryTree<DataType>::Construct(std::vector<DataType> data)
                     current->right       = new BinaryTreeNode<DataType>();
                     current->right->data = data[iter];
                     queue.Push(current->right);
+                    iter++;
                 }
-                iter++;
             }
         }
     }
 }
 
 template <class DataType>
-void engine::BinaryTree<DataType>::Traverse(const BinaryTreeNode<DataType>* tree_node, TreeTraverseOrder order, std::vector<DataType>& out) const
+void engine::BinaryTree<DataType>::Traverse(const BinaryTreeNode<DataType>* tree_node,
+                                            TreeTraverseOrder               order,
+                                            std::vector<DataType>&          out) const
 {
     if (tree_node == nullptr)
     {
@@ -82,75 +84,16 @@ void engine::BinaryTree<DataType>::Traverse(const BinaryTreeNode<DataType>* tree
 template <class DataType>
 uint32_t engine::BinaryTree<DataType>::FindDepth(BinaryTreeNode<DataType>* node_to_found)
 {
-    std::function<uint32_t(BinaryTreeNode<DataType>*, BinaryTreeNode<DataType>*, bool)> find_depth_helper =
-        [&](BinaryTreeNode<DataType>* node, BinaryTreeNode<DataType>* find, bool& is_found) -> uint32_t {
-        if (node == nullptr)
-        {
-            return 0;
-        }
-
-        if (node == find)
-        {
-            is_found = true;
-            return 1;
-        }
-
-        uint32_t depth = 0;
-        if (!is_found)
-        {
-            depth = find_depth_helper(node->left, node_to_found, is_found) + 1;
-        }
-
-        if (!is_found)
-        {
-            depth = find_depth_helper(node->right, node_to_found, is_found) + 1;
-        }
-
-        return depth;
-    };
-
     bool     found = false;
-    uint32_t depth = find_depth_helper(root, node_to_found, found);
+    uint32_t depth = FindDepthHelper(root, node_to_found, found);
     return found ? depth : 0;
 }
 
 template <class DataType>
 uint32_t engine::BinaryTree<DataType>::FindDepth(DataType node_to_found)
 {
-    std::function<uint32_t(BinaryTreeNode<DataType>*, DataType, bool&)> find_depth_helper =
-        [&](BinaryTreeNode<DataType>* node, DataType find, bool& is_found) -> uint32_t {
-        if (node == nullptr)
-        {
-            return 0;
-        }
-
-        if (node->data == find)
-        {
-            is_found = true;
-            return 1;
-        }
-
-        uint32_t depth = 0;
-        if (!is_found)
-        {
-            depth = find_depth_helper(node->left, find, is_found);
-        }
-
-        if (!is_found)
-        {
-            depth = find_depth_helper(node->right, find, is_found);
-        }
-
-        if (is_found)
-        {
-            depth = depth + 1;
-        }
-
-        return depth;
-    };
-
     bool     found = false;
-    uint32_t depth = find_depth_helper(root, node_to_found, found);
+    uint32_t depth = FindDepthHelper(root, node_to_found, found);
     return found ? depth : 0;
 }
 
@@ -203,6 +146,69 @@ void engine::BinaryTree<DataType>::UnitTest()
         std::cout << "Depth of 3 is " << int_tree.FindDepth(3) << std::endl;
         std::cout << "Depth of 200 is " << int_tree.FindDepth(200) << std::endl;
     }
+}
+
+template <class DataType>
+uint32_t engine::BinaryTree<DataType>::FindDepthHelper(BinaryTreeNode<DataType>* node,
+                                                       BinaryTreeNode<DataType>* find,
+                                                       bool&                     is_found)
+{
+    if (node == nullptr)
+    {
+        return 0;
+    }
+
+    if (node == find)
+    {
+        is_found = true;
+        return 1;
+    }
+
+    uint32_t depth = 0;
+    if (!is_found)
+    {
+        depth = find_depth_helper(node->left, find, is_found) + 1;
+    }
+
+    if (!is_found)
+    {
+        depth = find_depth_helper(node->right, find, is_found) + 1;
+    }
+
+    return depth;
+}
+
+template <class DataType>
+uint32_t engine::BinaryTree<DataType>::FindDepthHelper(BinaryTreeNode<DataType>* node, DataType find, bool& is_found)
+{
+    if (node == nullptr)
+    {
+        return 0;
+    }
+
+    if (node->data == find)
+    {
+        is_found = true;
+        return 1;
+    }
+
+    uint32_t depth = 0;
+    if (!is_found)
+    {
+        depth = FindDepthHelper(node->left, find, is_found);
+    }
+
+    if (!is_found)
+    {
+        depth = FindDepthHelper(node->right, find, is_found);
+    }
+
+    if (is_found)
+    {
+        depth = depth + 1;
+    }
+
+    return depth;
 }
 
 template <class DataType>
