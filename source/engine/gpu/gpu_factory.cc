@@ -11,6 +11,12 @@ engine::GpuFactory::GpuFactory()
 
 engine::GpuFactory::~GpuFactory()
 {
+    for (auto adapter : adapter_devices_)
+    {
+        delete adapter;
+    }
+
+    adapter_devices_.clear();
 }
 
 uint8_t engine::GpuFactory::GetDeviceCount() const
@@ -22,7 +28,7 @@ engine::GpuDevice* engine::GpuFactory::GetDevice(uint8_t device_adapter) const
 {
     if (device_adapter < GetDeviceCount())
     {
-        while (adapter_devices_.size() < device_adapter)
+        while (adapter_devices_.empty() || adapter_devices_.size() < device_adapter)
         {
             ID3D12Device10* device = nullptr;
             if (SUCCEEDED(D3D12CreateDevice(available_adapters_[device_adapter],
@@ -50,11 +56,18 @@ bool engine::GpuFactory::Initialize()
 
         if (CreateDXGIFactory2(0, __uuidof(IDXGIFactory2), reinterpret_cast<void**>(&temp)) == S_OK)
         {
-            dxgi_factory_ = temp;
-            for (uint8_t i = 0; temp->EnumAdapters1(i, &adapter) == DXGI_ERROR_NOT_FOUND; i++)
+            dxgi_factory_        = temp;
+            uint8_t adapter_iter = 0;
+            HRESULT success      = S_OK;
+            do
             {
-                available_adapters_.push_back(adapter);
-            }
+                success = temp->EnumAdapters1(adapter_iter, &adapter);
+                if (success != DXGI_ERROR_NOT_FOUND)
+                {
+                    available_adapters_.push_back(adapter);
+                    adapter_iter++;
+                }
+            } while (success == S_OK);
         }
     }
 

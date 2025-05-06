@@ -5,14 +5,35 @@
 engine::GpuDevice::GpuDevice(ID3D12Device10* d3d12_device)
     : d3d12_device_(d3d12_device)
 {
-    if (d3d12_device_)
-    {
-        d3d12_device_->AddRef();
-    }
+    d3d12_device->AddRef();
 }
 
 engine::GpuDevice::~GpuDevice()
 {
+    if (!cmd_allocators_map_by_type_.empty())
+    {
+        for (auto pair : cmd_allocators_map_by_type_)
+        {
+            pair.second->Release();
+        }
+
+        cmd_allocators_map_by_type_.clear();
+    }
+
+    if (!device_resources_map_.empty())
+    {
+        for (const auto& pair : device_resources_map_)
+        {
+            std::vector<GpuDeviceResourceCommon*> list = pair.second;
+            for (auto contianer : list)
+            {
+                delete contianer;
+            }
+        }
+
+        device_resources_map_.clear();
+    }
+
     if (d3d12_device_)
     {
         d3d12_device_->Release();
@@ -20,14 +41,11 @@ engine::GpuDevice::~GpuDevice()
     }
 }
 
-#define DEFINE_SPECIALIZED_CREATE(resource_type, resource_ptr_type, resource_desc) \
-    template <>                                                                    \
-    engine::GpuDeviceResource<resource_ptr_type>*                                  \
-    engine::GpuDevice::Create<engine::GpuDeviceResource<resource_ptr_type>,        \
-                              engine::GpuDeviceResourceDesc<resource_desc>>(       \
-        const engine::GpuDeviceResourceDesc<resource_desc>& desc)
+#define DEFINE_SPECIALIZED_CREATE_D3D_DESC(resource_type, resource_ptr_type, resource_desc) \
+    template <>                                                                             \
+    engine::GpuDeviceResource<resource_ptr_type>* engine::GpuDevice::Create(const resource_desc& desc)
 
-DEFINE_SPECIALIZED_CREATE(CmdQueue, ID3D12CommandQueue, D3D12_COMMAND_QUEUE_DESC)
+DEFINE_SPECIALIZED_CREATE_D3D_DESC(CmdQueue, ID3D12CommandQueue, D3D12_COMMAND_QUEUE_DESC)
 {
     GpuDeviceResourceDesc<D3D12_COMMAND_QUEUE_DESC> queue_desc = desc;
     GpuDeviceResource<ID3D12CommandQueue>*          ret_queue  = nullptr;
@@ -47,7 +65,46 @@ DEFINE_SPECIALIZED_CREATE(CmdQueue, ID3D12CommandQueue, D3D12_COMMAND_QUEUE_DESC
     return ret_queue;
 }
 
-DEFINE_SPECIALIZED_CREATE(CmdList, ID3D12CommandList, engine::GpuCmdListDesc)
+DEFINE_SPECIALIZED_CREATE_D3D_DESC(GraphicsPipeline, ID3D12PipelineState, D3D12_GRAPHICS_PIPELINE_STATE_DESC)
+{
+    GpuDeviceResource<ID3D12PipelineState>* ret_pipeline = nullptr;
+
+    ID3D12PipelineState* pipeline_state = nullptr;
+    if ((SUCCEEDED(d3d12_device_->CreateGraphicsPipelineState(
+            &desc, __uuidof(ID3D12PipelineState), reinterpret_cast<void**>(&pipeline_state)))))
+    {
+        ret_pipeline =
+            new GpuDeviceResContainer<GraphicsPipeline, ID3D12PipelineState, D3D12_GRAPHICS_PIPELINE_STATE_DESC>(
+                pipeline_state, desc);
+        device_resources_map_[GraphicsPipeline].push_back(ret_pipeline);
+    }
+
+    return ret_pipeline;
+}
+
+DEFINE_SPECIALIZED_CREATE_D3D_DESC(ComputePipeline, ID3D12PipelineState, D3D12_COMPUTE_PIPELINE_STATE_DESC)
+{
+    GpuDeviceResource<ID3D12PipelineState>* ret_pipeline = nullptr;
+
+    ID3D12PipelineState* pipeline_state = nullptr;
+    if ((SUCCEEDED(d3d12_device_->CreateComputePipelineState(
+            &desc, __uuidof(ID3D12PipelineState), reinterpret_cast<void**>(&pipeline_state)))))
+    {
+        ret_pipeline =
+            new GpuDeviceResContainer<GraphicsPipeline, ID3D12PipelineState, D3D12_COMPUTE_PIPELINE_STATE_DESC>(
+                pipeline_state, desc);
+        device_resources_map_[ComputePipeline].push_back(ret_pipeline);
+    }
+
+    return ret_pipeline;
+}
+
+#define DEFINE_SPECIALIZED_CREATE(resource_type, resource_ptr_type, resource_desc) \
+    template <>                                                                    \
+    engine::GpuDeviceResource<resource_ptr_type>* engine::GpuDevice::Create(       \
+        const engine::GpuDeviceResourceDesc<resource_desc>& desc)
+
+DEFINE_SPECIALIZED_CREATE(CmdList, ID3D12CommandList, GpuCmdListDesc)
 {
     ID3D12CommandAllocator*               cmd_allocator = nullptr;
     GpuDeviceResourceDesc<GpuCmdListDesc> cmd_desc      = desc;
@@ -82,36 +139,14 @@ DEFINE_SPECIALIZED_CREATE(CmdList, ID3D12CommandList, engine::GpuCmdListDesc)
     return ret_list;
 }
 
-DEFINE_SPECIALIZED_CREATE(GraphicsPipeline, ID3D12PipelineState, D3D12_GRAPHICS_PIPELINE_STATE_DESC)
+void engine::GpuDevice::UnitTest()
 {
-    GpuDeviceResource<ID3D12PipelineState>* ret_pipeline = nullptr;
-
-    ID3D12PipelineState* pipeline_state = nullptr;
-    if ((SUCCEEDED(d3d12_device_->CreateGraphicsPipelineState(
-            &desc, __uuidof(ID3D12PipelineState), reinterpret_cast<void**>(&pipeline_state)))))
-    {
-        ret_pipeline =
-            new GpuDeviceResContainer<GraphicsPipeline, ID3D12PipelineState, D3D12_GRAPHICS_PIPELINE_STATE_DESC>(
-                pipeline_state, desc);
-        device_resources_map_[GraphicsPipeline].push_back(ret_pipeline);
-    }
-
-    return ret_pipeline;
-}
-
-DEFINE_SPECIALIZED_CREATE(ComputePipeline, ID3D12PipelineState, D3D12_COMPUTE_PIPELINE_STATE_DESC)
-{
-    GpuDeviceResource<ID3D12PipelineState>* ret_pipeline = nullptr;
-
-    ID3D12PipelineState* pipeline_state = nullptr;
-    if ((SUCCEEDED(d3d12_device_->CreateComputePipelineState(
-            &desc, __uuidof(ID3D12PipelineState), reinterpret_cast<void**>(&pipeline_state)))))
-    {
-        ret_pipeline =
-            new GpuDeviceResContainer<GraphicsPipeline, ID3D12PipelineState, D3D12_COMPUTE_PIPELINE_STATE_DESC>(
-                pipeline_state, desc);
-        device_resources_map_[ComputePipeline].push_back(ret_pipeline);
-    }
-
-    return ret_pipeline;
+    assert(d3d12_device_ != nullptr);
+    GpuDeviceResourceDesc<GpuCmdListDesc> cmd_desc;
+    GpuDeviceResource<ID3D12CommandList>* cmd = Create<ID3D12CommandList>(cmd_desc);
+    cmd->GetPtr()->SetName(L"My Command List");
+    ID3D12GraphicsCommandList7* graphics_command_list7 = nullptr;
+    cmd->GetPtr()->QueryInterface(__uuidof(ID3D12GraphicsCommandList7),
+                                  reinterpret_cast<void**>(&graphics_command_list7));
+    ULONG ref_count = graphics_command_list7->Release();
 }

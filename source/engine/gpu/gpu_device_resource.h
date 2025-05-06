@@ -92,17 +92,40 @@ namespace engine
         }
     };
 
-    template <>
-    class GpuDeviceResourceDesc<GpuNoDesc>
+    class GpuDeviceResourceCommon
     {
+    public:
+        GpuDeviceResourceCommon(GpuDeviceResourceType resource_type)
+            : resource_type_(resource_type)
+        {
+        }
+
+        GpuDeviceResourceType Type() const
+        {
+            return resource_type_;
+        }
+
+        virtual ~GpuDeviceResourceCommon()
+        {
+        }
+
+        GpuDeviceResourceCommon()                                           = delete;
+        GpuDeviceResourceCommon(const GpuDeviceResourceCommon&)             = delete;
+        GpuDeviceResourceCommon(GpuDeviceResourceCommon&&)                  = delete;
+        GpuDeviceResourceCommon& operator=(const GpuDeviceResourceCommon&)  = delete;
+        GpuDeviceResourceCommon& operator=(const GpuDeviceResourceCommon&&) = delete;
+
+    private:
+        GpuDeviceResourceType resource_type_;
     };
 
     template <class DeviceResourcePtrType>
-    class GpuDeviceResource
+    class GpuDeviceResource : public GpuDeviceResourceCommon
     {
     public:
-        GpuDeviceResource(DeviceResourcePtrType* ptr)
-            : device_res_ptr_(ptr)
+        GpuDeviceResource(DeviceResourcePtrType* ptr, GpuDeviceResourceType res_type)
+            : GpuDeviceResourceCommon(res_type)
+            , device_res_ptr_(ptr)
         {
         }
 
@@ -111,53 +134,67 @@ namespace engine
             return device_res_ptr_;
         }
 
+        virtual ~GpuDeviceResource()
+        {
+            if (device_res_ptr_)
+            {
+                reinterpret_cast<IUnknown*>(device_res_ptr_)->Release();
+                device_res_ptr_ = nullptr;
+            }
+        }
+
+        GpuDeviceResource()                                     = delete;
+        GpuDeviceResource(const GpuDeviceResource&)             = delete;
+        GpuDeviceResource(GpuDeviceResource&&)                  = delete;
+        GpuDeviceResource& operator=(const GpuDeviceResource&)  = delete;
+        GpuDeviceResource& operator=(const GpuDeviceResource&&) = delete;
+
     private:
         DeviceResourcePtrType* device_res_ptr_;
     };
 
-    template <GpuDeviceResourceType resource_type,
-              class DeviceResourcePtrType,
-              class DeviceResourceDesc = GpuDeviceResourceDesc<GpuNoDesc>>
+    template <GpuDeviceResourceType resource_type, class DeviceResourcePtrType, class DeviceResourceDesc>
     class GpuDeviceResContainer : public GpuDeviceResource<DeviceResourcePtrType>
     {
     public:
         GpuDeviceResContainer(DeviceResourcePtrType* device_res_ptr, const DeviceResourceDesc& device_res_desc)
-            : GpuDeviceResource<DeviceResourcePtrType>(device_res_ptr)
+            : GpuDeviceResource<DeviceResourcePtrType>(device_res_ptr, resource_type)
             , device_res_desc_(device_res_desc)
-            , resource_type_(resource_type)
         {
         }
 
-        GpuDeviceResContainer() = delete;
-
-        GpuDeviceResourceType Type() const
+        ~GpuDeviceResContainer()
         {
-            return resource_type_;
         }
+
+        GpuDeviceResContainer()                                         = delete;
+        GpuDeviceResContainer(const GpuDeviceResContainer&)             = delete;
+        GpuDeviceResContainer(GpuDeviceResContainer&&)                  = delete;
+        GpuDeviceResContainer& operator=(const GpuDeviceResContainer&)  = delete;
+        GpuDeviceResContainer& operator=(const GpuDeviceResContainer&&) = delete;
 
     private:
         GpuDeviceResourceDesc<DeviceResourceDesc> device_res_desc_;
-        GpuDeviceResourceType                     resource_type_;
     };
 
-#define INSTANTIATE_DEVICE_RESOURCE(resource_type, resource_ptr_type, resource_desc)                    \
+#define INSTANTIATE_DEVICE_RESOURCE_CLASS(resource_type, resource_ptr_type, resource_desc)              \
     template <>                                                                                         \
     class GpuDeviceResContainer<resource_type, resource_ptr_type, GpuDeviceResourceDesc<resource_desc>> \
     {                                                                                                   \
     };
 
-    INSTANTIATE_DEVICE_RESOURCE(CmdQueue, ID3D12CommandQueue, D3D12_COMMAND_QUEUE_DESC);
-    INSTANTIATE_DEVICE_RESOURCE(ComputePipeline, ID3D12PipelineState, D3D12_COMPUTE_PIPELINE_STATE_DESC);
-    INSTANTIATE_DEVICE_RESOURCE(GraphicsPipeline, ID3D12PipelineState, D3D12_GRAPHICS_PIPELINE_STATE_DESC);
-    INSTANTIATE_DEVICE_RESOURCE(DescriptorHeap, ID3D12DescriptorHeap, D3D12_DESCRIPTOR_HEAP_DESC);
-    INSTANTIATE_DEVICE_RESOURCE(Heap, ID3D12Heap, D3D12_HEAP_DESC);
-    INSTANTIATE_DEVICE_RESOURCE(QueryHeap, ID3D12QueryHeap, D3D12_QUERY_HEAP_DESC);
+    INSTANTIATE_DEVICE_RESOURCE_CLASS(CmdQueue, ID3D12CommandQueue, D3D12_COMMAND_QUEUE_DESC);
+    INSTANTIATE_DEVICE_RESOURCE_CLASS(ComputePipeline, ID3D12PipelineState, D3D12_COMPUTE_PIPELINE_STATE_DESC);
+    INSTANTIATE_DEVICE_RESOURCE_CLASS(GraphicsPipeline, ID3D12PipelineState, D3D12_GRAPHICS_PIPELINE_STATE_DESC);
+    INSTANTIATE_DEVICE_RESOURCE_CLASS(DescriptorHeap, ID3D12DescriptorHeap, D3D12_DESCRIPTOR_HEAP_DESC);
+    INSTANTIATE_DEVICE_RESOURCE_CLASS(Heap, ID3D12Heap, D3D12_HEAP_DESC);
+    INSTANTIATE_DEVICE_RESOURCE_CLASS(QueryHeap, ID3D12QueryHeap, D3D12_QUERY_HEAP_DESC);
 
-    INSTANTIATE_DEVICE_RESOURCE(CmdList, ID3D12CommandList, GpuCmdListDesc);
-    INSTANTIATE_DEVICE_RESOURCE(CommittedResource, ID3D12Resource, GpuCommittedResDesc);
-    INSTANTIATE_DEVICE_RESOURCE(PlacedResource, ID3D12Resource, GpuPlacedResDesc);
-    INSTANTIATE_DEVICE_RESOURCE(Fence, ID3D12Fence, GpuFenceDesc);
-    INSTANTIATE_DEVICE_RESOURCE(RootSignature, ID3D12RootSignature, GpuRootSignatureDesc);
+    INSTANTIATE_DEVICE_RESOURCE_CLASS(CmdList, ID3D12CommandList, GpuCmdListDesc);
+    INSTANTIATE_DEVICE_RESOURCE_CLASS(CommittedResource, ID3D12Resource, GpuCommittedResDesc);
+    INSTANTIATE_DEVICE_RESOURCE_CLASS(PlacedResource, ID3D12Resource, GpuPlacedResDesc);
+    INSTANTIATE_DEVICE_RESOURCE_CLASS(Fence, ID3D12Fence, GpuFenceDesc);
+    INSTANTIATE_DEVICE_RESOURCE_CLASS(RootSignature, ID3D12RootSignature, GpuRootSignatureDesc);
 
 }  // namespace engine
 #endif
