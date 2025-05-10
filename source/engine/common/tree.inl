@@ -114,7 +114,6 @@ void engine::BinaryTree<DataType>::UnitTest()
 
             if (traversed_tree_iterative.size() == traversed_tree_recurse.size())
             {
-                traversed_tree_iterative.push_back(5436);
                 int cmp_result = memcmp(traversed_tree_iterative.data(), traversed_tree_recurse.data(), traversed_tree_iterative.size());
 
                 if (cmp_result == 0)
@@ -259,11 +258,11 @@ void engine::BinaryTree<DataType>::TraverseIteratively(const BinaryTreeNode<Data
                 }
             }
         }
-        /*else if (order == TreeTraverseOrder::InOrder)
+        else if (order == TreeTraverseOrder::InOrder)
         {
             
         }
-        else if (order == TreeTraverseOrder::PostOrder)
+        /*else if (order == TreeTraverseOrder::PostOrder)
         {
             
         }*/
