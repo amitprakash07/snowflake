@@ -22,6 +22,9 @@ namespace engine
 
     template <>
     char* ToStr<int>(const int& data);
+
+    template<>
+    char* ToStr<std::vector<int>>(const std::vector<int>& data);
 }  // namespace engine
 
 #include "to_str.inl"

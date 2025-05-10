@@ -14,7 +14,7 @@
 #include "common/util.h"
 #include "interface.h"
 #include "list.h"
-#include "common/heap.h"
+#include "common/HeapContainer.h"
 
 int subarraySum(vector<int>& nums, int k) {
   unordered_map<int, int> counts;
@@ -110,36 +110,15 @@ int lengthOfLongestSubstring(const string& str) {
 }
 
 int main(int argCount, char* argc[]) {
-  engine::Heap<int>::UnitTest();
-  engine::BinarySearchTree<int>::UnitTest();
   INSTANTIATE_PROBLEM(DistinctTriangles);
-  {
-    // Bubble sort
-    std::vector<int> data = {5, 8, 9, 2, 6, 7, 3, 1, 4};
-    std::cout << engine::util::ToStr(data);
-    engine::Sort::BubbleSort(data);
-    std::cout << engine::util::ToStr(data);
-  }
   INSTANTIATE_PROBLEM(MinLengthSubString);
   INSTANTIATE_PROBLEM(ZipLinkList);
   INSTANTIATE_PROBLEM(RotationalCipher);
   INSTANTIATE_PROBLEM(PassingYearBooks);
   INSTANTIATE_PROBLEM(AreTheyEqual);
-  INSTANTIATE_PROBLEM(RemoveDuplicateSortedArray);
-  std::cout << engine::maths::GetHCF(119, 544);
-  engine::BinaryTree<int>::UnitTest();
-  engine::Queue<int>::UnitTest();
-  engine::Stack<int>::UnitTest();
-  char* to_char_array = engine::ToStr(32);
-  std::string temp_string(to_char_array);
-  std::cout << temp_string.c_str();
-  std::cout << std::string(engine::ToStr(-6748)).c_str();
-  engine::LinkedList<int>::UnitTest();
+  INSTANTIATE_PROBLEM(RemoveDuplicateSortedArray);  
   INSTANTIATE_PROBLEM(MaxSubArrayFinder);
-  std::cout << engine::util::SimplifyPath("/.../a/../b/c/../d/./");
-  std::cout << engine::util::SimplifyPath("/../");
-  std::cout << engine::util::SimplifyPath("/home/user/Documents/../Pictures");
-  std::cout << engine::util::RemoveDuplicates("abbaca");
+  
   lengthOfLongestSubstring("tmmzuxt");
   std::vector<int> array = {0, 0, 1, 0, 0, 0, 1, 1};
   int max_length = findMaxLength(array);

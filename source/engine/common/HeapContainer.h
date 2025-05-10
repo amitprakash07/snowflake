@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "heap.h"
+#include "HeapContainer.h"
 
 namespace engine
 {
@@ -16,16 +16,16 @@ namespace engine
     };
 
     template <typename DataType, HeapType type = HeapType::Max, size_t init_size = 50>
-    class Heap
+    class HeapContainer
     {
     public:
-        Heap()
+        HeapContainer()
         {
             data_.resize(buffer_size_);
             current_size_ = 0;
         }
 
-        Heap(std::vector<DataType> init_data);
+        HeapContainer(std::vector<DataType> init_data);
 
         void     Push(DataType data);
         void     Pop();
@@ -75,6 +75,6 @@ namespace engine
 
 }  // namespace engine
 
-#include "heap.inl"
+#include "HeapContainer.inl"
 
 #endif

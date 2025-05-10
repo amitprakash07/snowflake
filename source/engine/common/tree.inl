@@ -1,6 +1,8 @@
 #ifndef ENGINE_COMMON_TREE_INL
 #define ENGINE_COMMON_TREE_INL
 
+#include <stack>
+
 #include "common/util.h"
 #include "queue.h"
 #include "tree.h"
@@ -46,7 +48,9 @@ void engine::BinaryTree<DataType>::Construct(std::vector<DataType> data)
 }
 
 template <class DataType>
-void engine::BinaryTree<DataType>::Traverse(const BinaryTreeNode<DataType>* tree_node, TreeTraverseOrder order, std::vector<DataType>& out) const
+void engine::BinaryTree<DataType>::Traverse(const BinaryTreeNode<DataType>* tree_node,
+                                            TreeTraverseOrder               order,
+                                            std::vector<DataType>&          out) const
 {
     if (tree_node == nullptr)
     {
@@ -82,75 +86,16 @@ void engine::BinaryTree<DataType>::Traverse(const BinaryTreeNode<DataType>* tree
 template <class DataType>
 uint32_t engine::BinaryTree<DataType>::FindDepth(BinaryTreeNode<DataType>* node_to_found)
 {
-    std::function<uint32_t(BinaryTreeNode<DataType>*, BinaryTreeNode<DataType>*, bool)> find_depth_helper =
-        [&](BinaryTreeNode<DataType>* node, BinaryTreeNode<DataType>* find, bool& is_found) -> uint32_t {
-        if (node == nullptr)
-        {
-            return 0;
-        }
-
-        if (node == find)
-        {
-            is_found = true;
-            return 1;
-        }
-
-        uint32_t depth = 0;
-        if (!is_found)
-        {
-            depth = find_depth_helper(node->left, node_to_found, is_found) + 1;
-        }
-
-        if (!is_found)
-        {
-            depth = find_depth_helper(node->right, node_to_found, is_found) + 1;
-        }
-
-        return depth;
-    };
-
     bool     found = false;
-    uint32_t depth = find_depth_helper(root, node_to_found, found);
+    uint32_t depth = FindDepthHelper(root, node_to_found, found);
     return found ? depth : 0;
 }
 
 template <class DataType>
 uint32_t engine::BinaryTree<DataType>::FindDepth(DataType node_to_found)
 {
-    std::function<uint32_t(BinaryTreeNode<DataType>*, DataType, bool&)> find_depth_helper =
-        [&](BinaryTreeNode<DataType>* node, DataType find, bool& is_found) -> uint32_t {
-        if (node == nullptr)
-        {
-            return 0;
-        }
-
-        if (node->data == find)
-        {
-            is_found = true;
-            return 1;
-        }
-
-        uint32_t depth = 0;
-        if (!is_found)
-        {
-            depth = find_depth_helper(node->left, find, is_found);
-        }
-
-        if (!is_found)
-        {
-            depth = find_depth_helper(node->right, find, is_found);
-        }
-
-        if (is_found)
-        {
-            depth = depth + 1;
-        }
-
-        return depth;
-    };
-
     bool     found = false;
-    uint32_t depth = find_depth_helper(root, node_to_found, found);
+    uint32_t depth = FindDepthHelper(root, node_to_found, found);
     return found ? depth : 0;
 }
 
@@ -161,14 +106,30 @@ void engine::BinaryTree<DataType>::UnitTest()
         BinaryTree<int> int_tree;
         int_tree.Construct({0, 1, 2, 3, 4, INT_MAX, 5, INT_MAX, INT_MAX, INT_MAX, 6});
         {
-            std::vector<int> traversed_tree;
-            int_tree.Traverse(int_tree.Root(), TreeTraverseOrder::PreOrder, traversed_tree);
-            std::cout << "{";
-            for (int val : traversed_tree)
+            std::vector<int> traversed_tree_recurse;
+            int_tree.Traverse(int_tree.Root(), TreeTraverseOrder::PreOrder, traversed_tree_recurse);
+
+            std::vector<int> traversed_tree_iterative;
+            int_tree.TraverseIteratively(int_tree.Root(), TreeTraverseOrder::PreOrder, traversed_tree_iterative);
+
+            if (traversed_tree_iterative.size() == traversed_tree_recurse.size())
             {
-                std::cout << val << ",";
+                int cmp_result = memcmp(traversed_tree_iterative.data(), traversed_tree_recurse.data(), traversed_tree_iterative.size());
+
+                if (cmp_result == 0)
+                {
+                    std::cout << "{";
+                    for (int val : traversed_tree_recurse)
+                    {
+                        std::cout << val << ",";
+                    }
+                    std::cout << "}\n";
+                }
+                else
+                {
+                    std::cout << "Not equal";
+                }
             }
-            std::cout << "}\n";
         }
 
         {
@@ -202,6 +163,109 @@ void engine::BinaryTree<DataType>::UnitTest()
         std::cout << "Depth of 6 is " << int_tree.FindDepth(4) << std::endl;
         std::cout << "Depth of 3 is " << int_tree.FindDepth(3) << std::endl;
         std::cout << "Depth of 200 is " << int_tree.FindDepth(200) << std::endl;
+    }
+}
+
+template <class DataType>
+uint32_t engine::BinaryTree<DataType>::FindDepthHelper(BinaryTreeNode<DataType>* node,
+                                                       BinaryTreeNode<DataType>* find,
+                                                       bool&                     is_found)
+{
+    if (node == nullptr)
+    {
+        return 0;
+    }
+
+    if (node == find)
+    {
+        is_found = true;
+        return 1;
+    }
+
+    uint32_t depth = 0;
+    if (!is_found)
+    {
+        depth = find_depth_helper(node->left, find, is_found) + 1;
+    }
+
+    if (!is_found)
+    {
+        depth = find_depth_helper(node->right, find, is_found) + 1;
+    }
+
+    return depth;
+}
+
+template <class DataType>
+uint32_t engine::BinaryTree<DataType>::FindDepthHelper(BinaryTreeNode<DataType>* node, DataType find, bool& is_found)
+{
+    if (node == nullptr)
+    {
+        return 0;
+    }
+
+    if (node->data == find)
+    {
+        is_found = true;
+        return 1;
+    }
+
+    uint32_t depth = 0;
+    if (!is_found)
+    {
+        depth = FindDepthHelper(node->left, find, is_found);
+    }
+
+    if (!is_found)
+    {
+        depth = FindDepthHelper(node->right, find, is_found);
+    }
+
+    if (is_found)
+    {
+        depth = depth + 1;
+    }
+
+    return depth;
+}
+
+template <class DataType>
+void engine::BinaryTree<DataType>::TraverseIteratively(const BinaryTreeNode<DataType>* tree_node,
+                                                       TreeTraverseOrder               order,
+                                                       std::vector<DataType>&          out) const
+{
+    if (tree_node)
+    {
+        if (order == TreeTraverseOrder::PreOrder)
+        {
+            std::stack<const void*> b_tree_stack;
+            b_tree_stack.push(tree_node);
+
+            while (!b_tree_stack.empty())
+            {
+                const BinaryTreeNode<DataType>* top = static_cast<const BinaryTreeNode<DataType>*>(b_tree_stack.top());
+                b_tree_stack.pop();
+                out.push_back(top->data);
+
+                if (top->right)
+                {
+                    b_tree_stack.push(top->right);
+                }
+
+                if (top->left)
+                {
+                    b_tree_stack.push(top->left);
+                }
+            }
+        }
+        else if (order == TreeTraverseOrder::InOrder)
+        {
+            
+        }
+        /*else if (order == TreeTraverseOrder::PostOrder)
+        {
+            
+        }*/
     }
 }
 

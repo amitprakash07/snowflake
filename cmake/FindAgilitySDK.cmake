@@ -3,7 +3,7 @@
 # Define a CMake module to find the Agility SDK
 
 # Set the minimum required CMake version
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.24)
 
 set(AgilitySDK_Found FALSE CACHE BOOL "Agility SDK exists" FORCE)
 set(AgilitySdk_Version "1.614.0" CACHE STRING "Agility SDK version" FORCE)
@@ -11,6 +11,14 @@ set(AgilitySdk_Path "${PROJECT_EXTERNAL_SOURCE_DIR}/agility_sdk/${AgilitySdk_Ver
 set(AgilitySdk_Include "" CACHE PATH "Agility SDK include path" FORCE)
 set(AgilitySdk_Lib "" CACHE PATH "Agility SDK library path" FORCE)
 
+include(FetchContent)
+
+FetchContent_Declare(
+    AgilitySdk
+    URL https://www.nuget.org/api/v2/package/Microsoft.Direct3D.D3D12/${AgilitySdk_Version}
+    URL_HASH SHA256=f8ee4da4851d0bba97d232e830565804743d95a4ae37a66a5b5757ac29668d77
+    SOURCE_DIR ${AgilitySdk_Path}
+)
 
 # Define a function to download the Agility SDK using PowerShell
 function(download_agility_sdk)
@@ -21,27 +29,8 @@ function(download_agility_sdk)
         return()
     endif()
 
-    message("Downloading Agility SDK...")
-    set(download_script "
-        \$url = 'https://www.nuget.org/api/v2/package/Microsoft.Direct3D.D3D12/1.614.0'
-        \$output = 'agility_sdk.zip'
-        Invoke-WebRequest -Uri \$url -OutFile \$output
-        Expand-Archive -Path \$output -DestinationPath ${AgilitySdk_Path}
-        Remove-Item -Path \$output
-    ")
-
-    # Execute the PowerShell script
-    execute_process(
-        COMMAND powershell -Command "${download_script}"
-        RESULT_VARIABLE result
-    )
-
-    # Check if the download was successful
-    if(result EQUAL 0)
-        message(STATUS "Agility SDK downloaded successfully in ${AgilitySdk_Path}")
-    else()
-        message(FATAL_ERROR "Failed to download Agility SDK")
-    endif()
+    FetchContent_MakeAvailable(AgilitySdk)
+    message(STATUS "Agility SDK already downloaded in ${AgilitySdk_Path}")
 endfunction()
 
 # Define a function to find the Agility SDK

@@ -1,3 +1,8 @@
+#ifndef ENGINE_COMMON_DOUBLY_LINKED_LIST_INL_H
+#define ENGINE_COMMON_DOUBLY_LINKED_LIST_INL_H
+
+#include <sstream>
+
 #include "doubly_linked_list.h"
 
 template <class Datatype>
@@ -69,3 +74,5 @@ std::string DoublyLinkedList<Datatype>::ToStr() const
     ret_str += '}';
     return ret_str;
 }
+
+#endif
