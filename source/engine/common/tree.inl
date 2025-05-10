@@ -1,6 +1,8 @@
 #ifndef ENGINE_COMMON_TREE_INL
 #define ENGINE_COMMON_TREE_INL
 
+#include <stack>
+
 #include "common/util.h"
 #include "queue.h"
 #include "tree.h"
@@ -27,8 +29,8 @@ void engine::BinaryTree<DataType>::Construct(std::vector<DataType> data)
                     current->left       = new BinaryTreeNode<DataType>();
                     current->left->data = data[iter];
                     queue.Push(current->left);
-                    iter++;
                 }
+                iter++;
             }
 
             if (current->right == nullptr)
@@ -38,8 +40,8 @@ void engine::BinaryTree<DataType>::Construct(std::vector<DataType> data)
                     current->right       = new BinaryTreeNode<DataType>();
                     current->right->data = data[iter];
                     queue.Push(current->right);
-                    iter++;
                 }
+                iter++;
             }
         }
     }
@@ -104,14 +106,31 @@ void engine::BinaryTree<DataType>::UnitTest()
         BinaryTree<int> int_tree;
         int_tree.Construct({0, 1, 2, 3, 4, INT_MAX, 5, INT_MAX, INT_MAX, INT_MAX, 6});
         {
-            std::vector<int> traversed_tree;
-            int_tree.Traverse(int_tree.Root(), TreeTraverseOrder::PreOrder, traversed_tree);
-            std::cout << "{";
-            for (int val : traversed_tree)
+            std::vector<int> traversed_tree_recurse;
+            int_tree.Traverse(int_tree.Root(), TreeTraverseOrder::PreOrder, traversed_tree_recurse);
+
+            std::vector<int> traversed_tree_iterative;
+            int_tree.TraverseIteratively(int_tree.Root(), TreeTraverseOrder::PreOrder, traversed_tree_iterative);
+
+            if (traversed_tree_iterative.size() == traversed_tree_recurse.size())
             {
-                std::cout << val << ",";
+                traversed_tree_iterative.push_back(5436);
+                int cmp_result = memcmp(traversed_tree_iterative.data(), traversed_tree_recurse.data(), traversed_tree_iterative.size());
+
+                if (cmp_result == 0)
+                {
+                    std::cout << "{";
+                    for (int val : traversed_tree_recurse)
+                    {
+                        std::cout << val << ",";
+                    }
+                    std::cout << "}\n";
+                }
+                else
+                {
+                    std::cout << "Not equal";
+                }
             }
-            std::cout << "}\n";
         }
 
         {
@@ -209,6 +228,46 @@ uint32_t engine::BinaryTree<DataType>::FindDepthHelper(BinaryTreeNode<DataType>*
     }
 
     return depth;
+}
+
+template <class DataType>
+void engine::BinaryTree<DataType>::TraverseIteratively(const BinaryTreeNode<DataType>* tree_node,
+                                                       TreeTraverseOrder               order,
+                                                       std::vector<DataType>&          out) const
+{
+    if (tree_node)
+    {
+        if (order == TreeTraverseOrder::PreOrder)
+        {
+            std::stack<const void*> b_tree_stack;
+            b_tree_stack.push(tree_node);
+
+            while (!b_tree_stack.empty())
+            {
+                const BinaryTreeNode<DataType>* top = static_cast<const BinaryTreeNode<DataType>*>(b_tree_stack.top());
+                b_tree_stack.pop();
+                out.push_back(top->data);
+
+                if (top->right)
+                {
+                    b_tree_stack.push(top->right);
+                }
+
+                if (top->left)
+                {
+                    b_tree_stack.push(top->left);
+                }
+            }
+        }
+        /*else if (order == TreeTraverseOrder::InOrder)
+        {
+            
+        }
+        else if (order == TreeTraverseOrder::PostOrder)
+        {
+            
+        }*/
+    }
 }
 
 template <class DataType>

@@ -44,16 +44,21 @@ namespace engine
     class BinaryTree
     {
     public:
-        void                            Construct(std::vector<DataType> data);
-        void                            Traverse(const BinaryTreeNode<DataType>* tree_node,
-                                                 TreeTraverseOrder               order,
-                                                 std::vector<DataType>&          out) const;
+        void Construct(std::vector<DataType> data);
+        void Traverse(const BinaryTreeNode<DataType>* tree_node,
+                      TreeTraverseOrder               order,
+                      std::vector<DataType>&          out) const;
+
         const BinaryTreeNode<DataType>* Root() const
         {
             return root;
         }
-        uint32_t    FindDepth(BinaryTreeNode<DataType>* node_to_found);
-        uint32_t    FindDepth(DataType node_to_found);
+        uint32_t FindDepth(BinaryTreeNode<DataType>* node_to_found);
+        uint32_t FindDepth(DataType node_to_found);
+
+        void        TraverseIteratively(const BinaryTreeNode<DataType>* tree_node,
+                                        TreeTraverseOrder               order,
+                                        std::vector<DataType>&          out) const;
         static void UnitTest();
 
     protected:
