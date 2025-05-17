@@ -13,3 +13,5 @@ make_library_target()
 link_target(d3d12.dll)
 link_target(dxgi.dll)
 group_target(Engine)
+
+add_subdirectory(hlsl)
