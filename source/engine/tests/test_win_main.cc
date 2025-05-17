@@ -1,7 +1,7 @@
 #include <Windows.h>
 
 #include "common/tree.h"
-#include "common/HeapContainer.h"
+#include "common/heap_container.h"
 #include "common/linked_list.h"
 #include "common/maths_util.h"
 #include "common/sort.h"
