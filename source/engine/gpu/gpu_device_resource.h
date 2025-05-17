@@ -6,7 +6,7 @@
 
 namespace engine
 {
-    enum GpuDeviceResourceType
+    enum GpuDeviceResourceType : uint8_t
     {
         Unknown,
         CmdQueue,
