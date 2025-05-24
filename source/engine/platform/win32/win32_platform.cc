@@ -1,12 +1,10 @@
-
-
 #include <cassert>
 #include <iostream>
 #include <ShlObj.h>
 #include <sstream>
 #include <ctime>
 
-#include "platform/platform.h"
+#include "platform/platform_systems.h"
 
 engine::Platform* engine::Platform::platform_ = nullptr;
 
@@ -24,7 +22,7 @@ bool engine::Platform::Initialize(const EngineStartupInfo& engine_startup_info)
             bool success = true;
             for (uint8_t i = 0; i < static_cast<uint8_t>(PlatformHandlerType::Count); i++)
             {
-                IPlatformHandler*& platform_handler = platform_->platform_handlers_[i];
+                IPlatformSystem*& platform_handler = platform_->platform_handlers_[i];
 
                 if (platform_handler == nullptr)
                 {
@@ -87,7 +85,7 @@ bool engine::Platform::ShutDown()
         {
             for (uint8_t i = 0; i < static_cast<uint8_t>(PlatformHandlerType::Count); i++)
             {
-                IPlatformHandler*& platform_handler = platform_->platform_handlers_[i];
+                IPlatformSystem*& platform_handler = platform_->platform_handlers_[i];
 
                 if (platform_handler != nullptr)
                 {

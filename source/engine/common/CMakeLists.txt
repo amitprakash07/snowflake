@@ -60,7 +60,7 @@ set(ENGINE_SHARED_MATHS_UTIL  ${CMAKE_CURRENT_LIST_DIR}/maths_util.h)
 source_group(MathsUtil FILES ${ENGINE_SHARED_MATHS_UTIL})
 
 add_library(${PROJECT_TARGET_NAME})
-target_sources(${PROJECT_TARGET_NAME} PUBLIC ${ENGINE_SHARED_CORE_SRC}
+target_sources(${PROJECT_TARGET_NAME} PRIVATE ${ENGINE_SHARED_CORE_SRC}
                                              ${ENGINE_SHARED_ALLOCATION}
                                              ${ENGINE_SHARED_DATA_CONTAINERS_SRC}
                                              ${ENGINE_SHARED_UTILITY_HELPERS}

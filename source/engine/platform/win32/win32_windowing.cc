@@ -2,8 +2,8 @@
 
 #include "common/string_pool.h"
 #include "win32_includes.h"
-#include "platform/platform.h"
 #include "win32_resource.h"
+#include "platform/platform_systems.h"
 
 engine::Window::Window()
 {
@@ -79,7 +79,7 @@ namespace engine
 }  // namespace engine
 
 engine::WindowingSystem::WindowingSystem(int win_main_display_state)
-    : IPlatformHandler(PlatformHandlerType::Windowing)
+    : IPlatformSystem(PlatformHandlerType::Windowing)
     , main_window_(nullptr)
     , main_window_handle_(nullptr)
     , win_main_display_state_(win_main_display_state)

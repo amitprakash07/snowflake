@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-
 set(PROJECT_NAME "Snowflake")
 message("Generating project files in ${CMAKE_BINARY_DIR}")
 
@@ -31,6 +30,16 @@ project(${PROJECT_NAME} LANGUAGES C CXX)
 
 # Required for CMake version < 3.29
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+include(FetchContent)
+set(JSON_MultipleHeaders OFF)
+set(JsonParser_Version "v3.12.0" CACHE STRING "Json Parser version" FORCE)
+set(JsonParser_Path "${PROJECT_EXTERNAL_SOURCE_DIR}/json_parser/${JsonParser_Version}/" CACHE PATH "Json Parser path" FORCE)
+FetchContent_Declare(
+    JsonParser
+    URL https://github.com/nlohmann/json/releases/download/${JsonParser_Version}/json.tar.xz
+    SOURCE_DIR ${JsonParser_Path})
+FetchContent_MakeAvailable(JsonParser)
 
 add_subdirectory(${PROJECT_SRC_DIR}/engine)
 add_subdirectory(${PROJECT_SRC_DIR}/tools)
