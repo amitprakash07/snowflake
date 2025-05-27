@@ -17,16 +17,20 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     MessageBox(nullptr, "Testing the Win Main", "Testing", MB_OK);
 
     {
-       /* engine::GpuFactory gpu;
+        engine::GpuFactory gpu;
 
         if (gpu.Initialize())
         {
             engine::GpuDevice* device = gpu.GetDevice();
-            device->UnitTest();
-        }*/
+            if (device)
+            {
+                device->UnitTest();
+            }
+        }
     }
 
     {
+        //engine::ShaderHandler::Init();
         engine::ShaderHandler::Instance()->CompileDefaultShaders();
     }
 

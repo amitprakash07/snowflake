@@ -26,18 +26,24 @@ uint8_t engine::GpuFactory::GetDeviceCount() const
 
 engine::GpuDevice* engine::GpuFactory::GetDevice(uint8_t device_adapter) const
 {
-    if (device_adapter < GetDeviceCount())
+    uint8_t device_count = GetDeviceCount();
+    if (device_adapter < device_count)
     {
         while (adapter_devices_.empty() || adapter_devices_.size() < device_adapter)
         {
             ID3D12Device10* device = nullptr;
-            if (SUCCEEDED(D3D12CreateDevice(available_adapters_[device_adapter],
-                                            D3D_FEATURE_LEVEL_12_0,
-                                            __uuidof(ID3D12Device10),
-                                            reinterpret_cast<void**>(&device))))
+            HRESULT         device_creation_op = D3D12CreateDevice(available_adapters_[device_adapter],
+                                                           D3D_FEATURE_LEVEL_12_0,
+                                                           __uuidof(ID3D12Device10),
+                                                           reinterpret_cast<void**>(&device));
+            if (SUCCEEDED(device_creation_op))
             {
                 GpuDevice* gpu_device = new GpuDevice(device);
                 adapter_devices_.push_back(gpu_device);
+            }
+            else
+            {
+                return nullptr;
             }
         }
 

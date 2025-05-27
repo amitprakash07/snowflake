@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.25.0)
 
 set(ENGINE_PROJECT_NAME EngineGpuShader)
 project(${ENGINE_PROJECT_NAME})
+message("Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 
 find_package(DxcCompiler REQUIRED)
 
@@ -14,10 +15,11 @@ source_group(Shaders/hlsl FILES ${ENGINE_SHADERS_HLSL})
 
 set(ENGINE_SHADERS ${ENGINE_SHADERS_HLSL})
 
-add_library(${ENGINE_PROJECT_NAME} STATIC   ${CMAKE_CURRENT_SOURCE_DIR}/shader_handler.h
-                                            ${CMAKE_CURRENT_SOURCE_DIR}/shader_handler.cc
-                                            ${ENGINE_SHADER_DIR}/asset_shaders.json
-                                            ${ENGINE_SHADERS})
+add_library(${ENGINE_PROJECT_NAME}  ${CMAKE_CURRENT_LIST_DIR}/shader_handler.h
+                                    ${CMAKE_CURRENT_LIST_DIR}/shader_handler.cc
+                                    ${ENGINE_SHADER_DIR}/asset_shaders.json
+                                    ${ENGINE_SHADERS})
+                                    
 target_compile_definitions(${ENGINE_PROJECT_NAME} PRIVATE ENGINE_SHADER_DIR=${ENGINE_SHADER_DIR})
 
 source_group(Shaders FILES ${ENGINE_SHADER_DIR}/asset_shaders.json)
@@ -38,3 +40,4 @@ set_target_properties(${ENGINE_PROJECT_NAME}
     PROPERTIES
     FOLDER "Engine"
     VS_SOLUTION_FOLDER "Engine")
+message("End Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")

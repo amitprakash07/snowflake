@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25.0)
 
 set(ENGINE_PROJECT_NAME Engine)
+message("Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 project(${ENGINE_PROJECT_NAME})
 
 find_package(AgilitySDK REQUIRED)
@@ -11,6 +12,7 @@ add_subdirectory(common)
 add_subdirectory(platform)
 add_subdirectory(maths)
 add_subdirectory(gpu)
+add_subdirectory(gpu/shader)
 add_subdirectory(tests)
 add_subdirectory(tools/build_shaders)
 
@@ -30,3 +32,4 @@ set_target_properties(${ENGINE_PROJECT_NAME}
     PROPERTIES
     FOLDER "Engine"
     VS_SOLUTION_FOLDER "Engine")
+message("End Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")

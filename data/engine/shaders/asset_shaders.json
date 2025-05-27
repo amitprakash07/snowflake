@@ -6,7 +6,7 @@
       "lang": "hlsl",
       "entry_point": "test_dxc_compilation_cs",
       "profile": "cs_6_0",
-      "macros": [],
+      "macros": "",
       "enable_debug_info": false
     },
     {
@@ -15,7 +15,7 @@
       "lang": "hlsl",
       "entry_point": "test_dxc_compilation_cs",
       "profile": "cs_6_0",
-      "macros": [],
+      "macros": "",
       "enable_debug_info": false
     }
   ]

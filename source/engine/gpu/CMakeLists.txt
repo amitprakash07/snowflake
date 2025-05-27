@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.25.0)
 
 set(ENGINE_PROJECT_NAME EngineGpu)
 project(${ENGINE_PROJECT_NAME})
+message("Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 
 set(ENGINE_GPU_SOURCES  ${CMAKE_CURRENT_LIST_DIR}/gpu_factory.h
                         ${CMAKE_CURRENT_LIST_DIR}/gpu_factory.cc
@@ -17,4 +18,4 @@ set_target_properties(${ENGINE_PROJECT_NAME}
     FOLDER "Engine"
     VS_SOLUTION_FOLDER "Engine")
 
-add_subdirectory(shader)
+message("End Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")

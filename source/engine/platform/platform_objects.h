@@ -78,7 +78,7 @@ namespace engine
             }
         }
 
-        std::filebuf* GetRawBuffer()
+        std::filebuf* GetRawBuffer() const
         {
             return file_stream_.rdbuf();
         }
