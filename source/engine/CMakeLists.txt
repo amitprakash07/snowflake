@@ -13,6 +13,7 @@ add_subdirectory(platform)
 add_subdirectory(maths)
 add_subdirectory(gpu)
 add_subdirectory(gpu/shader)
+add_subdirectory(image)
 add_subdirectory(tests)
 add_subdirectory(tools/build_shaders)
 

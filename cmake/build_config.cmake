@@ -20,6 +20,7 @@ else()
 endif()
 
 set(CMAKE_DEBUG_POSTFIX "_d")
+set(CMAKE_RELEASE_POSTFIX "")
 
 message("Generating project files for ${PROJECT_PLATFORM} platform.")
 
