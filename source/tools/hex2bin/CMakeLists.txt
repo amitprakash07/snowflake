@@ -1,8 +1,15 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-declare_target(Hex2Bin)
+set(TOOLS_PROJECT_NAME Hex2Bin)
+project(${TOOLS_PROJECT_NAME})
+message("Processing ${TOOLS_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 
-include_src(hex_to_bin.cc)
-make_executable_target()
-group_sources("")
-group_target(Tools)
+add_executable(${TOOLS_PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/hex_to_bin.cc)
+
+set_target_properties(${TOOLS_PROJECT_NAME}
+    PROPERTIES
+    FOLDER "Tools"
+    VS_SOLUTION_FOLDER "Tools")
+message("End Processing ${TOOLS_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
+
+

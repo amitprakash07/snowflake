@@ -1,15 +1,14 @@
-#ifndef ENGINE_COMMON_HEAP_INL
-#define ENGINE_COMMON_HEAP_INL
+#ifndef ENGINE_COMMON_HEAP_CONTAINER_INL
+#define ENGINE_COMMON_HEAP_CONTAINER_INL
 
 #include <iostream>
 #include <stdexcept>
 
-#include "HeapContainer.h"
+#include "heap_container.h"
 #include "util.h"
 
 namespace engine
 {
-
     template <typename DataType, HeapType type, size_t init_size>
     HeapContainer<DataType, type, init_size>::HeapContainer(std::vector<DataType> init_data)
         : HeapContainer()

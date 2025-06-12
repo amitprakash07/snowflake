@@ -7,4 +7,6 @@ tmp/
 output/
 bld*/
 external/agility_sdk/
-data/
+external/dxc_compiler/
+external/json_parser/
+data/data_science_mit/

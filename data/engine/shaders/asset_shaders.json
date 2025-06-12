@@ -1,0 +1,22 @@
+{
+  "compile": [
+    {
+      "name": "test_shader_v1",
+      "file": "hlsl/compile_test.hlsl",
+      "lang": "hlsl",
+      "entry_point": "test_dxc_compilation_cs",
+      "profile": "cs_6_0",
+      "macros": "",
+      "enable_debug_info": false
+    },
+    {
+      "name": "test_shader_v2",
+      "file": "hlsl/compile_test.hlsl",
+      "lang": "hlsl",
+      "entry_point": "test_dxc_compilation_cs",
+      "profile": "cs_6_0",
+      "macros": "",
+      "enable_debug_info": false
+    }
+  ]
+}

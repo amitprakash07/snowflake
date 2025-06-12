@@ -22,6 +22,10 @@ macro(include_src source_name)
     set(PROJECT_GROUP_SOURCES ${PROJECT_GROUP_SOURCES} ${CMAKE_CURRENT_LIST_DIR}/${source_name})
 endmacro()
 
+macro(include_source_from_var source_variable)
+    set(PROJECT_TARGET_SOURCES ${PROJECT_TARGET_SOURCES} ${source_variable})
+endmacro()
+
 macro(include_source_list_from_file cmake_file_name)
     set(PROJECT_TARGET_VS_SOLUTION_FOLDER_TEMP ${PROJECT_TARGET_VS_SOLUTION_FOLDER})
     set(PROJECT_TARGET_VS_SOURCE_GROUP_FILTER_TEMP ${PROJECT_TARGET_VS_SOURCE_GROUP_FILTER})

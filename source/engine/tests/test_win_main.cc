@@ -1,7 +1,7 @@
 #include <Windows.h>
 
 #include "common/tree.h"
-#include "common/HeapContainer.h"
+#include "common/heap_container.h"
 #include "common/linked_list.h"
 #include "common/maths_util.h"
 #include "common/sort.h"
@@ -10,19 +10,28 @@
 #include "common/util.h"
 #include "gpu/gpu_factory.h"
 #include "gpu/gpu_device.h"
+#include "gpu/shader/shader_handler.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
     MessageBox(nullptr, "Testing the Win Main", "Testing", MB_OK);
 
     {
-       /* engine::GpuFactory gpu;
+        engine::GpuFactory gpu;
 
         if (gpu.Initialize())
         {
             engine::GpuDevice* device = gpu.GetDevice();
-            device->UnitTest();
-        }*/
+            if (device)
+            {
+                device->UnitTest();
+            }
+        }
+    }
+
+    {
+        //engine::ShaderHandler::Init();
+        engine::ShaderHandler::Instance()->CompileDefaultShaders();
     }
 
     {
@@ -57,9 +66,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     }
 
     {
-        std::cout << engine::util::SimplifyPath("/.../a/../b/c/../d/./");
-        std::cout << engine::util::SimplifyPath("/../");
-        std::cout << engine::util::SimplifyPath("/home/user/Documents/../Pictures");
-        std::cout << engine::util::RemoveDuplicates("abbaca");
+        std::cout << engine_string_util::SimplifyPath("/.../a/../b/c/../d/./");
+        std::cout << engine_string_util::SimplifyPath("/../");
+        std::cout << engine_string_util::SimplifyPath("/home/user/Documents/../Pictures");
+        std::cout << engine_string_util::RemoveDuplicates("abbaca");
     }
 }

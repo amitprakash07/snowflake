@@ -1,10 +1,10 @@
-#ifndef ENGINE_COMMON_HEAP_H
-#define ENGINE_COMMON_HEAP_H
+#ifndef ENGINE_COMMON_HEAP_CONTAINER_H
+#define ENGINE_COMMON_HEAP_CONTAINER_H
 
 #include <cstdint>
 #include <vector>
 
-#include "HeapContainer.h"
+#include "heap_container.h"
 
 namespace engine
 {
@@ -75,6 +75,6 @@ namespace engine
 
 }  // namespace engine
 
-#include "HeapContainer.inl"
+#include "heap_container.inl"
 
 #endif

@@ -1,32 +1,37 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-declare_target(EngineMaths)
+set(ENGINE_PROJECT_NAME EngineMaths)
+project(${ENGINE_PROJECT_NAME})
 
-include_src(affine_transform.h)
-include_src(affine_transform.cc)
-include_src(axis_aligned_bounding_box.h)
-include_src(bounding_box.h)
-include_src(bounding_box.cc)
-include_src(utils.h)
-include_src(utils.cc)
-include_src(engine_math.h)
-include_src(engine_math.cc)
-include_src(matrix_4x4.h)
-include_src(matrix_4x4.cc)
-include_src(quaternion.h)
-include_src(quaternion.cc)
-include_src(ray_intersection.h)
-include_src(ray_intersection.cc)
-include_src(vector3.h)
-include_src(vector3.cc)
-include_src(vector4.h)
-include_src(vector4.cc)
-include_src(plane.h)
-include_src(plane.cc)
-include_src(sphere.h)
-include_src(sphere.cc)
-include_src(triangle.h)
-include_src(triangle.cc)
+set(ENGINE_MATH_SOURCE 
+affine_transform.h
+affine_transform.cc
+axis_aligned_bounding_box.h
+bounding_box.h
+bounding_box.cc
+utils.h
+utils.cc
+engine_math.h
+engine_math.cc
+matrix_4x4.h
+matrix_4x4.cc
+quaternion.h
+quaternion.cc
+ray_intersection.h
+ray_intersection.cc
+vector3.h
+vector3.cc
+vector4.h
+vector4.cc
+plane.h
+plane.cc
+sphere.h
+sphere.cc
+triangle.h
+triangle.cc)
 
-make_library_target()
-group_target(Engine)
+add_library(${ENGINE_PROJECT_NAME} ${ENGINE_MATH_SOURCE})
+set_target_properties(${ENGINE_PROJECT_NAME}
+    PROPERTIES
+    FOLDER "Engine"
+    VS_SOLUTION_FOLDER "Engine")

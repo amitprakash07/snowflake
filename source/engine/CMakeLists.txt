@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-declare_target(Engine)
+set(ENGINE_PROJECT_NAME Engine)
+message("Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
+project(${ENGINE_PROJECT_NAME})
 
 find_package(AgilitySDK REQUIRED)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -10,18 +12,24 @@ add_subdirectory(common)
 add_subdirectory(platform)
 add_subdirectory(maths)
 add_subdirectory(gpu)
+add_subdirectory(gpu/shader)
 add_subdirectory(tests)
-include_source_list_from_file(graphics/graphics.cmake)
-include_source_list_from_file(physics/physics.cmake)
-include_source_list_from_file(networking/networking.cmake)
-include_source_list_from_file(input/input.cmake)
-# include_source_list_from_file(platform/os_platform.cmake)
+add_subdirectory(tools/build_shaders)
 
-include_src(engine_defs.h)
-include_src(engine_core.h)
-include_src(engine_includes.h)
-include_src(engine_core.cc)
+# include_source_list_from_file(graphics/graphics.cmake)
+# include_source_list_from_file(physics/physics.cmake)
+# include_source_list_from_file(networking/networking.cmake)
+# include_source_list_from_file(input/input.cmake)
 
-make_library_target()
-group_sources("")
-group_target(Engine)
+set(ENGINE_SOURCES  engine_defs.h
+                    engine_core.h 
+                    engine_includes.h
+                    engine_core.cc)
+
+add_library(${ENGINE_PROJECT_NAME} ${ENGINE_SOURCES})
+
+set_target_properties(${ENGINE_PROJECT_NAME}
+    PROPERTIES
+    FOLDER "Engine"
+    VS_SOLUTION_FOLDER "Engine")
+message("End Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")

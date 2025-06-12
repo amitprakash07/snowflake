@@ -4,25 +4,36 @@
 #include <stack>
 #include <string>
 
-namespace engine
+namespace engine_string_util
 {
-    namespace util
-    {
-        std::string RemoveString(const std::string& remove_from, const std::string& remove_with, bool beginning = true);
+    [[nodiscard]] std::string RemoveString(const std::string& remove_from,
+                                           const std::string& remove_with,
+                                           bool               beginning = true);
 
-        std::string ReverseEachWordsInString(std::string sentence, char separator = ' ');
+    [[nodiscard]] std::string ReverseEachWordsInString(std::string sentence, char separator = ' ');
 
-        std::string ReverseOnlyLetters(std::string s);
+    [[nodiscard]] std::string ReverseOnlyLetters(std::string s);
 
-        bool IsLetter(char ch);
+    bool IsLetter(char ch);
 
-        std::string RemoveDuplicates(const std::string& s);
+    [[nodiscard]] std::string RemoveDuplicates(const std::string& s);
 
-        size_t LengthOfLongestSubstring(const std::string& str);
+    [[nodiscard]] size_t LengthOfLongestSubstring(const std::string& str);
 
-        std::string SimplifyPath(const std::string& path);
+    [[nodiscard]] std::string SimplifyPath(const std::string& path);
 
-        std::string MakeGood(const std::string& s);
-    }  // namespace util
-}  // namespace engine
+    [[nodiscard]] std::string MakeGood(const std::string& s);
+
+    [[nodiscard]] std::string ToUnixFilePath(const std::string& file_path);
+
+    [[nodiscard]] std::string ToWinFilePath(const std::string& file_path);
+
+    [[nodiscard]] std::string GetWinDirFromAbsPath(const std::string& file_path);
+
+    [[nodiscard]] std::string GetUnixDirFromAbsPath(const std::string& file_path);
+
+    [[nodiscard]] inline std::wstring ToWideString(const std::string& in);
+
+}  // namespace engine_string_util
+
 #endif
