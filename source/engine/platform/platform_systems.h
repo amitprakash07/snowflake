@@ -4,6 +4,7 @@
 #include <map>
 
 #include "platform.h"
+#include "platform_objects.h"
 
 namespace engine
 {
@@ -35,6 +36,8 @@ namespace engine
     public:
         friend class Platform;
         ~FileSystem() override = default;
+
+        static FilePath GetCurrentModulePath();
 
         bool Copy(const char*  path_source,
                   const char*  path_target,

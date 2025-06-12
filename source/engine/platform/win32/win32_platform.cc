@@ -7,8 +7,9 @@
 #include "platform/platform_systems.h"
 
 engine::Platform* engine::Platform::platform_ = nullptr;
+uint16_t const    engine::kFilePathMaxSize    = MAX_PATH;
 
-bool engine::Platform::Initialize(const EngineStartupInfo& engine_startup_info)
+bool engine::Platform::Initialize(const EngineStartupInfo* engine_startup_info)
 {
     if (platform_ == nullptr)
     {
@@ -41,7 +42,10 @@ bool engine::Platform::Initialize(const EngineStartupInfo& engine_startup_info)
                         platform_handler = new LoggingSystem();
                         break;
                     case PlatformHandlerType::Windowing:
-                        platform_handler = new WindowingSystem(engine_startup_info.win_display_state);
+                        if (engine_startup_info != nullptr)
+                        {
+                            platform_handler = new WindowingSystem(engine_startup_info->win_display_state);
+                        }
                         break;
 
                     case PlatformHandlerType::UnRegistered:
@@ -170,6 +174,20 @@ bool engine::Platform::SetEnvVar(const char* env_var, const std::string& env_val
 {
     //Assert(env_var, "Null VAriable name");
     return (::SetEnvironmentVariable(env_var, env_val.c_str()));
+}
+
+engine::FilePath engine::FileSystem::GetCurrentModulePath()
+{
+    char  module_path[kFilePathMaxSize];
+    DWORD path_size = ::GetModuleFileName(nullptr, module_path, kFilePathMaxSize);
+
+    if (path_size > 0)
+    {
+        module_path[path_size] = '\0';
+        return FilePath{std::string(module_path)};
+    }
+
+    return FilePath{""};
 }
 
 bool engine::FileSystem::Copy(const char* const path_source,

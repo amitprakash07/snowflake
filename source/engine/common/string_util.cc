@@ -5,7 +5,9 @@
 #include <map>
 
 using namespace engine_string_util;
-std::string engine_string_util::RemoveString(const std::string& remove_from, const std::string& remove_with, bool beginning)
+std::string engine_string_util::RemoveString(const std::string& remove_from,
+                                             const std::string& remove_with,
+                                             bool               beginning)
 {
     std::string returnString;
     if (beginning)
@@ -257,4 +259,16 @@ std::string engine_string_util::ToWinFilePath(const std::string& file_path)
     }
 
     return file_path_copy;
+}
+
+std::string engine_string_util::GetWinDirFromAbsPath(const std::string& file_path)
+{
+    std::string ret_string(file_path.cbegin(), file_path.cbegin() + file_path.find_last_of('\\'));
+    return ret_string;
+}
+
+std::string engine_string_util::GetUnixDirFromAbsPath(const std::string& file_path)
+{
+    std::string ret_string(file_path.cbegin(), file_path.cbegin() + file_path.find_last_of("/"));
+    return ret_string;
 }
