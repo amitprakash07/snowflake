@@ -25,12 +25,9 @@ elseif(WIN32)
     endif()
 endif()
 
-include(${PROJECT_CMAKE_MODULE_DIR}/build_config.cmake)
+
 message("Processing ${PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR})")
 project(${PROJECT_NAME} LANGUAGES C CXX)
-
-# Required for CMake version < 3.29
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 include(FetchContent)
 set(JSON_MultipleHeaders OFF)
@@ -41,6 +38,25 @@ FetchContent_Declare(
     URL https://github.com/nlohmann/json/releases/download/${JsonParser_Version}/json.tar.xz
     SOURCE_DIR ${JsonParser_Path})
 FetchContent_MakeAvailable(JsonParser)
+
+set(OpenCV_Root ${PROJECT_EXTERNAL_SOURCE_DIR}/opencv/4.11.0)
+set(OpenCV_Build_Dir ${OpenCV_Root}/build)
+set(OpenCV_Include_Dir ${OpenCV_Build_Dir}/include)
+set(OpenCV_Bin_Dir ${OpenCV_Build_Dir}/x64/vc16/bin)
+set(OpenCV_Lib_Dir ${OpenCV_Build_Dir}/x64/vc16/lib)
+
+add_library(OpenCV_Imported_Lib SHARED IMPORTED GLOBAL)
+set_target_properties(OpenCV_Imported_Lib PROPERTIES IMPORTED_LOCATION ${OpenCV_Lib_Dir}/opencv_world4110.lib)
+
+add_library(OpenCV_Imported_Lib_Debug SHARED IMPORTED GLOBAL)
+set_target_properties(OpenCV_Imported_Lib_Debug PROPERTIES IMPORTED_LOCATION ${OpenCV_Lib_Dir}/opencv_world4110d.lib)
+
+include(${PROJECT_CMAKE_MODULE_DIR}/build_config.cmake)
+
+# Required for CMake version < 3.29
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+set(ENGINE_DIR ${PROJECT_SRC_DIR}/engine)
 
 add_subdirectory(${PROJECT_SRC_DIR}/engine)
 add_subdirectory(${PROJECT_SRC_DIR}/projects/image_viewer)

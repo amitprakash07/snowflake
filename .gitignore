@@ -9,4 +9,5 @@ bld*/
 external/agility_sdk/
 external/dxc_compiler/
 external/json_parser/
+external/opencv/
 data/data_science_mit/

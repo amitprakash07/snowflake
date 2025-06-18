@@ -17,16 +17,30 @@ namespace engine
     class Image
     {
     public:
-        static Image*            LoadImage(const FilePath& image_file_path);
+        static Image*            CreateImage(const FilePath& image_file_path);
         inline virtual ImageType Type() const = 0;
         virtual bool             Load()       = 0;
         virtual ~Image()                      = default;
+        FilePath GetPath() const
+        {
+            return image_file_path_;
+        }
+
+    protected:
+        Image(const FilePath& path)
+            : image_file_path_(path)
+        {
+        }
+
+    private:
+        FilePath image_file_path_;
     };
 
     class PngImage : public Image
     {
     public:
-        PngImage()
+        PngImage(const FilePath& path)
+            : Image(path)
         {
         }
 
@@ -41,13 +55,30 @@ namespace engine
     class JpegImage : public Image
     {
     public:
-        JpegImage()
+        JpegImage(const FilePath& path)
+            : Image(path)
         {
         }
 
         ImageType Type() const override
         {
             return ImageType::JPEG;
+        }
+
+        bool Load() override;
+    };
+
+    class PpmImage : public Image
+    {
+    public:
+        PpmImage(const FilePath& path)
+            : Image(path)
+        {
+        }
+
+        ImageType Type() const override
+        {
+            return ImageType::PPM;
         }
 
         bool Load() override;

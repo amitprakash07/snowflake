@@ -21,6 +21,8 @@ endif()
 add_library(${ENGINE_PROJECT_NAME}  ${ENGINE_PLATFORM_COMMON_SOURCES}
                                     ${ENGINE_PLATFORM_SOURCES})
 
+target_link_libraries(${ENGINE_PROJECT_NAME} EngineShared)
+
 set_target_properties(${ENGINE_PROJECT_NAME}
     PROPERTIES
     FOLDER "Engine"
