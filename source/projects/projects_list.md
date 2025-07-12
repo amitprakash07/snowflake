@@ -13,6 +13,7 @@
 - Camera Input Controller
 
 ## Project Ideas
+Analog clock
 
 ### Image processing
 - Image Rotation, and resizing

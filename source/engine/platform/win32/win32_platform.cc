@@ -11,11 +11,6 @@ uint16_t const    engine::kFilePathMaxSize    = MAX_PATH;
 
 bool engine::Platform::Initialize(const EngineStartupInfo* engine_startup_info)
 {
-    if (platform_ == nullptr)
-    {
-        platform_ = new Platform();
-    }
-
     if (platform_)
     {
         if (!platform_->initialized_)
@@ -77,6 +72,11 @@ bool engine::Platform::Initialize(const EngineStartupInfo* engine_startup_info)
 
 engine::Platform* engine::Platform::Instance()
 {
+    if (platform_ == nullptr)
+    {
+        platform_ = new Platform();
+    }
+
     return platform_;
 }
 

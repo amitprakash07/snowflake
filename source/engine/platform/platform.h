@@ -52,9 +52,8 @@ namespace engine
 
         bool SetEnvVar(const char* env_var, const std::string& env_val, std::string* error_message = nullptr);
 
-    protected:
-        static [[nodiscard]] bool Initialize(const EngineStartupInfo* engine_startup_info = nullptr);
-        static [[nodiscard]] bool ShutDown();
+        [[nodiscard]] bool Initialize(const EngineStartupInfo* engine_startup_info = nullptr);
+        [[nodiscard]] bool ShutDown();
 
     private:
         Platform()

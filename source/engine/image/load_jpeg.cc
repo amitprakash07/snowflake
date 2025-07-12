@@ -2,5 +2,5 @@
 
 bool engine::JpegImage::Load()
 {
-    return false;
+    return LoadDefault();
 }

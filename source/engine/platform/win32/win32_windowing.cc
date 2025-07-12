@@ -5,7 +5,7 @@
 #include "win32_resource.h"
 #include "platform/platform_systems.h"
 
-engine::Window::Window()
+engine::WindowAttributes::WindowAttributes()
 {
     parent_window = nullptr;
     module_handle = GetModuleHandle(nullptr);
@@ -27,55 +27,13 @@ void engine::Window::SetToFullResolution()
     HWND desktopResolution = GetDesktopWindow();
     RECT fullResolution;
     GetWindowRect(desktopResolution, &fullResolution);
-    width  = fullResolution.right;
-    height = fullResolution.bottom;
+    wnd_attributes_.width = fullResolution.right;
+    wnd_attributes_.height = fullResolution.bottom;
 }
 
 namespace engine
 {
-    namespace util
-    {
-        WNDCLASSEX PlatformWndFrom(const Window& wnd)
-        {
-            WNDCLASSEX wnd_class_ex = {};
-            wnd_class_ex.cbSize     = sizeof(WNDCLASSEX);
-            wnd_class_ex.hInstance  = static_cast<HINSTANCE>(wnd.module_handle);
-            wnd_class_ex.style      = 0;
 
-            if (wnd.wnd_proc == nullptr)
-            {
-                wnd_class_ex.lpfnWndProc = DefWindowProc;
-            }
-
-            wnd_class_ex.cbClsExtra = 0;
-
-            wnd_class_ex.cbWndExtra = 0;
-            if (wnd.icon == nullptr)
-            {
-                wnd_class_ex.hIcon = LoadIcon(wnd_class_ex.hInstance, MAKEINTRESOURCE(IDI_BIG));
-            }
-
-            if (wnd.small_icon == nullptr)
-            {
-                wnd_class_ex.hIconSm = LoadIcon(wnd_class_ex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
-            }
-
-            if (wnd.cursor == nullptr)
-            {
-                wnd_class_ex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-            }
-
-            if (wnd.background)
-            {
-                wnd_class_ex.hbrBackground = static_cast<HBRUSH>(IntToPtr(COLOR_BACKGROUND + 1));
-            }
-
-            wnd_class_ex.lpszMenuName  = wnd.menu_name.c_str();
-            wnd_class_ex.lpszClassName = wnd.class_name.c_str();
-
-            return wnd_class_ex;
-        }
-    }  // namespace util
 }  // namespace engine
 
 engine::WindowingSystem::WindowingSystem(int win_main_display_state)
@@ -87,16 +45,8 @@ engine::WindowingSystem::WindowingSystem(int win_main_display_state)
     if (main_window_ == nullptr)
     {
         main_window_                = new Window();
-        WNDCLASSEX wnd_class_info   = util::PlatformWndFrom(*main_window_);
-        const ATOM registered_class = RegisterClassEx(&wnd_class_info);
 
-        if (registered_class == NULL)
-        {
-            const char* errorCaption = "No Main Window Class";
-            std::string errorMessage("Windows failed to register the main window's class: ");
-            errorMessage += ErrorHandler()->GetFormattedLastError();
-            MessageBox(nullptr, errorMessage.c_str(), errorCaption, MB_OK | MB_ICONERROR);
-        }
+        
 
         main_window_handle_ = ConstructWindow(main_window_);
     }

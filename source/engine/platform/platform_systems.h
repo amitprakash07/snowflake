@@ -178,40 +178,6 @@ namespace engine
         }
     };
 
-    using Icon          = void*;
-    using Cursor        = Icon;
-    using Brush         = void*;
-    using WindowStyle   = void*;
-    using ModuleHandle  = void*;
-    using WindowHandle  = void*;
-    using ProcessHandle = void*;
-    using Param         = void*;
-    using ResultPtr     = void*;
-    using Menu          = void*;
-    using WndMessage    = unsigned int;
-
-    // TO DO: Incompatible signature
-    typedef ResultPtr(__stdcall* WndProc)(WindowHandle, WndMessage, Param, Param);
-
-    struct Window
-    {
-        Window();
-        void         SetToFullResolution();
-        WindowHandle parent_window;
-        ModuleHandle module_handle;
-        WndProc      wnd_proc;
-        Icon         icon;
-        Icon         small_icon;
-        Cursor       cursor;
-        Brush        background;
-        int          width;
-        int          height;
-        std::string  class_name;
-        std::string  menu_name;
-        std::string  title_caption;
-        int          show_state;
-    };
-
     class WindowingSystem : public IPlatformSystem
     {
         friend class Platform;

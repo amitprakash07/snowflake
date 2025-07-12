@@ -179,6 +179,65 @@ namespace engine
         FileMetaData file_meta_data_;
     };
 
+    using Icon          = void*;
+    using Cursor        = Icon;
+    using Brush         = void*;
+    using WindowStyle   = void*;
+    using ModuleHandle  = void*;
+    using WindowHandle  = void*;
+    using ProcessHandle = void*;
+    using Param         = void*;
+    using ResultPtr     = void*;
+    using Menu          = void*;
+    using WndMessage    = unsigned int;
+    using WndClassId    = unsigned int;
+
+    // TO DO: Incompatible signature
+    typedef ResultPtr(__stdcall* WndProc)(WindowHandle, WndMessage, Param, Param);
+
+    struct WindowAttributes
+    {
+        WindowAttributes();
+        WindowHandle parent_window;
+        ModuleHandle module_handle;
+        WndProc      wnd_proc;
+        Icon         icon;
+        Icon         small_icon;
+        Cursor       cursor;
+        Brush        background;
+        int          width;
+        int          height;
+        std::string  class_name;
+        std::string  menu_name;
+        std::string  title_caption;
+        std::string  window_caption;
+        int          show_state;
+    };
+
+    class Window
+    {
+    public:
+        Window() = default;
+        Window(const WindowAttributes& wnd_meta_data)
+            : wnd_attributes_(wnd_meta_data)
+        {
+        }
+
+        bool Initialize();
+        bool Shutdown();
+
+        const WindowAttributes& Attributes() const
+        {
+            return wnd_attributes_;
+        }
+
+        void SetToFullResolution();
+
+    private:
+        bool             RegisterWindowClass();
+        WindowAttributes wnd_attributes_;
+    };
+
 }  // namespace engine
 
 #endif

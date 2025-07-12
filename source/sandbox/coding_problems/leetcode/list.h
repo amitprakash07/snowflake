@@ -8,5 +8,6 @@
 #include "maximum_sub_array.h"
 #include "remove_duplicate_sorted_array_2.h"
 #include "triplet_sum.h"
+#include "pascals_triangle.h"
 
 #endif

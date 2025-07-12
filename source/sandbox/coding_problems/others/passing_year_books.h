@@ -48,12 +48,12 @@ class PassingYearBooks : public ICodingProblem {
     vector<int> arr_1{2, 1};
     vector<int> expected_1{2, 2};
     vector<int> output_1 = FindSignatureCounts(arr_1);
-    assert(expected_1 == output_1, true);
+    assert(expected_1 == output_1);
 
     vector<int> arr_2{1, 2};
     vector<int> expected_2{1, 1};
     vector<int> output_2 = FindSignatureCounts(arr_2);
-    assert(expected_2 == output_2, true);
+    assert(expected_2 == output_2);
   }
 };
 

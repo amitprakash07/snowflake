@@ -32,6 +32,8 @@ namespace engine
         {
         }
 
+        bool LoadDefault();
+
     private:
         FilePath image_file_path_;
     };
