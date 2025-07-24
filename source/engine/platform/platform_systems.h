@@ -1,7 +1,7 @@
 #ifndef ENGINE_PLATFORM_PLATFORM_SYSTEMS_H_
 #define ENGINE_PLATFORM_PLATFORM_SYSTEMS_H_
 
-#include <map>
+#include <vector>
 
 #include "platform.h"
 #include "platform_objects.h"
@@ -183,8 +183,6 @@ namespace engine
         friend class Platform;
 
     public:
-        WindowHandle ConstructWindow(const Window* window_info = nullptr);
-
         WindowHandle GetMainWindowHandle() const
         {
             return main_window_handle_;
@@ -194,8 +192,6 @@ namespace engine
 
     private:
         //static ResultPtr CALLBACK DefaultWndProc(Window* window, WndMessage message, Param w_param, Param l_param);
-
-        bool DeleteWindow(WindowHandle wnd_handle, bool delete_main_window = false);
 
         WindowingSystem(int win_main_display_state);
 
@@ -214,10 +210,10 @@ namespace engine
             return true;
         }
 
-        std::map<WindowHandle, const Window*> all_window_map_;
-        Window*                               main_window_;
-        WindowHandle                          main_window_handle_;
-        int                                   win_main_display_state_;
+        std::vector<Window*> window_list_;
+        Window*              main_window_;
+        WindowHandle         main_window_handle_;
+        int                  win_main_display_state_;
     };
 }  // namespace engine
 

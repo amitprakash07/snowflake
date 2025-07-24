@@ -5,36 +5,14 @@
 #include "win32_resource.h"
 #include "platform/platform_systems.h"
 
-engine::WindowAttributes::WindowAttributes()
-{
-    parent_window = nullptr;
-    module_handle = GetModuleHandle(nullptr);
-    icon          = nullptr;
-    small_icon    = nullptr;
-    cursor        = nullptr;
-    background    = nullptr;
-    width         = 0;
-    height        = 0;
-    class_name    = "Engine: Default window";
-    menu_name     = "Engine: Default window";
-    title_caption = "Engine: Default window";
-    wnd_proc      = nullptr;
-    show_state    = 0;
-}
-
 void engine::Window::SetToFullResolution()
 {
     HWND desktopResolution = GetDesktopWindow();
     RECT fullResolution;
     GetWindowRect(desktopResolution, &fullResolution);
-    wnd_attributes_.width = fullResolution.right;
+    wnd_attributes_.width  = fullResolution.right;
     wnd_attributes_.height = fullResolution.bottom;
 }
-
-namespace engine
-{
-
-}  // namespace engine
 
 engine::WindowingSystem::WindowingSystem(int win_main_display_state)
     : IPlatformSystem(PlatformHandlerType::Windowing)
@@ -44,116 +22,9 @@ engine::WindowingSystem::WindowingSystem(int win_main_display_state)
 {
     if (main_window_ == nullptr)
     {
-        main_window_                = new Window();
-
-        
-
-        main_window_handle_ = ConstructWindow(main_window_);
+        main_window_ = new Window();
+        main_window_->Initialize();
     }
-}
-
-engine::WindowHandle engine::WindowingSystem::ConstructWindow(const Window* window_info)
-{
-    // Create the main window
-    const Window* use_window = window_info;
-
-    if (window_info == nullptr)
-    {
-        use_window = main_window_;
-    }
-
-    std::string window_caption_string = "Amit Prakash's - WindowsUtil Game";
-
-    constexpr DWORD window_style         = WS_OVERLAPPED | WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
-    constexpr DWORD windowStyle_extended = WS_EX_OVERLAPPEDWINDOW;
-    constexpr int   width                = CW_USEDEFAULT;
-    constexpr int   height               = CW_USEDEFAULT;
-    constexpr int   position_x           = CW_USEDEFAULT;
-    constexpr int   position_y           = CW_USEDEFAULT;
-    constexpr HWND  parent               = nullptr;
-    constexpr HMENU menu                 = nullptr;
-    const HINSTANCE instance             = static_cast<HINSTANCE>(use_window->module_handle);
-    void*           userData             = nullptr;
-
-    HWND window_handle = CreateWindowEx(windowStyle_extended,
-                                        use_window->class_name.c_str(),
-                                        window_caption_string.c_str(),
-                                        window_style,
-                                        position_x,
-                                        position_y,
-                                        width,
-                                        height,
-                                        parent,
-                                        menu,
-                                        instance,
-                                        userData);
-    if (window_handle == nullptr)
-    {
-        const char* errorCaption = "No Main Window";
-        std::string errorMessage("Windows failed to create the main window: ");
-        errorMessage += ErrorHandler()->GetFormattedLastError();
-        MessageBox(nullptr, errorMessage.c_str(), errorCaption, MB_OK | MB_ICONERROR);
-        return nullptr;
-    }
-
-    const int desiredWidth  = use_window->width;
-    const int desiredHeight = use_window->height;
-
-    // Calculate how much of the window is coming from the "non-client area"
-    // (the borders and title bar)
-    RECT window_coordinates;
-    struct
-    {
-        long width;
-        long height;
-    } non_client_area_size;
-
-    // Get the coordinates of the entire window
-    if (GetWindowRect(window_handle, &window_coordinates) == FALSE)
-    {
-        std::string errorMessage("Windows failed to get the coordinates of the main window: ");
-        errorMessage += ErrorHandler()->GetFormattedLastError();
-        MessageBox(nullptr, errorMessage.c_str(), nullptr, MB_OK | MB_ICONERROR);
-        return nullptr;
-    }
-
-    // Get the dimensions of the client area
-    RECT client_dimensions;
-    if (GetClientRect(window_handle, &client_dimensions) == FALSE)
-    {
-        std::string errorMessage(
-            "Windows failed to get the dimensions of the main window's client "
-            "area: ");
-        errorMessage += ErrorHandler()->GetFormattedLastError();
-        MessageBox(nullptr, errorMessage.c_str(), nullptr, MB_OK | MB_ICONERROR);
-        return nullptr;
-    }
-
-    // Get the difference between them
-    non_client_area_size.width  = (window_coordinates.right - window_coordinates.left) - client_dimensions.right;
-    non_client_area_size.height = (window_coordinates.bottom - window_coordinates.top) - client_dimensions.bottom;
-
-    // Resize the window
-    BOOL shouldTheResizedWindowBeRedrawn = TRUE;
-    if (MoveWindow(window_handle,
-                   window_coordinates.left,
-                   window_coordinates.top,
-                   desiredWidth + non_client_area_size.width,
-                   desiredHeight + non_client_area_size.height,
-                   shouldTheResizedWindowBeRedrawn) == FALSE)
-    {
-        std::string errorMessage("Windows failed to resize the main window: ");
-        errorMessage += ErrorHandler()->GetFormattedLastError();
-        MessageBox(nullptr, errorMessage.c_str(), nullptr, MB_OK | MB_ICONERROR);
-        return nullptr;
-    }
-
-    // Display the window in the initial state that Windows requested
-    ShowWindow(window_handle, win_main_display_state_);
-
-    all_window_map_[window_handle] = window_info;
-
-    return window_handle;
 }
 
 //engine::ResultPtr CALLBACK engine::WindowingSystem::DefaultWndProc(Window*    window,
@@ -290,42 +161,19 @@ engine::WindowHandle engine::WindowingSystem::ConstructWindow(const Window* wind
 
 engine::WindowingSystem::~WindowingSystem()
 {
-    for (auto it : all_window_map_)
+    for (size_t window_iter = 0; window_iter < window_list_.size(); window_iter++)
     {
-        DeleteWindow(it.first);
+        window_list_[window_iter]->Shutdown();
+        delete window_list_[window_iter];
+        window_list_[window_iter] = nullptr;
     }
 
-    DeleteWindow(main_window_, true);
-}
+    window_list_.clear();
 
-bool engine::WindowingSystem::DeleteWindow(WindowHandle wnd_handle, bool delete_main_window)
-{
-    bool          success  = true;
-    const Window* wnd_info = all_window_map_[wnd_handle];
-
-    if (!delete_main_window && wnd_info->module_handle != main_window_->module_handle)
+    if (main_window_)
     {
-        if (UnregisterClass(wnd_info->class_name.c_str(), static_cast<HINSTANCE>(wnd_info->module_handle)) == FALSE)
-        {
-            const char* errorCaption = "Couldn't Unregister Main Window Class";
-            std::string errorMessage("Windows failed to unregister the main window's class: ");
-            errorMessage += ErrorHandler()->GetFormattedLastError();
-            MessageBox(nullptr, errorMessage.c_str(), errorCaption, MB_OK | MB_ICONERROR);
-            success &= false;
-        }
+        main_window_->Shutdown();
+        delete main_window_;
+        main_window_ = nullptr;
     }
-
-    if (!delete_main_window && wnd_handle != main_window_handle_)
-    {
-        if (DestroyWindow(static_cast<HWND>(wnd_handle)) == FALSE)
-        {
-            const char* errorCaption = "Couldn't Destroy Main Window";
-            std::string errorMessage("Windows failed to destroy the main window: ");
-            errorMessage += ErrorHandler()->GetFormattedLastError();
-            MessageBox(nullptr, errorMessage.c_str(), errorCaption, MB_OK | MB_ICONERROR);
-            success &= false;
-        }
-    }
-
-    return success;
 }

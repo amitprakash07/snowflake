@@ -46,13 +46,25 @@ engine::FileMetaData::FileMetaData(const FilePath& file_path)
     }
 }
 
+engine::WindowAttributes::WindowAttributes(int in_width, int in_height)
+{
+    parent_window = nullptr;
+    module_handle = GetModuleHandle(nullptr);
+    icon          = nullptr;
+    small_icon    = nullptr;
+    cursor        = nullptr;
+    background    = nullptr;
+    width         = in_width;
+    height        = in_width;
+    class_name    = "Default window";
+    menu_name     = "Default window";
+    title_caption = "Default window";
+    wnd_proc      = nullptr;
+    show_state    = 1;
+}
+
 bool engine::Window::Initialize()
 {
-    if (wnd_attributes_.title_caption.empty())
-    {
-        wnd_attributes_.title_caption = "Amit Prakash's - WindowsUtil Game";
-    }
-
     constexpr DWORD window_style         = WS_OVERLAPPED | WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
     constexpr DWORD windowStyle_extended = WS_EX_OVERLAPPEDWINDOW;
     constexpr int   width                = CW_USEDEFAULT;
@@ -62,7 +74,7 @@ bool engine::Window::Initialize()
     constexpr HWND  parent               = nullptr;
     constexpr HMENU menu                 = nullptr;
     const HINSTANCE instance             = static_cast<HINSTANCE>(wnd_attributes_.module_handle);
-    void*           userData             = nullptr;
+    void*           user_data            = nullptr;
 
     if (RegisterWindowClass())
     {
@@ -77,18 +89,19 @@ bool engine::Window::Initialize()
                                             parent,
                                             menu,
                                             instance,
-                                            userData);
+                                            user_data);
+
         if (window_handle == nullptr)
         {
-            const char* errorCaption = "No Main Window";
-            std::string errorMessage("Windows failed to create the main window: ");
-            errorMessage += ErrorHandler()->GetFormattedLastError();
-            MessageBox(nullptr, errorMessage.c_str(), errorCaption, MB_OK | MB_ICONERROR);
-            return nullptr;
+            const char* error_caption = "No Main Window";
+            std::string error_message("Windows failed to create the main window: ");
+            error_message += ErrorHandler()->GetFormattedLastError();
+            MessageBox(nullptr, error_message.c_str(), error_caption, MB_OK | MB_ICONERROR);
+            return false;
         }
 
-        const int desiredWidth  = wnd_attributes_.width;
-        const int desiredHeight = wnd_attributes_.height;
+        const int desired_width  = wnd_attributes_.width;
+        const int desired_height = wnd_attributes_.height;
 
         // Calculate how much of the window is coming from the "non-client area"
         // (the borders and title bar)
@@ -102,22 +115,22 @@ bool engine::Window::Initialize()
         // Get the coordinates of the entire window
         if (GetWindowRect(window_handle, &window_coordinates) == FALSE)
         {
-            std::string errorMessage("Windows failed to get the coordinates of the main window: ");
-            errorMessage += ErrorHandler()->GetFormattedLastError();
-            MessageBox(nullptr, errorMessage.c_str(), nullptr, MB_OK | MB_ICONERROR);
-            return nullptr;
+            std::string error_message("Windows failed to get the coordinates of the main window: ");
+            error_message += ErrorHandler()->GetFormattedLastError();
+            MessageBox(nullptr, error_message.c_str(), nullptr, MB_OK | MB_ICONERROR);
+            return false;
         }
 
         // Get the dimensions of the client area
         RECT client_dimensions;
         if (GetClientRect(window_handle, &client_dimensions) == FALSE)
         {
-            std::string errorMessage(
+            std::string error_message(
                 "Windows failed to get the dimensions of the main window's client "
                 "area: ");
-            errorMessage += ErrorHandler()->GetFormattedLastError();
-            MessageBox(nullptr, errorMessage.c_str(), nullptr, MB_OK | MB_ICONERROR);
-            return nullptr;
+            error_message += ErrorHandler()->GetFormattedLastError();
+            MessageBox(nullptr, error_message.c_str(), nullptr, MB_OK | MB_ICONERROR);
+            return false;
         }
 
         // Get the difference between them
@@ -125,22 +138,23 @@ bool engine::Window::Initialize()
         non_client_area_size.height = (window_coordinates.bottom - window_coordinates.top) - client_dimensions.bottom;
 
         // Resize the window
-        BOOL shouldTheResizedWindowBeRedrawn = TRUE;
+        BOOL should_the_resized_window_be_redrawn = TRUE;
         if (MoveWindow(window_handle,
                        window_coordinates.left,
                        window_coordinates.top,
-                       desiredWidth + non_client_area_size.width,
-                       desiredHeight + non_client_area_size.height,
-                       shouldTheResizedWindowBeRedrawn) == FALSE)
+                       desired_width + non_client_area_size.width,
+                       desired_height + non_client_area_size.height,
+                       should_the_resized_window_be_redrawn) == FALSE)
         {
-            std::string errorMessage("Windows failed to resize the main window: ");
-            errorMessage += ErrorHandler()->GetFormattedLastError();
-            MessageBox(nullptr, errorMessage.c_str(), nullptr, MB_OK | MB_ICONERROR);
-            return nullptr;
+            std::string error_message("Windows failed to resize the main window: ");
+            error_message += ErrorHandler()->GetFormattedLastError();
+            MessageBox(nullptr, error_message.c_str(), nullptr, MB_OK | MB_ICONERROR);
+            return false;
         }
 
         // Display the window in the initial state that Windows requested
         ShowWindow(window_handle, wnd_attributes_.show_state);
+        wnd_handle_ = window_handle;
 
         return true;
     }
@@ -150,6 +164,49 @@ bool engine::Window::Initialize()
 
 bool engine::Window::Shutdown()
 {
+    bool success = true;
+    if (wnd_attributes_.module_handle != nullptr)
+    {
+        if (UnregisterClass(wnd_attributes_.class_name.c_str(),
+                            static_cast<HINSTANCE>(wnd_attributes_.module_handle)) == FALSE)
+        {
+            const char* error_caption = "Couldn't Unregister Main Window Class";
+            std::string error_message("Windows failed to unregister the main window's class: ");
+            error_message += ErrorHandler()->GetFormattedLastError();
+            MessageBox(nullptr, error_message.c_str(), error_caption, MB_OK | MB_ICONERROR);
+            success &= false;
+        }
+        else
+        {
+            wnd_attributes_.module_handle = nullptr;
+        }
+    }
+
+    if (success)
+    {
+        if (DestroyWindow(static_cast<HWND>(wnd_handle_)) == FALSE)
+        {
+            const char* error_caption = "Couldn't Destroy Main Window";
+            std::string error_message("Windows failed to destroy the main window: ");
+            error_message += ErrorHandler()->GetFormattedLastError();
+            MessageBox(nullptr, error_message.c_str(), error_caption, MB_OK | MB_ICONERROR);
+            success &= false;
+        }
+        else
+        {
+            wnd_handle_ = nullptr;
+        }
+    }
+
+    return success;
+}
+
+void engine::Window::Show()
+{
+    while (1)
+    {
+        
+    }
 }
 
 bool engine::Window::RegisterWindowClass()
@@ -194,10 +251,10 @@ bool engine::Window::RegisterWindowClass()
 
     if (registered_class == NULL)
     {
-        const char* errorCaption = "No Main Window Class";
-        std::string errorMessage("Windows failed to register the main window's class: ");
-        errorMessage += ErrorHandler()->GetFormattedLastError();
-        MessageBox(nullptr, errorMessage.c_str(), errorCaption, MB_OK | MB_ICONERROR);
+        const char* error_caption = "No Main Window Class";
+        std::string error_message("Windows failed to register the main window's class: ");
+        error_message += ErrorHandler()->GetFormattedLastError();
+        MessageBox(nullptr, error_message.c_str(), error_caption, MB_OK | MB_ICONERROR);
         return false;
     }
 

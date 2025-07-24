@@ -6,6 +6,8 @@
 
 #include "common/string_util.h"
 
+using byte = uint8_t;
+
 namespace engine
 {
     enum class FileOpenMode
@@ -197,7 +199,7 @@ namespace engine
 
     struct WindowAttributes
     {
-        WindowAttributes();
+        explicit WindowAttributes(int in_width = 1920, int in_height = 1080);
         WindowHandle parent_window;
         ModuleHandle module_handle;
         WndProc      wnd_proc;
@@ -220,22 +222,31 @@ namespace engine
         Window() = default;
         Window(const WindowAttributes& wnd_meta_data)
             : wnd_attributes_(wnd_meta_data)
+            , wnd_handle_(nullptr)
         {
         }
 
         bool Initialize();
         bool Shutdown();
 
+        [[nodiscard]] const WindowHandle GetHandle() const
+        {
+            return wnd_handle_;
+        }
+
         const WindowAttributes& Attributes() const
         {
             return wnd_attributes_;
         }
+
+        void Show();
 
         void SetToFullResolution();
 
     private:
         bool             RegisterWindowClass();
         WindowAttributes wnd_attributes_;
+        WindowHandle     wnd_handle_;
     };
 
 }  // namespace engine

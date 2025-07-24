@@ -10,6 +10,10 @@ engine::Image* engine::Image::CreateImage(const FilePath& image_file_path)
 
 bool engine::Image::LoadDefault()
 {
-    cv::Mat image_data = cv::imread(GetPath().AsCharArray());
+    cv::Mat image_data = cv::imread(GetPath().AsCharArray(), cv::IMREAD_UNCHANGED);
+    size_t pixel_count = image_data.total();
+    int mat_type = image_data.type();
+    int     channels    = image_data.channels();
+    //image_data.data
     return true;
 }

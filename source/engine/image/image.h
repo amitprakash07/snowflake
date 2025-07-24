@@ -21,6 +21,12 @@ namespace engine
         inline virtual ImageType Type() const = 0;
         virtual bool             Load()       = 0;
         virtual ~Image()                      = default;
+
+        const byte* GetDataBuffer() const
+        {
+            return image_data_;
+        }
+
         FilePath GetPath() const
         {
             return image_file_path_;
@@ -29,6 +35,7 @@ namespace engine
     protected:
         Image(const FilePath& path)
             : image_file_path_(path)
+            , image_data_(nullptr)
         {
         }
 
@@ -36,6 +43,7 @@ namespace engine
 
     private:
         FilePath image_file_path_;
+        byte*    image_data_;
     };
 
     class PngImage : public Image
