@@ -44,5 +44,6 @@ FetchContent_MakeAvailable(JsonParser)
 
 add_subdirectory(${PROJECT_SRC_DIR}/engine)
 add_subdirectory(${PROJECT_SRC_DIR}/tools/hex2bin)
+add_subdirectory(${PROJECT_SRC_DIR}/projects/cpu_rasterizer)
 add_subdirectory(${PROJECT_SRC_DIR}/sandbox)
 message("End Processing ${PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR})")

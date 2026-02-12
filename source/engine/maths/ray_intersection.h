@@ -42,6 +42,6 @@ template <>
 bool engine::Ray::Intersect<engine::BoundingBox>(const BoundingBox& primitive, HitInfo& hit_info) const;
 
 template <>
-bool engine::Ray::Intersect<engine::Triangle>(const Triangle& primitive, HitInfo& hit_info) const;
+bool engine::Ray::Intersect<engine::geometry::Triangle>(const geometry::Triangle& primitive, HitInfo& hit_info) const;
 
 #endif

@@ -138,12 +138,12 @@ bool Ray::Intersect<BoundingBox>(const BoundingBox& primitive, HitInfo& hit_info
 }
 
 template <>
-bool Ray::Intersect<Triangle>(const Triangle& primitive, HitInfo& hit_info) const
+bool Ray::Intersect<geometry::Triangle>(const geometry::Triangle& primitive, HitInfo& hit_info) const
 {
-    const Triangle& triangle = primitive;
-    const Vertex&   vertex_a  = triangle.Vert_A();
-    const Vertex&   vertex_b  = triangle.Vert_B();
-    const Vertex&   vertex_c  = triangle.Vert_C();
+    const geometry::Triangle& triangle = primitive;
+    const geometry::Vertex&   vertex_a = triangle.Vert_A();
+    const geometry::Vertex&   vertex_b = triangle.Vert_B();
+    const geometry::Vertex&   vertex_c = triangle.Vert_C();
 
     Vector3 normal               = (vertex_b - vertex_a).Cross(vertex_c - vertex_a);
     Vector3 face_normal_normalized = normal.CreateNormalized();

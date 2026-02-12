@@ -5,36 +5,48 @@
 
 namespace engine
 {
-    using Vertex = Vector3;
-
-    class Triangle
+    namespace geometry
     {
-    public:
-        // Returns 2 times the signed triangle area. The result is positive if
-        // abc is ccw, negative if abc is cw, zero if abc is degenerate.
-        float Signed2DTriArea() const;
+        using Vertex = Vector3;
 
-        inline Vertex Vert_A() const
+        class Triangle
         {
-            return vert_a_;
-        }
+        public:
+            // Returns 2 times the signed triangle area. The result is positive if
+            // abc is ccw, negative if abc is cw, zero if abc is degenerate.
+            float Signed2DTriArea() const;
 
-        inline Vertex Vert_B() const
-        {
-            return vert_b_;
-        }
+            Triangle() = delete;
 
-        inline Vertex Vert_C() const
-        {
-            return vert_c_;
-        }
+            Triangle(const Vertex& a, const Vertex& b, const Vertex& c)
+                : vert_a_(a)
+                , vert_b_(b)
+                , vert_c_(c)
+            {
+            }
 
-    private:
-        // Counter ClockWise Direction
-        Vertex vert_a_;
-        Vertex vert_b_;
-        Vertex vert_c_;
-    };
+            inline Vertex Vert_A() const
+            {
+                return vert_a_;
+            }
+
+            inline Vertex Vert_B() const
+            {
+                return vert_b_;
+            }
+
+            inline Vertex Vert_C() const
+            {
+                return vert_c_;
+            }
+
+        private:
+            // Counter ClockWise Direction
+            Vertex vert_a_;
+            Vertex vert_b_;
+            Vertex vert_c_;
+        };
+    }  // namespace geometry
 
 }  // namespace engine
 
