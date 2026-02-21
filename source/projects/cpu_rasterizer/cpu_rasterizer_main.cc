@@ -3,7 +3,7 @@
 
 #include "engine/common/maths_util.h"
 #include "engine/maths/triangle.h"
-#include "engine/graphics/color.h"
+#include "engine/graphics/pixel.h"
 #include "engine/graphics/ppm_image.h"
 
 int main(int argc, char* argv[])
@@ -27,13 +27,16 @@ int main(int argc, char* argv[])
     engine::graphics::PpmImage framebuffer(width, height);
 
     // Rasterization logic goes here. For now, we just set the triangle vertices to red color.
-    framebuffer.SetPixelColor((int)a.x(), (int)a.y(), 255, 0, 0);
+    /*framebuffer.SetPixelColor((int)a.x(), (int)a.y(), 255, 0, 0);
     framebuffer.SetPixelColor((int)b.x(), (int)b.y(), 255, 0, 0);
-    framebuffer.SetPixelColor((int)c.x(), (int)c.y(), 255, 0, 0);
+    framebuffer.SetPixelColor((int)c.x(), (int)c.y(), 255, 0, 0);*/
+    engine::graphics::Pixel vert_a_pixel = {static_cast<uint16_t>(a.x()), static_cast<uint16_t>(a.y())};
+    engine::graphics::Pixel vert_b_pixel = {static_cast<uint16_t>(b.x()), static_cast<uint16_t>(b.y())};
+    engine::graphics::Pixel vert_c_pixel = {static_cast<uint16_t>(c.x()), static_cast<uint16_t>(c.y())};
 
-    /*framebuffer.SetSurroundIngPixelsColor((int)a.x(), (int)a.y(), 2, engine::graphics::Color(255, 0, 0));
-    framebuffer.SetSurroundIngPixelsColor((int)b.x(), (int)b.y(), 2, engine::graphics::Color(255, 0, 0));
-    framebuffer.SetSurroundIngPixelsColor((int)c.x(), (int)c.y(), 2, engine::graphics::Color(255, 0, 0));*/
+    framebuffer.SetPixelTileColor(vert_a_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
+    framebuffer.SetPixelTileColor(vert_b_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
+    framebuffer.SetPixelTileColor(vert_c_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
 
     // Save the frame buffer to disk as a PPM image
     framebuffer.SaveToDisk("output.ppm");

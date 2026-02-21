@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <cstdio>
 
-#include "color.h"
+#include "pixel.h"
 
 namespace engine
 {
@@ -22,18 +22,16 @@ namespace engine
                 delete[] image_data_;
             }
 
-            void SetPixelColor(int x, int y, const engine::graphics::Color& color);
+            void SetPixelColor(Pixel& pixel, const engine::graphics::Rgb8& color);
 
-            void SetPixelColor(int x, int y, uint8_t r, uint8_t g, std::uint8_t b);
-
-            void SetSurroundIngPixelsColor(int x, int y, uint8_t step, const engine::graphics::Color& color);
+            void SetPixelTileColor(Pixel& pixel, uint8_t step, const engine::graphics::Rgb8& rgb8_color);
 
             void SaveToDisk(const char* filename);
 
         private:
-            engine::graphics::Color* image_data_;  // Array to hold pixel colors by row-major order
-            uint16_t                 width_;
-            uint16_t                 height_;
+            engine::graphics::Rgb8* image_data_;  // Array to hold pixel colors by row-major order
+            uint16_t                width_;
+            uint16_t                height_;
         };
     }  // namespace graphics
 }  // namespace engine
