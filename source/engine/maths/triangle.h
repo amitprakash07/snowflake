@@ -1,13 +1,13 @@
 #ifndef ENGINE_MATHS_TRIANGLE_H_
 #define ENGINE_MATHS_TRIANGLE_H_
 
-#include "vector3.h"
+#include "point.h"
 
 namespace engine
 {
     namespace geometry
     {
-        using Vertex = Vector3;
+        using Vertex = engine::geometry::Point3D;
 
         class Triangle
         {
@@ -16,7 +16,7 @@ namespace engine
             // abc is ccw, negative if abc is cw, zero if abc is degenerate.
             float Signed2DTriArea() const;
 
-            Triangle() = delete;
+            Triangle() = default;
 
             Triangle(const Vertex& a, const Vertex& b, const Vertex& c)
                 : vert_a_(a)

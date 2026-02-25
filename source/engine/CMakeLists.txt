@@ -5,7 +5,7 @@ message("Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 project(${ENGINE_PROJECT_NAME})
 
 find_package(AgilitySDK REQUIRED)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${PROJECT_SRC_DIR})
 include_directories(${AgilitySdk_Include})
 
 add_subdirectory(common)

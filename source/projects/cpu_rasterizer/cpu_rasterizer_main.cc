@@ -5,6 +5,7 @@
 #include "engine/maths/triangle.h"
 #include "engine/graphics/pixel.h"
 #include "engine/graphics/ppm_image.h"
+#include "engine/graphics/rasterizer.h"
 
 int main(int argc, char* argv[])
 {
@@ -37,6 +38,13 @@ int main(int argc, char* argv[])
     framebuffer.SetPixelTileColor(vert_a_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
     framebuffer.SetPixelTileColor(vert_b_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
     framebuffer.SetPixelTileColor(vert_c_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
+
+    engine::graphics::Rasterizer triangle_rasterizer(width, height, screen_space_triangle);
+    triangle_rasterizer.RasterizeEdgePixels([&framebuffer](const engine::graphics::PixelCoordinate& pixel_coordinate) {
+        engine::graphics::Pixel current_pixel(pixel_coordinate);
+        framebuffer.SetPixelColor(current_pixel, engine::graphics::Rgb8(255, 0, 0));
+        framebuffer.SetPixelTileColor(current_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
+    });
 
     // Save the frame buffer to disk as a PPM image
     framebuffer.SaveToDisk("output.ppm");

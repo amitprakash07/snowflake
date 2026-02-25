@@ -14,7 +14,12 @@ matrix_4x4.h
 matrix_4x4.cc
 quaternion.h
 quaternion.cc)
-source_group("LinearAlgebra" FILES ${ENGINE_MATHS_LINEAR_ALGEBRA_SOURCE})
+
+add_library(EngineMathsLinearAlgebra STATIC ${ENGINE_MATHS_LINEAR_ALGEBRA_SOURCE})
+set_target_properties(EngineMathsLinearAlgebra
+    PROPERTIES
+    FOLDER "Engine"
+    VS_SOLUTION_FOLDER "Engine")
 
 set(ENGINE_MATHS_GEOMETRY_SOURCE
 axis_aligned_bounding_box.h
@@ -29,16 +34,16 @@ triangle.cc
 affine_transform.h
 affine_transform.cc
 ray_intersection.h
-ray_intersection.cc)
-source_group("Geometry" FILES ${ENGINE_MATHS_GEOMETRY_SOURCE})
+ray_intersection.cc
+point.h
+point.cc)
 
-set(ENGINE_MATH_SOURCE 
-${ENGINE_MATHS_LINEAR_ALGEBRA_SOURCE}
-${ENGINE_MATHS_GEOMETRY_SOURCE}
-${ENGINE_MATHS_GRAPHICS_SOURCE})
-
-add_library(${ENGINE_PROJECT_NAME} ${ENGINE_MATH_SOURCE})
-set_target_properties(${ENGINE_PROJECT_NAME}
+add_library(EngineMathsGeometry STATIC ${ENGINE_MATHS_GEOMETRY_SOURCE})
+target_link_libraries(EngineMathsGeometry EngineMathsLinearAlgebra)
+set_target_properties(EngineMathsGeometry
     PROPERTIES
     FOLDER "Engine"
     VS_SOLUTION_FOLDER "Engine")
+
+add_library(${ENGINE_PROJECT_NAME} INTERFACE)
+target_link_libraries(${ENGINE_PROJECT_NAME} INTERFACE EngineMathsLinearAlgebra EngineMathsGeometry)

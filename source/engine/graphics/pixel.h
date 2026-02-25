@@ -10,7 +10,6 @@ namespace engine
 {
     namespace graphics
     {
-
         class PixelCoordinate
         {
         public:

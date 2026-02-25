@@ -140,7 +140,10 @@ bool Ray::Intersect<BoundingBox>(const BoundingBox& primitive, HitInfo& hit_info
 template <>
 bool Ray::Intersect<geometry::Triangle>(const geometry::Triangle& primitive, HitInfo& hit_info) const
 {
-    const geometry::Triangle& triangle = primitive;
+    primitive;
+    hit_info;
+    return false;
+    /*const geometry::Triangle& triangle = primitive;
     const geometry::Vertex&   vertex_a = triangle.Vert_A();
     const geometry::Vertex&   vertex_b = triangle.Vert_B();
     const geometry::Vertex&   vertex_c = triangle.Vert_C();
@@ -170,5 +173,5 @@ bool Ray::Intersect<geometry::Triangle>(const geometry::Triangle& primitive, Hit
         is_hit              = true;
     }
 
-    return is_hit;
+    return is_hit;*/
 }
