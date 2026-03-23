@@ -22,7 +22,9 @@ namespace engine
                 delete[] image_data_;
             }
 
-            void SetPixelColor(Pixel& pixel, const engine::graphics::Rgb8& color);
+            void SetPixelColor(const PixelCoordinate& pixel_coordinate, const engine::graphics::Rgb8& color);
+
+            void SetPixel(const Pixel& pixel);
 
             void SetPixelTileColor(Pixel& pixel, uint8_t step, const engine::graphics::Rgb8& rgb8_color);
 

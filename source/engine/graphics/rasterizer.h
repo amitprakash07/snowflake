@@ -3,45 +3,96 @@
 
 #include <functional>
 
+#include "engine/maths/geometry_primitives.h"
 #include "pixel.h"
-#include "engine/maths/triangle.h"
+#include "viewport.h"
 
 namespace engine
 {
     namespace graphics
     {
-        class Rasterizer
+        template <engine::geometry::PrimitiveTypeConcept Primitive>
+        class PrimitiveRasterizer
         {
         public:
-            Rasterizer() = delete;
+            PrimitiveRasterizer() = delete;
 
-            Rasterizer(uint16_t width, uint16_t height, const engine::geometry::Triangle& triangle)
-
+            PrimitiveRasterizer(const Viewport& viewport, const Primitive& primitive)
+                : viewport_(viewport)
+                , primitive_(primitive)
             {
-                width;
-                height;
-                shape_data_.triangle_ = triangle;
             }
 
-            void RasterizeEdgePixels(
-                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const;
-            void RasterizeBoundPixel(
-                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const;
+            virtual ~PrimitiveRasterizer() = default;
 
-        private:
-            enum class ShapeType
-            {
-                Triangle,
-                Sphere,
-                Rectangle
-            };
-
-            union ShapeData
-            {
-                engine::geometry::Triangle triangle_ = {};
-            } shape_data_;
+        protected:
+            Primitive primitive_;
+            Viewport  viewport_;
         };
 
+        class RasterizerTrait
+        {
+        public:
+            virtual void RasterizePixelCoordinate(
+                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const = 0;
+
+            virtual void RasterizeBoundingBoxPixel(
+                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const = 0;
+
+            virtual void RasterizePixels(
+                const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const = 0;
+
+            virtual ~RasterizerTrait() = default;
+        };
+
+        template <engine::geometry::PrimitiveTypeConcept Primitive>
+        class Rasterizer : public PrimitiveRasterizer<Primitive>, public RasterizerTrait
+        {
+        public:
+            Rasterizer(const Viewport& viewport, const Primitive& primitive)
+                : PrimitiveRasterizer<Primitive>(viewport, primitive)
+            {
+            }
+        };
+
+        template <>
+        class Rasterizer<engine::geometry::Triangle> : public PrimitiveRasterizer<engine::geometry::Triangle>,
+                                                       public RasterizerTrait
+        {
+        public:
+            Rasterizer(const Viewport& viewport, const engine::geometry::Triangle& primitive)
+                : PrimitiveRasterizer<engine::geometry::Triangle>(viewport, primitive)
+            {
+            }
+
+            void RasterizePixelCoordinate(
+                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const override;
+
+            void RasterizeBoundingBoxPixel(
+                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const override;
+
+            void RasterizePixels(
+                const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const override;
+        };
+
+        template <>
+        class Rasterizer<engine::geometry::LineSegment> : public PrimitiveRasterizer<engine::geometry::LineSegment>,
+                                                          RasterizerTrait
+        {
+        public:
+            Rasterizer(const Viewport& viewport, const engine::geometry::LineSegment& primitive)
+                : PrimitiveRasterizer<engine::geometry::LineSegment>(viewport, primitive)
+            {
+            }
+
+            void RasterizePixelCoordinate(
+                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const override;
+
+            void RasterizeBoundingBoxPixel(
+                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const override;
+
+            void RasterizePixels(const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const override;
+        };
     }  // namespace graphics
 }  // namespace engine
 

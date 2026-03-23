@@ -6,7 +6,7 @@
 #include "engine_math.h"
 #include "Quaternion.h"
 
-using namespace engine;
+using namespace engine::maths;
 
 Quaternion::Quaternion()
     : w_(1.0f)

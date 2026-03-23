@@ -5,7 +5,7 @@
 #include "engine_math.h"
 #include "Vector3.h"
 
-using namespace engine;
+using namespace engine::maths;
 
 Vector3 Vector3::operator+(const Vector3& other) const
 {

@@ -1,7 +1,9 @@
 #ifndef ENGINE_MATHS_TRIANGLE_H_
 #define ENGINE_MATHS_TRIANGLE_H_
 
+#include "bounding_box.h"
 #include "point.h"
+#include "primitive.h"
 
 namespace engine
 {
@@ -9,20 +11,37 @@ namespace engine
     {
         using Vertex = engine::geometry::Point3D;
 
-        class Triangle
+        class Triangle : public Primitive
         {
         public:
             // Returns 2 times the signed triangle area. The result is positive if
             // abc is ccw, negative if abc is cw, zero if abc is degenerate.
             float Signed2DTriArea() const;
 
-            Triangle() = default;
+            Triangle() = delete;
 
             Triangle(const Vertex& a, const Vertex& b, const Vertex& c)
-                : vert_a_(a)
+                : Primitive(PrimitiveType::kTriangle)
+                , vert_a_(a)
                 , vert_b_(b)
                 , vert_c_(c)
             {
+            }
+
+            Triangle(const Triangle& other)
+                : Primitive(PrimitiveType::kTriangle)
+                , vert_a_(other.vert_a_)
+                , vert_b_(other.vert_b_)
+                , vert_c_(other.vert_c_)
+            {
+            }
+
+            Triangle& operator=(const Triangle& other)
+            {
+                vert_a_ = other.vert_a_;
+                vert_b_ = other.vert_b_;
+                vert_c_ = other.vert_c_;
+                return *this;
             }
 
             inline Vertex Vert_A() const
@@ -40,11 +59,18 @@ namespace engine
                 return vert_c_;
             }
 
+            AxisAlignedBoundingBox GetBoundingBox() const;
+
+            bool IsInside(const Point3D& point) const;
+
         private:
+            void FindBoundingBox();
+
             // Counter ClockWise Direction
-            Vertex vert_a_;
-            Vertex vert_b_;
-            Vertex vert_c_;
+            Vertex                 vert_a_;
+            Vertex                 vert_b_;
+            Vertex                 vert_c_;
+            AxisAlignedBoundingBox bounding_box_;
         };
     }  // namespace geometry
 

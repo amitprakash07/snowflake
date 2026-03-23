@@ -22,6 +22,8 @@ set_target_properties(EngineMathsLinearAlgebra
     VS_SOLUTION_FOLDER "Engine")
 
 set(ENGINE_MATHS_GEOMETRY_SOURCE
+geometry_primitives.h
+primitive.h
 axis_aligned_bounding_box.h
 bounding_box.h
 bounding_box.cc
@@ -36,7 +38,8 @@ affine_transform.cc
 ray_intersection.h
 ray_intersection.cc
 point.h
-point.cc)
+point.cc
+line_segment.h)
 
 add_library(EngineMathsGeometry STATIC ${ENGINE_MATHS_GEOMETRY_SOURCE})
 target_link_libraries(EngineMathsGeometry EngineMathsLinearAlgebra)

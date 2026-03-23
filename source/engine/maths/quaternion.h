@@ -3,7 +3,7 @@
 
 #include "Vector3.h"
 
-namespace engine
+namespace engine::maths
 {
     class Quaternion
     {

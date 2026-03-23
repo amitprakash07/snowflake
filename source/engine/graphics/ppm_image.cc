@@ -15,11 +15,10 @@ engine::graphics::PpmImage::PpmImage(uint16_t width, uint16_t height)
     }
 }
 
-void engine::graphics::PpmImage::SetPixelColor(Pixel& pixel, const engine::graphics::Rgb8& color)
+void engine::graphics::PpmImage::SetPixelColor(const PixelCoordinate&        pixel_coordinate,
+                                               const engine::graphics::Rgb8& color)
 {
-    pixel.SetColor(color);
-
-    const PixelCoordinate& coordinate = pixel.GetCoordinate();
+    const PixelCoordinate& coordinate = pixel_coordinate;
 
     if (coordinate.x < 0 || coordinate.y < 0)
     {
@@ -36,6 +35,11 @@ void engine::graphics::PpmImage::SetPixelColor(Pixel& pixel, const engine::graph
     image_data_[index] = color;
 }
 
+void engine::graphics::PpmImage::SetPixel(const Pixel& pixel)
+{
+    SetPixelColor(pixel.GetCoordinate(), pixel.GetRgb8Color());
+}
+
 void engine::graphics::PpmImage::SetPixelTileColor(Pixel& pixel, uint8_t step, const engine::graphics::Rgb8& rgb8_color)
 {
     size_t count = 0;
@@ -47,7 +51,7 @@ void engine::graphics::PpmImage::SetPixelTileColor(Pixel& pixel, uint8_t step, c
         for (int16_t j = -step; j < step; j++)
         {
             Pixel tile_pixel(coordinate.x + i, coordinate.y + j);
-            SetPixelColor(tile_pixel, rgb8_color);
+            SetPixelColor(coordinate, rgb8_color);
             count++;
         }
     }

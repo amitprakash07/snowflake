@@ -7,16 +7,10 @@ This file contains math-related functions
 
 #include "Math.h"
 
-namespace engine {
-namespace Math {
-// Interface
-//==========
+namespace engine::maths
+{
+    extern const float Pi;
 
-extern const float Pi;
-
-
-
-}  // namespace Math
-}  
+}  // namespace engine::maths
 
 #endif

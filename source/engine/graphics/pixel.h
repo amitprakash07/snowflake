@@ -20,14 +20,14 @@ namespace engine
             };
 
             PixelCoordinate() = default;
-            PixelCoordinate(uint16_t x_in, uint16_t y_in, Origin origin_in = Origin::kTopLeft)
+            PixelCoordinate(uint32_t x_in, uint32_t y_in, Origin origin_in = Origin::kTopLeft)
                 : x(x_in)
                 , y(y_in)
                 , origin(origin_in)
             {
             }
 
-            uint16_t x, y;
+            uint32_t x, y;
             Origin   origin;
 
         private:
@@ -51,7 +51,7 @@ namespace engine
                 }
             }
 
-            Pixel(uint16_t x, uint16_t y, ColorFormat color_format = ColorFormat::kRgb8)
+            Pixel(uint32_t x, uint32_t y, ColorFormat color_format = ColorFormat::kRgb8)
                 : coordinate_(x, y)
                 , color_format_(color_format)
             {
@@ -79,12 +79,12 @@ namespace engine
                 }
             }
 
-            uint16_t x() const
+            uint32_t x() const
             {
                 return coordinate_.x;
             }
 
-            uint16_t y() const
+            uint32_t y() const
             {
                 return coordinate_.y;
             }

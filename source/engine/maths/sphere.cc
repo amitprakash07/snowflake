@@ -2,9 +2,9 @@
 
 using namespace engine;
 
-bool Sphere::DoesIntersect(const Sphere& other) const
+bool geometry::Sphere::DoesIntersect(const Sphere& other) const
 {
-    Vector3 d     = centre - other.centre;
+    maths::Vector3 d     = centre - other.centre;
     float   dist2 = d.Dot(d);
     // Spheres intersect if squared distance is less than squared sum of radii
     float radiusSum = radius + other.radius;

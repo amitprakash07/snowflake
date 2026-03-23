@@ -11,9 +11,9 @@ namespace engine
 {
     struct HitInfo
     {
-        Vector3 hit_point;
-        Vector3 normal;
-        float   distance;
+        engine::maths::Vector3 hit_point;
+        engine::maths::Vector3 normal;
+        float                  distance;
         HitInfo();
     };
 
@@ -26,17 +26,17 @@ namespace engine
             return false;
         }
 
-        Vector3 origin;
-        Vector3 direction;
+        engine::maths::Vector3 origin;
+        engine::maths::Vector3 direction;
     };
 
 }  // namespace engine
 
 template <>
-bool engine::Ray::Intersect<engine::Plane>(const Plane& primitive, HitInfo& hit_info) const;
+bool engine::Ray::Intersect<engine::geometry::Plane>(const geometry::Plane& primitive, HitInfo& hit_info) const;
 
 template <>
-bool engine::Ray::Intersect<engine::Sphere>(const Sphere& primitive, HitInfo& hit_info) const;
+bool engine::Ray::Intersect<engine::geometry::Sphere>(const geometry::Sphere& primitive, HitInfo& hit_info) const;
 
 template <>
 bool engine::Ray::Intersect<engine::BoundingBox>(const BoundingBox& primitive, HitInfo& hit_info) const;

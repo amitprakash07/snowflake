@@ -1,0 +1,22 @@
+#ifndef ENGINE_MATHS_GEOMETRY_PRIMITIVES_H_
+#define ENGINE_MATHS_GEOMETRY_PRIMITIVES_H_
+
+#include <cstdint>
+#include <concepts>
+
+namespace engine::geometry
+{
+    class Primitive;
+
+    template <typename T>
+    concept PrimitiveTypeConcept = std::derived_from<T, Primitive>;
+
+}  // namespace engine::geometry
+
+#include "triangle.h"
+#include "bounding_box.h"
+#include "line_segment.h"
+#include "point.h"
+#include "plane.h"
+
+#endif  // ENGINE_MATHS_GEOMETRY_PRIMITIVES_H_

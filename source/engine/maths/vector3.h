@@ -2,7 +2,7 @@
 #define ENGINE_MATHS_VECTOR_3_H_
 #include <string>
 
-namespace engine
+namespace engine::maths
 {
     class Vector3
     {
@@ -68,7 +68,6 @@ namespace engine
         float& y_ = data_[1];
         float& z_ = data_[2];
     };
-
 }  // namespace engine
 
 #endif  // ENGINE_MATH_VECTOR_3_H_

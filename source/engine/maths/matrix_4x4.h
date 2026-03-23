@@ -29,11 +29,12 @@
 */
 
 #include "vector3.h"
+#include "plane.h"
 
-namespace engine
+namespace engine::maths
 {
-    class Plane;
     class Quaternion;
+
     class Matrix4x4
     {
     public:
@@ -45,7 +46,7 @@ namespace engine
         static Matrix4x4 CreateLookAtMatrix(const Vector3& eye, const Vector3& target, const Vector3& up_vector);
         static Matrix4x4 CreateScaleMatrix(const Vector3& scale_factor);
         static Matrix4x4 CreateNormalMatrix(const Matrix4x4& model_matrix);
-        static Matrix4x4 CreateShadowMatrix(const Vector3& light_position, const Plane& plane);
+        static Matrix4x4 CreateShadowMatrix(const Vector3& light_position, const geometry::Plane& plane);
         Matrix4x4        operator*(float scalar) const;
         Matrix4x4        operator*(Matrix4x4 other) const;
         Vector3          Mul(const Vector3& vector, bool is_vector = false) const;
@@ -54,7 +55,7 @@ namespace engine
         void             Transpose();
         Matrix4x4        GetInverse() const;
         void             Inverse();
-        float           Determinant() const;
+        float            Determinant() const;
         Matrix4x4();
         Matrix4x4(const Quaternion& rotation, const Vector3& translation);
         Matrix4x4(const Vector3& translation, bool direction = false);

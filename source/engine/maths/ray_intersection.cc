@@ -8,16 +8,16 @@ HitInfo::HitInfo()
 }
 
 template <>
-bool Ray::Intersect<Plane>(const Plane& primitive, HitInfo& hit_info) const
+bool Ray::Intersect<geometry::Plane>(const geometry::Plane& primitive, HitInfo& hit_info) const
 {
-    const Plane& plane = primitive;
+    const geometry::Plane& plane = primitive;
     float        t     = (plane.Distance() - plane.Normal().Dot(origin)) / plane.Normal().Dot(direction);
 
     if (t >= 0.0f && t <= 1.0f)
     {
         hit_info.hit_point = origin + direction * t;
         hit_info.distance  = t;
-        hit_info.normal    = Vector3(0, 0, 1);
+        hit_info.normal    = maths::Vector3(0, 0, 1);
         return true;
     }
 
@@ -25,15 +25,15 @@ bool Ray::Intersect<Plane>(const Plane& primitive, HitInfo& hit_info) const
 }
 
 template <>
-bool Ray::Intersect<Sphere>(const Sphere& primitive, HitInfo& hit_info) const
+bool Ray::Intersect<geometry::Sphere>(const geometry::Sphere& primitive, HitInfo& hit_info) const
 {
     // Intersects ray r = p + td, |d| = 1, with sphere s and, if intersecting,
     // returns t value of intersection and intersection point q
 
-    const Sphere& sphere = primitive;
-    Vector3       m      = origin - sphere.centre;
-    float         b      = m.Dot(direction);
-    float         c      = m.Dot(m) - sphere.radius * sphere.radius;
+    const geometry::Sphere& sphere = primitive;
+    maths::Vector3          m      = origin - sphere.centre;
+    float                   b      = m.Dot(direction);
+    float                   c      = m.Dot(m) - sphere.radius * sphere.radius;
 
     // Exit if r’s origin outside s (c > 0) and r pointing away from s (b > 0)
     if (c > 0.0f && b > 0.0f)

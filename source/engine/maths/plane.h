@@ -1,20 +1,28 @@
 #ifndef ENGINE_MATHS_PLANE_H_
 #define ENGINE_MATHS_PLANE_H_
 
+#include "primitive.h"
 #include "vector3.h"
 
-namespace engine
+namespace engine::geometry
 {
-    class Plane
+    class Plane : public Primitive
     {
     public:
-        static Plane ComputePlane(const Vector3& vec_a, const Vector3& vec_b, const Vector3& vec_c);
-        Vector3      ClosestPointFromPointOnPlane(const Vector3& point_on_plane) const;
+        static Plane   ComputePlane(const maths::Vector3& vec_a,
+                                    const maths::Vector3& vec_b,
+                                    const maths::Vector3& vec_c);
+        maths::Vector3 ClosestPointFromPointOnPlane(const maths::Vector3& point_on_plane) const;
 
-        Plane(const Vector3& normal, const Vector3& point_on_plane);
-        Plane() = default;
+        Plane(const maths::Vector3& normal, const maths::Vector3& point_on_plane);
+        Plane()
+            : Primitive(geometry::PrimitiveType::kPlane)
+            , normal_(geometry::kYAxis)
+            , distance_(0.0f)
+        {
+        }
 
-        inline Vector3 Normal() const
+        inline maths::Vector3 Normal() const
         {
             return normal_;
         }
@@ -25,9 +33,9 @@ namespace engine
         }
 
     private:
-        Vector3 normal_;
-        float   distance_;
+        maths::Vector3 normal_;    //< Unit vector representing the normal of the plane
+        float          distance_;  //< distance from the origin to the plane in the direction of the normal
     };
-}  // namespace engine
+}  // namespace engine::geometry
 
 #endif

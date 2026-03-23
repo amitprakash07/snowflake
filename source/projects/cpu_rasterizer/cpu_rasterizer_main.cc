@@ -2,8 +2,8 @@
 #include <iostream>
 
 #include "engine/common/maths_util.h"
-#include "engine/maths/triangle.h"
 #include "engine/graphics/pixel.h"
+#include "engine/graphics/viewport.h"
 #include "engine/graphics/ppm_image.h"
 #include "engine/graphics/rasterizer.h"
 
@@ -19,6 +19,7 @@ int main(int argc, char* argv[])
 
     uint16_t                   width  = 800;
     uint16_t                   height = 600;
+    engine::graphics::Viewport viewport(width, height);
     engine::geometry::Vertex   a{400, 100, 0};
     engine::geometry::Vertex   b{200, 500, 0};
     engine::geometry::Vertex   c{600, 500, 0};
@@ -31,20 +32,23 @@ int main(int argc, char* argv[])
     /*framebuffer.SetPixelColor((int)a.x(), (int)a.y(), 255, 0, 0);
     framebuffer.SetPixelColor((int)b.x(), (int)b.y(), 255, 0, 0);
     framebuffer.SetPixelColor((int)c.x(), (int)c.y(), 255, 0, 0);*/
-    engine::graphics::Pixel vert_a_pixel = {static_cast<uint16_t>(a.x()), static_cast<uint16_t>(a.y())};
-    engine::graphics::Pixel vert_b_pixel = {static_cast<uint16_t>(b.x()), static_cast<uint16_t>(b.y())};
-    engine::graphics::Pixel vert_c_pixel = {static_cast<uint16_t>(c.x()), static_cast<uint16_t>(c.y())};
+    engine::graphics::Pixel vert_a_pixel = {static_cast<uint16_t>(a.x), static_cast<uint16_t>(a.y)};
+    engine::graphics::Pixel vert_b_pixel = {static_cast<uint16_t>(b.x), static_cast<uint16_t>(b.y)};
+    engine::graphics::Pixel vert_c_pixel = {static_cast<uint16_t>(c.x), static_cast<uint16_t>(c.y)};
 
-    framebuffer.SetPixelTileColor(vert_a_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
-    framebuffer.SetPixelTileColor(vert_b_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
-    framebuffer.SetPixelTileColor(vert_c_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
+    //framebuffer.SetPixelTileColor(vert_a_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
+    //framebuffer.SetPixelTileColor(vert_b_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
+    //framebuffer.SetPixelTileColor(vert_c_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
 
-    engine::graphics::Rasterizer triangle_rasterizer(width, height, screen_space_triangle);
-    triangle_rasterizer.RasterizeEdgePixels([&framebuffer](const engine::graphics::PixelCoordinate& pixel_coordinate) {
-        engine::graphics::Pixel current_pixel(pixel_coordinate);
-        framebuffer.SetPixelColor(current_pixel, engine::graphics::Rgb8(255, 0, 0));
-        framebuffer.SetPixelTileColor(current_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
-    });
+    engine::graphics::Rasterizer<engine::geometry::Triangle> triangle_rasterizer(viewport, screen_space_triangle);
+    //triangle_rasterizer.RasterizePixelCoordinate([&framebuffer](const engine::graphics::PixelCoordinate& pixel_coordinate) {
+    //    engine::graphics::Pixel current_pixel(pixel_coordinate);
+    //    framebuffer.SetPixelColor(current_pixel, engine::graphics::Rgb8(255, 0, 0));
+    //    //framebuffer.SetPixelTileColor(current_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
+    //});
+
+    triangle_rasterizer.RasterizePixels(
+        [&framebuffer](const engine::graphics::Pixel& pixel) { framebuffer.SetPixel(pixel); });
 
     // Save the frame buffer to disk as a PPM image
     framebuffer.SaveToDisk("output.ppm");

@@ -6,7 +6,7 @@
 
 #include "engine_math.h"
 
-using namespace engine;
+using namespace engine::maths;
 
 Vector4 Vector4::operator+(const Vector4& other) const
 {

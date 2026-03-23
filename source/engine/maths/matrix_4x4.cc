@@ -12,7 +12,7 @@ Link http://www.euclideanspace.com/
 #include "Quaternion.h"
 #include "Vector3.h"
 
-using namespace engine;
+using namespace engine::maths;
 
 Matrix4x4 Matrix4x4::CreateWorldToViewTransform(const Quaternion& camera_orientation, const Vector3& camera_position)
 {
@@ -492,7 +492,7 @@ void Matrix4x4::PrintMatrix4x4() const
     std::cout << m_30 << ", " << m_31 << ", " << m_32 << ", " << m_33 << std::endl;
 }
 
-Matrix4x4 Matrix4x4::CreateShadowMatrix(const Vector3& light_position, const Plane& plane)
+Matrix4x4 Matrix4x4::CreateShadowMatrix(const Vector3& light_position, const geometry::Plane& plane)
 {
     Matrix4x4 shadow_matrix;
     float     nDotL = light_position.Dot(plane.Normal());
