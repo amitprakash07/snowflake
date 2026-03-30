@@ -2,7 +2,6 @@
 #define ENGINE_GRAPHICS_PIXEL_H_
 
 #include <cstdint>
-#include <cstring>
 
 #include "color.h"
 
@@ -63,6 +62,13 @@ namespace engine
                 {
                     color_data_.float_color_ = FloatColor(0.0f, 0.0f, 0.0f);
                 }
+            }
+
+            Pixel(uint32_t x, uint32_t y, const Rgb8& color)
+                : coordinate_(x, y)
+                , color_format_(ColorFormat::kRgb8)
+                , color_data_{.rgb8_color_ = color}
+            {
             }
 
             Pixel(PixelCoordinate coordinate, ColorFormat color_format = ColorFormat::kRgb8)

@@ -24,7 +24,6 @@ int main(int argc, char* argv[])
     engine::geometry::Vertex   b{200, 500, 0};
     engine::geometry::Vertex   c{600, 500, 0};
     engine::geometry::Triangle screen_space_triangle(a, b, c);
-    screen_space_triangle;
 
     engine::graphics::PpmImage framebuffer(width, height);
 
@@ -47,12 +46,15 @@ int main(int argc, char* argv[])
     //    //framebuffer.SetPixelTileColor(current_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
     //});
 
-    triangle_rasterizer.RasterizePixels(
-        [&framebuffer](const engine::graphics::Pixel& pixel) { framebuffer.SetPixel(pixel); });
+    printf("CPU rasterizer is starting");
+
+    triangle_rasterizer.RasterizePixels([&framebuffer](const engine::graphics::Pixel& pixel) {
+        framebuffer.SetPixel(pixel);
+        std::cout << "Rasterized pixel at (" << pixel.x() << ", " << pixel.y() << ")" << std::endl;
+    });
 
     // Save the frame buffer to disk as a PPM image
     framebuffer.SaveToDisk("output.ppm");
 
-    printf("CPU rasterizer is starting");
     return 0;
 }

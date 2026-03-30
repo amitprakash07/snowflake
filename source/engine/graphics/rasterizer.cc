@@ -57,7 +57,7 @@ void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizeBound
 void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizePixels(
     const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
 {
-    auto RasterizeEdge = [&pixel_callback, this]() {
+    auto RasterizeEdgeUsingLineEquation = [&pixel_callback, this]() {
         // Equation of a line y - y1 = m(x - x1), where m = (y2 - y1) / (x2 - x1)
         float x1 = this->primitive_.Start().x;
         float y1 = this->primitive_.Start().y;
@@ -96,14 +96,89 @@ void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizePixel
         }
     };
 
-    RasterizeEdge();
-    //auto RasterizeEdge_MidPointAlgo = [&pixel_callback, this](const engine::geometry::Vertex& vert_a,
-    //                                                          const engine::geometry::Vertex& vert_b) {
-    //    // Equation of a line y - y1 = m(x - x1), where m = (y2 - y1) / (x2 - x1)
-    //    uint32_t x1 = static_cast<uint32_t>(vert_a.x);
-    //    uint32_t y1 = static_cast<uint32_t>(vert_a.y);
+    auto RasterizeEdgeUsingMidPointAlgo = [&pixel_callback, this]() {
+        /* Bresenham Mid-point algo
+         * 1. Calculate the differences dx and dy between the start and end points of the line.
+         * F(x,y) = ax + by + c
+         * F(x0,y0) = ax0 + by0 + c
+         * F(x1,y1) = ax1 + by1 + c
+         * F(x) => y = mx + b 
+         * m = dy/dx
+         * F(x,y) = 0 => (dy/dx)x - y + b
+         * F(x,y) = 0 => dy*x - dx*y + b*dx
+         * F(x,y) = Ax + By + C => A = dy, B = -dx, C = b*dx
+         * Decision parameter Initial (d) = F(M) - F(x0, y0) where M is the mid-point of (x0,y0) and (x0 + 1, y0 + 1) 
+         * F(M) = F(x0 +1, y0 + 1/2), and F(x0, y0) = 0
+         * d = F(x0 +1, y0 + 1/2) = A(x0 +1) + B(y0 + 1/2) + C
+         * d = Ax0 + A + By0 + B/2 + C
+         * d = Ax0 + By0 + C + A + B/2
+         * d = A + B/2 as F(x0, y0) = 0 => Ax0 + By0 + C = 0
+         * d = dy + (-dx)/2 => d = dy - dx/2 => d = 2*dy - dx
+         *
+         * All of this for slope between 0 and 1, i.e. dx > dy
+         * For other case where m > 1, we need to swap the role of x and y. It means y will move every time while
+         * x change will be based on d.
+         */
+        uint32_t x1 = static_cast<uint32_t>(this->primitive_.Start().x);
+        uint32_t y1 = static_cast<uint32_t>(this->primitive_.Start().y);
 
-    //    uint32_t x2 = static_cast<uint32_t>(vert_b.x);
-    //    uint32_t y2 = static_cast<uint32_t>(vert_b.y);
-    //};
+        uint32_t x2 = static_cast<uint32_t>(this->primitive_.End().x);
+        uint32_t y2 = static_cast<uint32_t>(this->primitive_.End().y);
+
+        int32_t dx = x2 - x1;
+        int32_t dy = y2 - y1;
+
+        int32_t sx = dx >= 0 ? 1 : -1;  // Step direction for x
+        int32_t sy = dy >= 0 ? 1 : -1;  // Step direction for y
+
+        dx = abs(dx);
+        dy = abs(dy);
+
+        int32_t x = x1;
+        int32_t y = y1;
+
+        if (dx >= dy)
+        {
+            int32_t d = 2 * dy - dx;  // Initial decision parameter
+
+            while (x <= x2)
+            {
+                Pixel draw_pixel{static_cast<uint16_t>(x), static_cast<uint16_t>(y), kRed};
+                pixel_callback(draw_pixel);
+                x = x + sx;  // Move to the next x coordinate
+                if (d > 0)
+                {
+                    y = y + sy;               // Move to the next y coordinate
+                    d = d + (2 * (dy - dx));  // Update decision parameter for the next point
+                }
+                else
+                {
+                    d = d + (2 * dy);  // Update decision parameter for the next point
+                }
+            }
+        }
+        else
+        {
+            int32_t d = 2 * dx - dy;  // Initial decision parameter
+
+            while (y <= y2)
+            {
+                Pixel draw_pixel{static_cast<uint16_t>(x), static_cast<uint16_t>(y), kRed};
+                pixel_callback(draw_pixel);
+                y = y + sy;  // Move to the next y coordinate
+                if (d > 0)
+                {
+                    x = x + sx;               // Move to the next x coordinate
+                    d = d + (2 * (dx - dy));  // Update decision parameter for the next point
+                }
+                else
+                {
+                    d = d + (2 * dx);  // Update decision parameter for the next point
+                }
+            }
+        }
+    };
+
+    //RasterizeEdgeUsingLineEquation();
+    RasterizeEdgeUsingMidPointAlgo();
 }
