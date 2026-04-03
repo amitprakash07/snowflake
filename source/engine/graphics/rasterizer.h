@@ -33,13 +33,9 @@ namespace engine
         class RasterizerTrait
         {
         public:
-            virtual void RasterizePixelCoordinate(
-                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const = 0;
+            virtual void Rasterize(const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const = 0;
 
-            virtual void RasterizeBoundingBoxPixel(
-                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const = 0;
-
-            virtual void RasterizePixels(
+            virtual void RasterizeBoundingBox(
                 const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const = 0;
 
             virtual ~RasterizerTrait() = default;
@@ -65,13 +61,9 @@ namespace engine
             {
             }
 
-            void RasterizePixelCoordinate(
-                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const override;
+            void Rasterize(const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const override;
 
-            void RasterizeBoundingBoxPixel(
-                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const override;
-
-            void RasterizePixels(
+            void RasterizeBoundingBox(
                 const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const override;
         };
 
@@ -85,13 +77,10 @@ namespace engine
             {
             }
 
-            void RasterizePixelCoordinate(
-                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const override;
+            void Rasterize(const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const override;
 
-            void RasterizeBoundingBoxPixel(
-                const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const override;
-
-            void RasterizePixels(const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const override;
+            void RasterizeBoundingBox(
+                const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const override;
         };
     }  // namespace graphics
 }  // namespace engine

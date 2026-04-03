@@ -71,7 +71,7 @@ namespace engine
             {
             }
 
-            Pixel(PixelCoordinate coordinate, ColorFormat color_format = ColorFormat::kRgb8)
+            explicit Pixel(PixelCoordinate coordinate, ColorFormat color_format = ColorFormat::kRgb8)
                 : coordinate_(coordinate)
                 , color_format_(color_format)
             {

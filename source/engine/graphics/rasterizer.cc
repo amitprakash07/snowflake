@@ -3,58 +3,30 @@
 #include "rasterizer.h"
 
 // Triangle
-void engine::graphics::Rasterizer<engine::geometry::Triangle>::RasterizePixelCoordinate(
-    const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const
-{
-    Rasterizer<geometry::LineSegment> line_segment_ab(viewport_,
-                                                      geometry::LineSegment(primitive_.Vert_A(), primitive_.Vert_B()));
-    line_segment_ab.RasterizePixelCoordinate(pixel_callback);
-
-    Rasterizer<geometry::LineSegment> line_segment_bc(viewport_,
-                                                      geometry::LineSegment(primitive_.Vert_B(), primitive_.Vert_C()));
-    line_segment_bc.RasterizePixelCoordinate(pixel_callback);
-
-    Rasterizer<geometry::LineSegment> line_segment_ca(viewport_,
-                                                      geometry::LineSegment(primitive_.Vert_C(), primitive_.Vert_A()));
-    line_segment_ca.RasterizePixelCoordinate(pixel_callback);
-}
-
-void engine::graphics::Rasterizer<engine::geometry::Triangle>::RasterizeBoundingBoxPixel(
-    const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const
-{
-    pixel_callback;
-}
-
-void engine::graphics::Rasterizer<engine::geometry::Triangle>::RasterizePixels(
+void engine::graphics::Rasterizer<engine::geometry::Triangle>::Rasterize(
     const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
 {
     Rasterizer<geometry::LineSegment> line_segment_ab(viewport_,
                                                       geometry::LineSegment(primitive_.Vert_A(), primitive_.Vert_B()));
-    line_segment_ab.RasterizePixels(pixel_callback);
+    line_segment_ab.Rasterize(pixel_callback);
 
     Rasterizer<geometry::LineSegment> line_segment_bc(viewport_,
                                                       geometry::LineSegment(primitive_.Vert_B(), primitive_.Vert_C()));
-    line_segment_bc.RasterizePixels(pixel_callback);
+    line_segment_bc.Rasterize(pixel_callback);
 
     Rasterizer<geometry::LineSegment> line_segment_ca(viewport_,
                                                       geometry::LineSegment(primitive_.Vert_C(), primitive_.Vert_A()));
-    line_segment_ca.RasterizePixels(pixel_callback);
+    line_segment_ca.Rasterize(pixel_callback);
+}
+
+void engine::graphics::Rasterizer<engine::geometry::Triangle>::RasterizeBoundingBox(
+    const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
+{
+    pixel_callback;
 }
 
 // Line Segment
-void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizePixelCoordinate(
-    const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const
-{
-    pixel_callback;
-}
-
-void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizeBoundingBoxPixel(
-    const std::function<void(const engine::graphics::PixelCoordinate&)>& pixel_callback) const
-{
-    pixel_callback;
-}
-
-void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizePixels(
+void engine::graphics::Rasterizer<engine::geometry::LineSegment>::Rasterize(
     const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
 {
     auto RasterizeEdgeUsingLineEquation = [&pixel_callback, this]() {
@@ -119,11 +91,11 @@ void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizePixel
          * For other case where m > 1, we need to swap the role of x and y. It means y will move every time while
          * x change will be based on d.
          */
-        uint32_t x1 = static_cast<uint32_t>(this->primitive_.Start().x);
-        uint32_t y1 = static_cast<uint32_t>(this->primitive_.Start().y);
+        int32_t x1 = static_cast<int32_t>(this->primitive_.Start().x);
+        int32_t y1 = static_cast<int32_t>(this->primitive_.Start().y);
 
-        uint32_t x2 = static_cast<uint32_t>(this->primitive_.End().x);
-        uint32_t y2 = static_cast<uint32_t>(this->primitive_.End().y);
+        int32_t x2 = static_cast<int32_t>(this->primitive_.End().x);
+        int32_t y2 = static_cast<int32_t>(this->primitive_.End().y);
 
         int32_t dx = x2 - x1;
         int32_t dy = y2 - y1;
@@ -141,7 +113,7 @@ void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizePixel
         {
             int32_t d = 2 * dy - dx;  // Initial decision parameter
 
-            while (x <= x2)
+            for (int32_t i = 0; i <= dx; ++i)
             {
                 Pixel draw_pixel{static_cast<uint16_t>(x), static_cast<uint16_t>(y), kRed};
                 pixel_callback(draw_pixel);
@@ -161,7 +133,7 @@ void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizePixel
         {
             int32_t d = 2 * dx - dy;  // Initial decision parameter
 
-            while (y <= y2)
+            for (int32_t i = 0; i <= dy; ++i)
             {
                 Pixel draw_pixel{static_cast<uint16_t>(x), static_cast<uint16_t>(y), kRed};
                 pixel_callback(draw_pixel);
@@ -181,4 +153,10 @@ void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizePixel
 
     //RasterizeEdgeUsingLineEquation();
     RasterizeEdgeUsingMidPointAlgo();
+}
+
+void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizeBoundingBox(
+    const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
+{
+    pixel_callback;
 }

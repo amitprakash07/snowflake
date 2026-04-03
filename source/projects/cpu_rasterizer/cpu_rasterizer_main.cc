@@ -40,15 +40,10 @@ int main(int argc, char* argv[])
     //framebuffer.SetPixelTileColor(vert_c_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
 
     engine::graphics::Rasterizer<engine::geometry::Triangle> triangle_rasterizer(viewport, screen_space_triangle);
-    //triangle_rasterizer.RasterizePixelCoordinate([&framebuffer](const engine::graphics::PixelCoordinate& pixel_coordinate) {
-    //    engine::graphics::Pixel current_pixel(pixel_coordinate);
-    //    framebuffer.SetPixelColor(current_pixel, engine::graphics::Rgb8(255, 0, 0));
-    //    //framebuffer.SetPixelTileColor(current_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
-    //});
 
     printf("CPU rasterizer is starting");
 
-    triangle_rasterizer.RasterizePixels([&framebuffer](const engine::graphics::Pixel& pixel) {
+    triangle_rasterizer.Rasterize([&framebuffer](const engine::graphics::Pixel& pixel) {
         framebuffer.SetPixel(pixel);
         std::cout << "Rasterized pixel at (" << pixel.x() << ", " << pixel.y() << ")" << std::endl;
     });

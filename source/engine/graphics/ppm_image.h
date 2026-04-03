@@ -2,7 +2,6 @@
 #define ENGINE_GRAPHICS_PPM_IMAGE_H_
 
 #include <cstdint>
-#include <cstdio>
 
 #include "pixel.h"
 
