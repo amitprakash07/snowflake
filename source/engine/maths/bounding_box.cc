@@ -74,20 +74,25 @@ float BoundingBox::SqDistPointAABB(engine::maths::Vector3 point) const
 
 bool geometry::AxisAlignedBoundingBox::IsInside(Point3D point) const
 {
-        if (point.x < min.x || point.x > max.x)
-        {
-                return false;
-        }
-        
-        if (point.y < min.y || point.y > max.y)
-        {
-                return false;
-        }
-        
-        if (point.z < min.z || point.z > max.z)
-        {
-                return false;
-        }
-        
-        return true;
+    if (point.x < min_.x || point.x > max_.x)
+    {
+        return false;
+    }
+
+    if (point.y < min_.y || point.y > max_.y)
+    {
+        return false;
+    }
+
+    if (point.z < min_.z || point.z > max_.z)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+const std::array<geometry::Point3D, 4>& geometry::AxisAlignedBoundingBox::GetVertices() const
+{
+    return vertices_;
 }

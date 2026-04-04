@@ -2,6 +2,7 @@
 #define ENGINE_GRAPHICS_VIEWPORT_H_
 
 #include <cstdint>
+#include <utility>
 
 #include "engine/maths/point.h"
 
@@ -40,6 +41,43 @@ namespace engine
             inline const geometry::Point3D& Origin() const
             {
                 return origin_;
+            }
+
+            inline uint32_t ClampX(int32_t x) const
+            {
+                if (std::cmp_less(x, 0))
+                {
+                    return 0;
+                }
+
+                if (std::cmp_greater(x, width_))
+                {
+                    return width_;
+                }
+
+                return static_cast<uint32_t>(x);
+            }
+
+            inline uint32_t ClampY(int32_t y) const
+            {
+                if (std::cmp_less(y, 0))
+                {
+                    return 0;
+                }
+
+                if (std::cmp_greater(y, height_))
+                {
+                    return width_;
+                }
+
+                return static_cast<uint32_t>(y);
+            }
+
+            geometry::Point3D ClampToView(const geometry::Point3D& point) const
+            {
+                return geometry::Point3D{static_cast<float>(ClampX(static_cast<int32_t>(point.x))),
+                                         static_cast<float>(ClampY(static_cast<int32_t>(point.y))),
+                                         point.z};
             }
 
         private:

@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include "color.h"
+#include "engine/maths/point.h"
 
 namespace engine
 {
@@ -23,6 +24,13 @@ namespace engine
                 : x(x_in)
                 , y(y_in)
                 , origin(origin_in)
+            {
+            }
+
+            explicit PixelCoordinate(const geometry::Point3D& point)
+                : x(static_cast<uint32_t>(point.x))
+                , y(static_cast<uint32_t>(point.y))
+                , origin(Origin::kTopLeft)
             {
             }
 
@@ -71,17 +79,24 @@ namespace engine
             {
             }
 
-            explicit Pixel(PixelCoordinate coordinate, ColorFormat color_format = ColorFormat::kRgb8)
+            explicit Pixel(PixelCoordinate coordinate, const Rgb8& color)
                 : coordinate_(coordinate)
-                , color_format_(color_format)
+                , color_format_(ColorFormat::kRgb8)
+                , color_data_{.rgb8_color_ = color}
             {
-                if (color_format == ColorFormat::kRgb8)
+            }
+
+            Pixel(const Pixel& other)
+            {
+                coordinate_   = other.coordinate_;
+                color_format_ = other.color_format_;
+                if (color_format_ == ColorFormat::kRgb8)
                 {
-                    color_data_.rgb8_color_ = Rgb8(0, 0, 0);
+                    color_data_.rgb8_color_ = other.color_data_.rgb8_color_;
                 }
-                else if (color_format == ColorFormat::kFloat)
+                else if (color_format_ == ColorFormat::kFloat)
                 {
-                    color_data_.float_color_ = FloatColor(0.0f, 0.0f, 0.0f);
+                    color_data_.float_color_ = other.color_data_.float_color_;
                 }
             }
 

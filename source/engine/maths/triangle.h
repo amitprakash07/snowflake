@@ -64,13 +64,12 @@ namespace engine
             bool IsInside(const Point3D& point) const;
 
         private:
-            void FindBoundingBox();
-
             // Counter ClockWise Direction
-            Vertex                 vert_a_;
-            Vertex                 vert_b_;
-            Vertex                 vert_c_;
-            AxisAlignedBoundingBox bounding_box_;
+            Vertex                         vert_a_;
+            Vertex                         vert_b_;
+            Vertex                         vert_c_;
+            mutable AxisAlignedBoundingBox bounding_box_;
+            bool                           is_bounding_box_computed_ = false;
         };
     }  // namespace geometry
 

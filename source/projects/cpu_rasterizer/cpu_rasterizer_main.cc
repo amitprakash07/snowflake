@@ -20,9 +20,9 @@ int main(int argc, char* argv[])
     uint16_t                   width  = 800;
     uint16_t                   height = 600;
     engine::graphics::Viewport viewport(width, height);
-    engine::geometry::Vertex   a{400, 100, 0};
-    engine::geometry::Vertex   b{200, 500, 0};
-    engine::geometry::Vertex   c{600, 500, 0};
+    engine::geometry::Vertex   a{400u, 100u};
+    engine::geometry::Vertex   b{200u, 500u};
+    engine::geometry::Vertex   c{600u, 500u};
     engine::geometry::Triangle screen_space_triangle(a, b, c);
 
     engine::graphics::PpmImage framebuffer(width, height);
@@ -44,6 +44,13 @@ int main(int argc, char* argv[])
     printf("CPU rasterizer is starting");
 
     triangle_rasterizer.Rasterize([&framebuffer](const engine::graphics::Pixel& pixel) {
+        framebuffer.SetPixel(pixel);
+        std::cout << "Rasterized pixel at (" << pixel.x() << ", " << pixel.y() << ")" << std::endl;
+    });
+
+    triangle_rasterizer.RasterizeBoundingBox([&framebuffer](const engine::graphics::Pixel& fragment) {
+        engine::graphics::Pixel pixel(fragment);
+        pixel.SetColor(engine::graphics::Rgb8(0, 255, 0));  // Set bounding box pixels to green color
         framebuffer.SetPixel(pixel);
         std::cout << "Rasterized pixel at (" << pixel.x() << ", " << pixel.y() << ")" << std::endl;
     });

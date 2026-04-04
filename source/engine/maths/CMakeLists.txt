@@ -39,7 +39,8 @@ ray_intersection.h
 ray_intersection.cc
 point.h
 point.cc
-line_segment.h)
+line_segment.h
+geometry.h)
 
 add_library(EngineMathsGeometry STATIC ${ENGINE_MATHS_GEOMETRY_SOURCE})
 target_link_libraries(EngineMathsGeometry EngineMathsLinearAlgebra)

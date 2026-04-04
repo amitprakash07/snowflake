@@ -1,5 +1,6 @@
 #include <algorithm>
 
+#include "geometry.h"
 #include "Triangle.h"
 
 using namespace engine;
@@ -11,6 +12,25 @@ float geometry::Triangle::Signed2DTriArea() const
 
 geometry::AxisAlignedBoundingBox geometry::Triangle::GetBoundingBox() const
 {
+    if (!is_bounding_box_computed_)
+    {
+        Point3D min_point;
+        min_point.x = std::min({vert_a_.x, vert_b_.x, vert_c_.x});
+        min_point.y = std::min({vert_a_.y, vert_b_.y, vert_c_.y});
+
+        // This is not required as box is a 2D shape, but we may need it for depth testing in the future.
+        min_point.z = std::min({vert_a_.z, vert_b_.z, vert_c_.z});
+
+        Point3D max_point;
+        max_point.x = std::max({vert_a_.x, vert_b_.x, vert_c_.x});
+        max_point.y = std::max({vert_a_.y, vert_b_.y, vert_c_.y});
+
+        // This is not required as box is a 2D shape, but we may need it for depth testing in the future.
+        max_point.z = std::max({vert_a_.z, vert_b_.z, vert_c_.z});
+
+        bounding_box_ = geometry::AxisAlignedBoundingBox(min_point, max_point);
+    }
+
     return bounding_box_;
 }
 
@@ -21,17 +41,19 @@ bool geometry::Triangle::IsInside(const Point3D& point) const
         return false;
     }
 
-    // TODO
+    float edge_function_ab = geometry::EdgeFunction(vert_a_, vert_b_, point);
+    float edge_function_bc = geometry::EdgeFunction(vert_b_, vert_c_, point);
+    float edge_function_ca = geometry::EdgeFunction(vert_c_, vert_a_, point);
+
+    if (edge_function_ab < 0 && edge_function_bc < 0 && edge_function_ca < 0)
+    {
+        return true;
+    }
+
+    if (edge_function_ab >= 0 && edge_function_bc >= 0 && edge_function_ca >= 0)
+    {
+        return true;
+    }
+
     return false;
-}
-
-void geometry::Triangle::FindBoundingBox()
-{
-    bounding_box_.min.x = std::min({vert_a_.x, vert_b_.x, vert_c_.x});
-    bounding_box_.min.y = std::min({vert_a_.y, vert_b_.y, vert_c_.y});
-    bounding_box_.min.z = std::min({vert_a_.z, vert_b_.z, vert_c_.z});
-
-    bounding_box_.max.x = std::max({vert_a_.x, vert_b_.x, vert_c_.x});
-    bounding_box_.max.y = std::max({vert_a_.y, vert_b_.y, vert_c_.y});
-    bounding_box_.max.z = std::max({vert_a_.z, vert_b_.z, vert_c_.z});
 }

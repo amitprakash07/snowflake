@@ -6,7 +6,7 @@
 void engine::graphics::Rasterizer<engine::geometry::Triangle>::Rasterize(
     const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
 {
-    Rasterizer<geometry::LineSegment> line_segment_ab(viewport_,
+    /*Rasterizer<geometry::LineSegment> line_segment_ab(viewport_,
                                                       geometry::LineSegment(primitive_.Vert_A(), primitive_.Vert_B()));
     line_segment_ab.Rasterize(pixel_callback);
 
@@ -16,13 +16,60 @@ void engine::graphics::Rasterizer<engine::geometry::Triangle>::Rasterize(
 
     Rasterizer<geometry::LineSegment> line_segment_ca(viewport_,
                                                       geometry::LineSegment(primitive_.Vert_C(), primitive_.Vert_A()));
-    line_segment_ca.Rasterize(pixel_callback);
+    line_segment_ca.Rasterize(pixel_callback);*/
+
+    geometry::AxisAlignedBoundingBox bounding_box = primitive_.GetBoundingBox();
+
+    geometry::Point3D viewport_clamped_min = viewport_.ClampToView(bounding_box.GetMin());
+    geometry::Point3D viewport_clamped_max = viewport_.ClampToView(bounding_box.GetMax());
+
+    uint32_t x_start = static_cast<uint32_t>(viewport_clamped_min.x);
+    uint32_t x_end   = static_cast<uint32_t>(viewport_clamped_max.x);
+
+    uint32_t y_start = static_cast<uint32_t>(viewport_clamped_min.y);
+    uint32_t y_end   = static_cast<uint32_t>(viewport_clamped_max.y);
+
+    for (uint32_t x_iter = x_start; x_iter <= x_end; x_iter++)
+    {
+        for (uint32_t y_iter = y_start; y_iter <= y_end; y_iter++)
+        {
+            geometry::Point3D point{x_iter, y_iter};
+
+            if (primitive_.IsInside(point))
+            {
+                Pixel draw_pixel{PixelCoordinate(point), kRed};
+                pixel_callback(draw_pixel);
+            }
+        }
+    }
 }
 
 void engine::graphics::Rasterizer<engine::geometry::Triangle>::RasterizeBoundingBox(
     const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
 {
-    pixel_callback;
+    geometry::AxisAlignedBoundingBox bounding_box = primitive_.GetBoundingBox();
+
+    const std::array<engine::geometry::Point3D, 4>& vertices = bounding_box.GetVertices();
+
+    {
+        Rasterizer<geometry::LineSegment> line_segment(viewport_, geometry::LineSegment(vertices[0], vertices[1]));
+        line_segment.Rasterize(pixel_callback);
+    }
+
+    {
+        Rasterizer<geometry::LineSegment> line_segment(viewport_, geometry::LineSegment(vertices[1], vertices[2]));
+        line_segment.Rasterize(pixel_callback);
+    }
+
+    {
+        Rasterizer<geometry::LineSegment> line_segment(viewport_, geometry::LineSegment(vertices[2], vertices[3]));
+        line_segment.Rasterize(pixel_callback);
+    }
+
+    {
+        Rasterizer<geometry::LineSegment> line_segment(viewport_, geometry::LineSegment(vertices[3], vertices[0]));
+        line_segment.Rasterize(pixel_callback);
+    }
 }
 
 // Line Segment
