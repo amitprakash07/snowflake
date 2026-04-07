@@ -34,26 +34,5 @@ geometry::AxisAlignedBoundingBox geometry::Triangle::GetBoundingBox() const
     return bounding_box_;
 }
 
-bool geometry::Triangle::IsInside(const Point3D& point) const
-{
-    if (!bounding_box_.IsInside(point))
-    {
-        return false;
-    }
 
-    float edge_function_ab = geometry::EdgeFunction(vert_a_, vert_b_, point);
-    float edge_function_bc = geometry::EdgeFunction(vert_b_, vert_c_, point);
-    float edge_function_ca = geometry::EdgeFunction(vert_c_, vert_a_, point);
 
-    if (edge_function_ab < 0 && edge_function_bc < 0 && edge_function_ca < 0)
-    {
-        return true;
-    }
-
-    if (edge_function_ab >= 0 && edge_function_bc >= 0 && edge_function_ca >= 0)
-    {
-        return true;
-    }
-
-    return false;
-}

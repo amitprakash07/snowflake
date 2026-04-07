@@ -9,7 +9,14 @@ namespace engine
 {
     namespace geometry
     {
+        struct ImplicitLineCoefficients;
         using Vertex = engine::geometry::Point3D;
+
+        struct TriangleEdge
+        {
+            Point3D start;
+            Point3D end;
+        };
 
         class Triangle : public Primitive
         {
@@ -44,27 +51,25 @@ namespace engine
                 return *this;
             }
 
-            inline Vertex Vert_A() const
+            TriangleEdge Edge_0() const
             {
-                return vert_a_;
+                return TriangleEdge{.start = vert_a_, .end = vert_b_};
             }
 
-            inline Vertex Vert_B() const
+            TriangleEdge Edge_1() const
             {
-                return vert_b_;
+                return TriangleEdge{.start = vert_b_, .end = vert_c_};
             }
 
-            inline Vertex Vert_C() const
+            TriangleEdge Edge_2() const
             {
-                return vert_c_;
+                return TriangleEdge{.start = vert_c_, .end = vert_a_};
             }
 
             AxisAlignedBoundingBox GetBoundingBox() const;
 
-            bool IsInside(const Point3D& point) const;
-
         private:
-            // Counter ClockWise Direction
+            // CounterClockwise Direction
             Vertex                         vert_a_;
             Vertex                         vert_b_;
             Vertex                         vert_c_;

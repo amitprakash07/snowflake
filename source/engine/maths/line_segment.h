@@ -7,6 +7,13 @@ namespace engine
 {
     namespace geometry
     {
+        struct ImplicitLineCoefficients
+        {
+            float a;
+            float b;
+            float c;
+        };
+
         class LineSegment : public Primitive
         {
         public:

@@ -2,6 +2,8 @@
 
 #include "rasterizer.h"
 
+#include "engine/maths/geometry.h"
+
 // Triangle
 void engine::graphics::Rasterizer<engine::geometry::Triangle>::Rasterize(
     const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
@@ -29,18 +31,41 @@ void engine::graphics::Rasterizer<engine::geometry::Triangle>::Rasterize(
     uint32_t y_start = static_cast<uint32_t>(viewport_clamped_min.y);
     uint32_t y_end   = static_cast<uint32_t>(viewport_clamped_max.y);
 
-    for (uint32_t x_iter = x_start; x_iter <= x_end; x_iter++)
+    using EdgeFunctionValue = float;
+
+    const std::array<geometry::ImplicitLineCoefficients, 3> triangle_edge_coefficients{
+        geometry::MakeImplicitLineCoefficients(primitive_.Edge_0().start, primitive_.Edge_0().end),
+        geometry::MakeImplicitLineCoefficients(primitive_.Edge_1().start, primitive_.Edge_1().end),
+        geometry::MakeImplicitLineCoefficients(primitive_.Edge_2().start, primitive_.Edge_2().end)};
+
+    std::array<EdgeFunctionValue, 3> triangle_edge_function_value_row_start{
+        geometry::Orient2D(triangle_edge_coefficients[0], geometry::Point3D(x_start, y_start)),
+        geometry::Orient2D(triangle_edge_coefficients[1], geometry::Point3D(x_start, y_start)),
+        geometry::Orient2D(triangle_edge_coefficients[2], geometry::Point3D(x_start, y_start))};
+
+    for (uint32_t y_iter = y_start; y_iter <= y_end; y_iter++)
     {
-        for (uint32_t y_iter = y_start; y_iter <= y_end; y_iter++)
+        std::array<EdgeFunctionValue, 3> edge_value = triangle_edge_function_value_row_start;
+
+        for (uint32_t x_iter = x_start; x_iter <= x_end; x_iter++)
         {
             geometry::Point3D point{x_iter, y_iter};
 
-            if (primitive_.IsInside(point))
+            if ((edge_value[0] < 0 && edge_value[1] < 0 && edge_value[2] < 0) ||
+                (edge_value[0] >= 0 && edge_value[1] >= 0 && edge_value[2] >= 0))
             {
                 Pixel draw_pixel{PixelCoordinate(point), kRed};
                 pixel_callback(draw_pixel);
             }
+
+            edge_value[0] += triangle_edge_coefficients[0].a;
+            edge_value[1] += triangle_edge_coefficients[1].a;
+            edge_value[2] += triangle_edge_coefficients[2].a;
         }
+
+        triangle_edge_function_value_row_start[0] += triangle_edge_coefficients[0].b;
+        triangle_edge_function_value_row_start[1] += triangle_edge_coefficients[1].b;
+        triangle_edge_function_value_row_start[2] += triangle_edge_coefficients[2].b;
     }
 }
 
