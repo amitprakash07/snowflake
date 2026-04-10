@@ -36,6 +36,36 @@ namespace engine::geometry
         return Orient2D(temp_coefficients, point);
     }
 
+    inline float SignedAreaOfTriangle(const Point3D& a, const Point3D& b, const Point3D& c)
+    {
+        return 0.5f * Orient2D(a, b, c);
+    }
+
+    inline float AreaOfTriangle(const Point3D& a, const Point3D& b, const Point3D& c)
+    {
+        return abs(SignedAreaOfTriangle(a, b, c));
+    }
+
+    struct BaryCentricCoordinate
+    {
+        float alpha;
+        float beta;
+        float gamma;
+    };
+
+    inline BaryCentricCoordinate CalculateBaryCentricCoordinate(const Point3D& a,
+                                                                const Point3D& b,
+                                                                const Point3D& c,
+                                                                const Point3D& p)
+    {
+        BaryCentricCoordinate barycentric;
+        float                 triangle_area = SignedAreaOfTriangle(a, b, c);
+        barycentric.alpha                   = SignedAreaOfTriangle(b, c, p) / triangle_area;
+        barycentric.beta                    = SignedAreaOfTriangle(c, a, p) / triangle_area;
+        barycentric.gamma                   = SignedAreaOfTriangle(a, b, p) / triangle_area;
+        return barycentric;
+    }
+
 }  // namespace engine::geometry
 
 #endif  // ENGINE_MATHS_GEOMETRY_H_

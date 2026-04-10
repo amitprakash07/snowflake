@@ -10,13 +10,14 @@ namespace engine
     namespace geometry
     {
         struct ImplicitLineCoefficients;
-        using Vertex = engine::geometry::Point3D;
 
         struct TriangleEdge
         {
             Point3D start;
             Point3D end;
         };
+
+        float CalculateSigned2DTriAreaCCW(const Point3D& a, const Point3D& b, const Point3D& c);
 
         class Triangle : public Primitive
         {
@@ -27,52 +28,67 @@ namespace engine
 
             Triangle() = delete;
 
-            Triangle(const Vertex& a, const Vertex& b, const Vertex& c)
+            Triangle(const Point3D& a, const Point3D& b, const Point3D& c)
                 : Primitive(PrimitiveType::kTriangle)
-                , vert_a_(a)
-                , vert_b_(b)
-                , vert_c_(c)
+                , vert_a_position_(a)
+                , vert_b_position_(b)
+                , vert_c_position_(c)
             {
             }
 
             Triangle(const Triangle& other)
                 : Primitive(PrimitiveType::kTriangle)
-                , vert_a_(other.vert_a_)
-                , vert_b_(other.vert_b_)
-                , vert_c_(other.vert_c_)
+                , vert_a_position_(other.vert_a_position_)
+                , vert_b_position_(other.vert_b_position_)
+                , vert_c_position_(other.vert_c_position_)
             {
             }
 
             Triangle& operator=(const Triangle& other)
             {
-                vert_a_ = other.vert_a_;
-                vert_b_ = other.vert_b_;
-                vert_c_ = other.vert_c_;
+                vert_a_position_ = other.vert_a_position_;
+                vert_b_position_ = other.vert_b_position_;
+                vert_c_position_ = other.vert_c_position_;
                 return *this;
             }
 
             TriangleEdge Edge_0() const
             {
-                return TriangleEdge{.start = vert_a_, .end = vert_b_};
+                return TriangleEdge{.start = vert_a_position_, .end = vert_b_position_};
             }
 
             TriangleEdge Edge_1() const
             {
-                return TriangleEdge{.start = vert_b_, .end = vert_c_};
+                return TriangleEdge{.start = vert_b_position_, .end = vert_c_position_};
             }
 
             TriangleEdge Edge_2() const
             {
-                return TriangleEdge{.start = vert_c_, .end = vert_a_};
+                return TriangleEdge{.start = vert_c_position_, .end = vert_a_position_};
+            }
+
+            const Point3D& VertA() const
+            {
+                return vert_a_position_;
+            }
+
+            const Point3D& VertB() const
+            {
+                return vert_b_position_;
+            }
+
+            const Point3D& VertC() const
+            {
+                return vert_c_position_;
             }
 
             AxisAlignedBoundingBox GetBoundingBox() const;
 
         private:
             // CounterClockwise Direction
-            Vertex                         vert_a_;
-            Vertex                         vert_b_;
-            Vertex                         vert_c_;
+            Point3D                        vert_a_position_;
+            Point3D                        vert_b_position_;
+            Point3D                        vert_c_position_;
             mutable AxisAlignedBoundingBox bounding_box_;
             bool                           is_bounding_box_computed_ = false;
         };

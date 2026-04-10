@@ -20,9 +20,9 @@ int main(int argc, char* argv[])
     uint16_t                   width  = 800;
     uint16_t                   height = 600;
     engine::graphics::Viewport viewport(width, height);
-    engine::geometry::Vertex   a{400u, 100u};
-    engine::geometry::Vertex   b{200u, 500u};
-    engine::geometry::Vertex   c{600u, 500u};
+    engine::geometry::Point3D  a{400u, 100u};
+    engine::geometry::Point3D  b{200u, 500u};
+    engine::geometry::Point3D  c{600u, 500u};
     engine::geometry::Triangle screen_space_triangle(a, b, c);
 
     engine::graphics::PpmImage framebuffer(width, height);
@@ -39,21 +39,17 @@ int main(int argc, char* argv[])
     //framebuffer.SetPixelTileColor(vert_b_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
     //framebuffer.SetPixelTileColor(vert_c_pixel, 5, engine::graphics::Rgb8(255, 0, 0));
 
-    engine::graphics::Rasterizer<engine::geometry::Triangle> triangle_rasterizer(viewport, screen_space_triangle);
+    engine::graphics::Rasterizer triangle_rasterizer(viewport);
 
     printf("CPU rasterizer is starting");
 
-    triangle_rasterizer.Rasterize([&framebuffer](const engine::graphics::Pixel& pixel) {
-        framebuffer.SetPixel(pixel);
-        std::cout << "Rasterized pixel at (" << pixel.x() << ", " << pixel.y() << ")" << std::endl;
-    });
-
-    triangle_rasterizer.RasterizeBoundingBox([&framebuffer](const engine::graphics::Pixel& fragment) {
-        engine::graphics::Pixel pixel(fragment);
-        pixel.SetColor(engine::graphics::Rgb8(0, 255, 0));  // Set bounding box pixels to green color
-        framebuffer.SetPixel(pixel);
-        std::cout << "Rasterized pixel at (" << pixel.x() << ", " << pixel.y() << ")" << std::endl;
-    });
+    triangle_rasterizer.Rasterize(engine::graphics::RasterizeMode::PrimitiveAndBoundingBox,
+                                  screen_space_triangle,
+                                  [&framebuffer](const engine::graphics::RasterizedPixel& raster_pixel) {
+                                      framebuffer.SetPixel(raster_pixel.pixel);
+                                      std::cout << "Rasterized pixel at (" << raster_pixel.pixel.x() << ", "
+                                                << raster_pixel.pixel.y() << ")" << std::endl;
+                                  });
 
     // Save the frame buffer to disk as a PPM image
     framebuffer.SaveToDisk("output.ppm");

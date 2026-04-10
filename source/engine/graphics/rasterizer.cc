@@ -2,25 +2,22 @@
 
 #include "rasterizer.h"
 
+#include "raster_primitives.h"
 #include "engine/maths/geometry.h"
 
 // Triangle
-void engine::graphics::Rasterizer<engine::geometry::Triangle>::Rasterize(
-    const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
+template <>
+void engine::graphics::Rasterizer::Rasterize<engine::geometry::Triangle>(
+    RasterizeMode                                                                         raster_mode,
+    const geometry::Triangle&                                                             triangle,
+    const std::function<void(const engine::graphics::RasterizedPixel& rasterized_pixel)>& pixel_callback) const
 {
-    /*Rasterizer<geometry::LineSegment> line_segment_ab(viewport_,
-                                                      geometry::LineSegment(primitive_.Vert_A(), primitive_.Vert_B()));
-    line_segment_ab.Rasterize(pixel_callback);
+    geometry::AxisAlignedBoundingBox bounding_box = triangle.GetBoundingBox();
 
-    Rasterizer<geometry::LineSegment> line_segment_bc(viewport_,
-                                                      geometry::LineSegment(primitive_.Vert_B(), primitive_.Vert_C()));
-    line_segment_bc.Rasterize(pixel_callback);
-
-    Rasterizer<geometry::LineSegment> line_segment_ca(viewport_,
-                                                      geometry::LineSegment(primitive_.Vert_C(), primitive_.Vert_A()));
-    line_segment_ca.Rasterize(pixel_callback);*/
-
-    geometry::AxisAlignedBoundingBox bounding_box = primitive_.GetBoundingBox();
+    std::array<RasterVertex, 3> raster_vertices = MakeRasterTriangleVertices(triangle);
+    raster_vertices.at(0).color                 = kRed;
+    raster_vertices.at(1).color                 = kGreen;
+    raster_vertices.at(2).color                 = kBlue;
 
     geometry::Point3D viewport_clamped_min = viewport_.ClampToView(bounding_box.GetMin());
     geometry::Point3D viewport_clamped_max = viewport_.ClampToView(bounding_box.GetMax());
@@ -34,80 +31,96 @@ void engine::graphics::Rasterizer<engine::geometry::Triangle>::Rasterize(
     using EdgeFunctionValue = float;
 
     const std::array<geometry::ImplicitLineCoefficients, 3> triangle_edge_coefficients{
-        geometry::MakeImplicitLineCoefficients(primitive_.Edge_0().start, primitive_.Edge_0().end),
-        geometry::MakeImplicitLineCoefficients(primitive_.Edge_1().start, primitive_.Edge_1().end),
-        geometry::MakeImplicitLineCoefficients(primitive_.Edge_2().start, primitive_.Edge_2().end)};
+        geometry::MakeImplicitLineCoefficients(triangle.Edge_0().start, triangle.Edge_0().end),
+        geometry::MakeImplicitLineCoefficients(triangle.Edge_1().start, triangle.Edge_1().end),
+        geometry::MakeImplicitLineCoefficients(triangle.Edge_2().start, triangle.Edge_2().end)};
 
     std::array<EdgeFunctionValue, 3> triangle_edge_function_value_row_start{
         geometry::Orient2D(triangle_edge_coefficients[0], geometry::Point3D(x_start, y_start)),
         geometry::Orient2D(triangle_edge_coefficients[1], geometry::Point3D(x_start, y_start)),
         geometry::Orient2D(triangle_edge_coefficients[2], geometry::Point3D(x_start, y_start))};
 
-    for (uint32_t y_iter = y_start; y_iter <= y_end; y_iter++)
+    if (raster_mode == RasterizeMode::PrimitiveOnly || raster_mode == RasterizeMode::PrimitiveAndBoundingBox)
     {
-        std::array<EdgeFunctionValue, 3> edge_value = triangle_edge_function_value_row_start;
-
-        for (uint32_t x_iter = x_start; x_iter <= x_end; x_iter++)
+        for (uint32_t y_iter = y_start; y_iter <= y_end; y_iter++)
         {
-            geometry::Point3D point{x_iter, y_iter};
+            std::array<EdgeFunctionValue, 3> edge_value           = triangle_edge_function_value_row_start;
+            bool                             is_first_or_last_row = (y_iter == y_start || y_iter == y_end);
 
-            if ((edge_value[0] < 0 && edge_value[1] < 0 && edge_value[2] < 0) ||
-                (edge_value[0] >= 0 && edge_value[1] >= 0 && edge_value[2] >= 0))
+            for (uint32_t x_iter = x_start; x_iter <= x_end; x_iter++)
             {
-                Pixel draw_pixel{PixelCoordinate(point), kRed};
-                pixel_callback(draw_pixel);
+                bool is_first_or_last_column = (x_iter == x_start || x_iter == x_end);
+
+                if ((edge_value[0] < 0 && edge_value[1] < 0 && edge_value[2] < 0) ||
+                    (edge_value[0] >= 0 && edge_value[1] >= 0 && edge_value[2] >= 0))
+                {
+                    geometry::BaryCentricCoordinate barycentric_coordinate = geometry::CalculateBaryCentricCoordinate(
+                        triangle.VertA(), triangle.VertB(), triangle.VertC(), geometry::Point3D(x_iter, y_iter));
+
+                    engine::graphics::FloatColor interpolated_color =
+                        engine::graphics::InterpolateColor(raster_vertices[0].color.ToFloatColor(),
+                                                           raster_vertices[1].color.ToFloatColor(),
+                                                           raster_vertices[2].color.ToFloatColor(),
+                                                           barycentric_coordinate);
+
+                    RasterizedPixel primitive_pixel{.pixel      = {x_iter, y_iter, interpolated_color.ToRgb8()},
+                                                    .pixel_kind = RasterizedPixel::Kind::Primitive};
+                    pixel_callback(primitive_pixel);
+                }
+
+                if (raster_mode == RasterizeMode::PrimitiveAndBoundingBox &&
+                    (is_first_or_last_column || is_first_or_last_row))
+                {
+                    RasterizedPixel bounding_box_pixel{.pixel      = {x_iter, y_iter, kGreen},
+                                                       .pixel_kind = RasterizedPixel::Kind::BoundingBox};
+                    pixel_callback(bounding_box_pixel);
+                }
+
+                edge_value[0] += triangle_edge_coefficients[0].a;
+                edge_value[1] += triangle_edge_coefficients[1].a;
+                edge_value[2] += triangle_edge_coefficients[2].a;
             }
 
-            edge_value[0] += triangle_edge_coefficients[0].a;
-            edge_value[1] += triangle_edge_coefficients[1].a;
-            edge_value[2] += triangle_edge_coefficients[2].a;
+            triangle_edge_function_value_row_start[0] += triangle_edge_coefficients[0].b;
+            triangle_edge_function_value_row_start[1] += triangle_edge_coefficients[1].b;
+            triangle_edge_function_value_row_start[2] += triangle_edge_coefficients[2].b;
         }
-
-        triangle_edge_function_value_row_start[0] += triangle_edge_coefficients[0].b;
-        triangle_edge_function_value_row_start[1] += triangle_edge_coefficients[1].b;
-        triangle_edge_function_value_row_start[2] += triangle_edge_coefficients[2].b;
     }
-}
-
-void engine::graphics::Rasterizer<engine::geometry::Triangle>::RasterizeBoundingBox(
-    const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
-{
-    geometry::AxisAlignedBoundingBox bounding_box = primitive_.GetBoundingBox();
-
-    const std::array<engine::geometry::Point3D, 4>& vertices = bounding_box.GetVertices();
-
+    else if (raster_mode == RasterizeMode::BoundingBoxOnly)
     {
-        Rasterizer<geometry::LineSegment> line_segment(viewport_, geometry::LineSegment(vertices[0], vertices[1]));
-        line_segment.Rasterize(pixel_callback);
-    }
+        for (uint32_t y_iter = y_start; y_iter <= y_end; y_iter++)
+        {
+            bool is_first_or_last_row = (y_iter == y_start || y_iter == y_end);
 
-    {
-        Rasterizer<geometry::LineSegment> line_segment(viewport_, geometry::LineSegment(vertices[1], vertices[2]));
-        line_segment.Rasterize(pixel_callback);
-    }
+            for (uint32_t x_iter = x_start; x_iter <= x_end; x_iter++)
+            {
+                bool is_first_or_last_column = (x_iter == x_start || x_iter == x_end);
 
-    {
-        Rasterizer<geometry::LineSegment> line_segment(viewport_, geometry::LineSegment(vertices[2], vertices[3]));
-        line_segment.Rasterize(pixel_callback);
-    }
-
-    {
-        Rasterizer<geometry::LineSegment> line_segment(viewport_, geometry::LineSegment(vertices[3], vertices[0]));
-        line_segment.Rasterize(pixel_callback);
+                if (is_first_or_last_column || is_first_or_last_row)
+                {
+                    RasterizedPixel bounding_box_pixel{.pixel      = {x_iter, y_iter, kGreen},
+                                                       .pixel_kind = RasterizedPixel::Kind::BoundingBox};
+                    pixel_callback(bounding_box_pixel);
+                }
+            }
+        }
     }
 }
 
 // Line Segment
-void engine::graphics::Rasterizer<engine::geometry::LineSegment>::Rasterize(
-    const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
+template <>
+void engine::graphics::Rasterizer::Rasterize<engine::geometry::LineSegment>(
+    RasterizeMode                                                                         raster_mode,
+    const geometry::LineSegment&                                                          line,
+    const std::function<void(const engine::graphics::RasterizedPixel& rasterized_pixel)>& pixel_callback) const
 {
-    auto RasterizeEdgeUsingLineEquation = [&pixel_callback, this]() {
+    auto RasterizeEdgeUsingLineEquation = [&pixel_callback, &line]() {
         // Equation of a line y - y1 = m(x - x1), where m = (y2 - y1) / (x2 - x1)
-        float x1 = this->primitive_.Start().x;
-        float y1 = this->primitive_.Start().y;
+        float x1 = line.Start().x;
+        float y1 = line.Start().y;
 
-        float x2 = this->primitive_.End().x;
-        float y2 = this->primitive_.End().y;
+        float x2 = line.End().x;
+        float y2 = line.End().y;
 
         float slope_denominator = x2 - x1;
 
@@ -133,14 +146,17 @@ void engine::graphics::Rasterizer<engine::geometry::LineSegment>::Rasterize(
             for (uint32_t pixel_coordinate_x = start; pixel_coordinate_x < end; pixel_coordinate_x++)
             {
                 float pixel_coordinate_y = y1 + (slope * (pixel_coordinate_x - x1));
-                Pixel pixel{static_cast<uint16_t>(pixel_coordinate_x), static_cast<uint16_t>(pixel_coordinate_y)};
-                pixel.SetColor(kRed);
-                pixel_callback(pixel);
+
+                RasterizedPixel primitive_pixel{.pixel      = {static_cast<uint16_t>(pixel_coordinate_x),
+                                                               static_cast<uint16_t>(pixel_coordinate_y),
+                                                               kRed},
+                                                .pixel_kind = RasterizedPixel::Kind::Primitive};
+                pixel_callback(primitive_pixel);
             }
         }
     };
 
-    auto RasterizeEdgeUsingMidPointAlgo = [&pixel_callback, this]() {
+    auto RasterizeEdgeUsingMidPointAlgo = [&pixel_callback, line]() {
         /* Bresenham Mid-point algo
          * 1. Calculate the differences dx and dy between the start and end points of the line.
          * F(x,y) = ax + by + c
@@ -163,11 +179,11 @@ void engine::graphics::Rasterizer<engine::geometry::LineSegment>::Rasterize(
          * For other case where m > 1, we need to swap the role of x and y. It means y will move every time while
          * x change will be based on d.
          */
-        int32_t x1 = static_cast<int32_t>(this->primitive_.Start().x);
-        int32_t y1 = static_cast<int32_t>(this->primitive_.Start().y);
+        int32_t x1 = static_cast<int32_t>(line.Start().x);
+        int32_t y1 = static_cast<int32_t>(line.Start().y);
 
-        int32_t x2 = static_cast<int32_t>(this->primitive_.End().x);
-        int32_t y2 = static_cast<int32_t>(this->primitive_.End().y);
+        int32_t x2 = static_cast<int32_t>(line.End().x);
+        int32_t y2 = static_cast<int32_t>(line.End().y);
 
         int32_t dx = x2 - x1;
         int32_t dy = y2 - y1;
@@ -187,8 +203,10 @@ void engine::graphics::Rasterizer<engine::geometry::LineSegment>::Rasterize(
 
             for (int32_t i = 0; i <= dx; ++i)
             {
-                Pixel draw_pixel{static_cast<uint16_t>(x), static_cast<uint16_t>(y), kRed};
-                pixel_callback(draw_pixel);
+                RasterizedPixel primitive_pixel{.pixel = {static_cast<uint16_t>(x), static_cast<uint16_t>(y), kRed},
+                                                .pixel_kind = RasterizedPixel::Kind::Primitive};
+                pixel_callback(primitive_pixel);
+
                 x = x + sx;  // Move to the next x coordinate
                 if (d > 0)
                 {
@@ -207,8 +225,9 @@ void engine::graphics::Rasterizer<engine::geometry::LineSegment>::Rasterize(
 
             for (int32_t i = 0; i <= dy; ++i)
             {
-                Pixel draw_pixel{static_cast<uint16_t>(x), static_cast<uint16_t>(y), kRed};
-                pixel_callback(draw_pixel);
+                RasterizedPixel primitive_pixel{.pixel = {static_cast<uint16_t>(x), static_cast<uint16_t>(y), kRed},
+                                                .pixel_kind = RasterizedPixel::Kind::Primitive};
+                pixel_callback(primitive_pixel);
                 y = y + sy;  // Move to the next y coordinate
                 if (d > 0)
                 {
@@ -225,10 +244,4 @@ void engine::graphics::Rasterizer<engine::geometry::LineSegment>::Rasterize(
 
     //RasterizeEdgeUsingLineEquation();
     RasterizeEdgeUsingMidPointAlgo();
-}
-
-void engine::graphics::Rasterizer<engine::geometry::LineSegment>::RasterizeBoundingBox(
-    const std::function<void(const engine::graphics::Pixel&)>& pixel_callback) const
-{
-    pixel_callback;
 }

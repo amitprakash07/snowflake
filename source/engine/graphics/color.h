@@ -1,5 +1,6 @@
 #ifndef ENGINE_GRAPHICS_COLOR_H_
 #define ENGINE_GRAPHICS_COLOR_H_
+#include "engine/maths/geometry.h"
 
 namespace engine
 {
@@ -10,6 +11,8 @@ namespace engine
             kRgb8,
             kFloat
         };
+
+        class FloatColor;
 
         class Rgb8
         {
@@ -28,12 +31,10 @@ namespace engine
             {
             }
 
-            Rgb8(const Rgb8& other)
-                : r(other.r)
-                , g(other.g)
-                , b(other.b)
-            {
-            }
+            FloatColor ToFloatColor() const;
+
+            Rgb8(const Rgb8& other)            = default;
+            Rgb8& operator=(const Rgb8& other) = default;
 
             uint8_t r, g, b;
         };
@@ -61,17 +62,30 @@ namespace engine
             {
             }
 
-            FloatColor(const FloatColor& other)
-                : r(other.r)
-                , g(other.g)
-                , b(other.b)
-            {
-            }
+            FloatColor(const FloatColor& other)            = default;
+            FloatColor& operator=(const FloatColor& other) = default;
+
+            Rgb8 ToRgb8() const;
 
             float r;
             float g;
             float b;
         };
+
+        inline FloatColor InterpolateColor(const FloatColor&               color1,
+                                           const FloatColor&               color2,
+                                           const FloatColor&               color3,
+                                           geometry::BaryCentricCoordinate barycentric_coordinate)
+        {
+            FloatColor interpolated_color;
+            interpolated_color.r = color1.r * barycentric_coordinate.alpha + color2.r * barycentric_coordinate.beta +
+                                   color3.r * barycentric_coordinate.gamma;
+            interpolated_color.g = color1.g * barycentric_coordinate.alpha + color2.g * barycentric_coordinate.beta +
+                                   color3.g * barycentric_coordinate.gamma;
+            interpolated_color.b = color1.b * barycentric_coordinate.alpha + color2.b * barycentric_coordinate.beta +
+                                   color3.b * barycentric_coordinate.gamma;
+            return interpolated_color;
+        }
 
     }  // namespace graphics
 }  // namespace engine

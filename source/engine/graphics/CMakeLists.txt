@@ -21,7 +21,10 @@ ppm_image.h
 ppm_image.cc
 rasterizer.h
 rasterizer.cc
-viewport.h)
+viewport.h
+raster_primitives.h
+raster_primitives.cc
+color.cc)
 
 add_library(${ENGINE_PROJECT_NAME} ${ENGINE_GRAPHICS_SOURCES})
 

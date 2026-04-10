@@ -79,10 +79,24 @@ namespace engine
             {
             }
 
+            Pixel(uint32_t x, uint32_t y, const FloatColor& color)
+                : coordinate_(x, y)
+                , color_format_(ColorFormat::kFloat)
+                , color_data_{.float_color_ = color}
+            {
+            }
+
             explicit Pixel(PixelCoordinate coordinate, const Rgb8& color)
                 : coordinate_(coordinate)
                 , color_format_(ColorFormat::kRgb8)
                 , color_data_{.rgb8_color_ = color}
+            {
+            }
+
+            explicit Pixel(PixelCoordinate coordinate, const FloatColor& color)
+                : coordinate_(coordinate)
+                , color_format_(ColorFormat::kFloat)
+                , color_data_{.float_color_ = color}
             {
             }
 
