@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-set(PROJECT_NAME "Snowflake")
+set(PROJECT_NAME "amit-labs")
 message("Generating project files in ${CMAKE_BINARY_DIR}")
 
 #inlcude all the CMake global variables
