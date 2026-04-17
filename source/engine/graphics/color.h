@@ -39,11 +39,11 @@ namespace engine
             uint8_t r, g, b;
         };
 
-        const Rgb8 kRed   = {255, 0, 0};
-        const Rgb8 kGreen = {0, 255, 0};
-        const Rgb8 kBlue  = {0, 0, 255};
-        const Rgb8 kWhite = {255, 255, 255};
-        const Rgb8 kBlack = {0, 0, 0};
+        const Rgb8 kRgb8ColorRed   = {255, 0, 0};
+        const Rgb8 kRgb8ColorGreen = {0, 255, 0};
+        const Rgb8 kRgb8ColorBlue  = {0, 0, 255};
+        const Rgb8 kRgb8ColorWhite = {255, 255, 255};
+        const Rgb8 kRgb8ColorBlack = {0, 0, 0};
 
         class FloatColor
         {

@@ -24,14 +24,25 @@ rasterizer.cc
 viewport.h
 raster_primitives.h
 raster_primitives.cc
-color.cc)
+color.cc
+text_overlay.h
+text_overlay.cc)
+
+file(GLOB FONT8X8_HEADERS CONFIGURE_DEPENDS
+  "${PROJECT_EXTERNAL_SOURCE_DIR}/font8x8/*.h")
 
 add_library(${ENGINE_PROJECT_NAME} ${ENGINE_GRAPHICS_SOURCES})
+
+target_sources(${ENGINE_PROJECT_NAME} PRIVATE ${FONT8X8_HEADERS})
+set_source_files_properties(${FONT8X8_HEADERS} PROPERTIES HEADER_FILE_ONLY TRUE)
+source_group("external/font8x8" FILES ${FONT8X8_HEADERS})
 
 set_target_properties(${ENGINE_PROJECT_NAME}
     PROPERTIES
     FOLDER "Engine"
     VS_SOLUTION_FOLDER "Engine")
+
+target_include_directories(${ENGINE_PROJECT_NAME} PRIVATE ${PROJECT_EXTERNAL_SOURCE_DIR}/font8x8/)
 
 message("End Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 

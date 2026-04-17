@@ -4,7 +4,7 @@
 #include "to_str.h"
 
 template <>
-char* engine::ToStr<int>(const int& data)
+inline char* engine::ToStr<int>(const int& data)
 {
     char* ret_char_array                          = kCharArrayStorageFor32BitData;
     ret_char_array[kMaxCharArraySizeFor32Bit - 1] = '\0';
@@ -38,11 +38,5 @@ char* engine::ToStr<int>(const int& data)
     return ret_ptr;
 }
 
-
-template <>
-char* engine::ToStr<std::vector<int>>(const std::vector<int>& data)
-{
-    return nullptr;
-}
 
 #endif

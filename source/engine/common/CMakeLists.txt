@@ -10,7 +10,8 @@ set(ENGINE_SHARED_CORE_SRC  ${CMAKE_CURRENT_LIST_DIR}/additional_types.h
                             ${CMAKE_CURRENT_LIST_DIR}/core_objects.h
                             ${CMAKE_CURRENT_LIST_DIR}/rtti.h
                             ${CMAKE_CURRENT_LIST_DIR}/rtti.cc
-                            ${CMAKE_CURRENT_LIST_DIR}/defs.h)
+                            ${CMAKE_CURRENT_LIST_DIR}/defs.h
+                            ${CMAKE_CURRENT_LIST_DIR}/core.h)
 source_group(Core FILES ${ENGINE_SHARED_CORE_SRC})
 
 set(ENGINE_SHARED_ALLOCATION    ${CMAKE_CURRENT_LIST_DIR}/shared_pointer.h
@@ -42,8 +43,10 @@ set(ENGINE_SHARED_UTILITY_HELPERS ${CMAKE_CURRENT_LIST_DIR}/util.h
                                     ${CMAKE_CURRENT_LIST_DIR}/time_helper.h
                                     ${CMAKE_CURRENT_LIST_DIR}/time_helper.inl
                                     ${CMAKE_CURRENT_LIST_DIR}/sort.h
-                                    ${CMAKE_CURRENT_LIST_DIR}/sort.cc)
-source_group(UtilityHelpers FILES ${ENGINE_SHARED_UTILITY_HELPERS})
+                                    ${CMAKE_CURRENT_LIST_DIR}/sort.cc
+                                    ${CMAKE_CURRENT_LIST_DIR}/perf_stats.h
+                                    ${CMAKE_CURRENT_LIST_DIR}/perf_stats.cc)
+source_group(Utility FILES ${ENGINE_SHARED_UTILITY_HELPERS})
 
 set(ENGINE_SHARED_STRINGS   ${CMAKE_CURRENT_LIST_DIR}/string_util.h
                             ${CMAKE_CURRENT_LIST_DIR}/string_util.cc

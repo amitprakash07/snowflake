@@ -42,6 +42,15 @@ FetchContent_Declare(
     SOURCE_DIR ${JsonParser_Path})
 FetchContent_MakeAvailable(JsonParser)
 
+# Bitmap fonts
+FetchContent_Declare(
+    font8x8
+    GIT_REPOSITORY https://github.com/dhepper/font8x8
+    GIT_TAG 8e279d2d864e79128e96188a6b9526cfa3fbfef9
+    SOURCE_DIR "${PROJECT_EXTERNAL_SOURCE_DIR}/font8x8/")
+FetchContent_MakeAvailable(font8x8)
+
+
 add_subdirectory(${PROJECT_SRC_DIR}/engine)
 add_subdirectory(${PROJECT_SRC_DIR}/tools/hex2bin)
 add_subdirectory(${PROJECT_SRC_DIR}/projects/cpu_rasterizer)

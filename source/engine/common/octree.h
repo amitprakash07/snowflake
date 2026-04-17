@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "maths/vector3.h"
+#include "engine/maths/vector3.h"
 
 namespace engine
 {
@@ -26,14 +26,16 @@ namespace engine
 
         struct OctreeNode
         {
-            Vector3              pos;
-            Vector3              extent;
+            maths::Vector3             pos;
+            maths::Vector3             extent;
             std::vector<TriangleIndex> triangles;
-            Vector3              GetMin() const
+
+            maths::Vector3                    GetMin() const
             {
                 return pos - extent;
             }
-            Vector3 GetMax() const
+
+            maths::Vector3 GetMax() const
             {
                 return pos + extent;
             }
@@ -44,22 +46,22 @@ namespace engine
         public:
             Octree();
             ~Octree();
-            void          InitFromRange(uint32_t level, Vector3 min, Vector3 max);
-            void          InitFromFile(const char* pFile);
-            OctreeNode*   GetNodesInLevel(uint32_t levelIndex) const;
-            uint32_t      GetCountOfNodesInLevel(uint32_t levelIndex) const;
-            uint32_t      GetNodeCount() const;
-            OctreeNode*   GetNodes() const;
-            Vector3 GetMin() const;
-            Vector3 GetMax() const;
-            uint32_t      Level() const;
+            void           InitFromRange(uint32_t level, maths::Vector3 min, maths::Vector3 max);
+            void           InitFromFile(const char* pFile);
+            OctreeNode*    GetNodesInLevel(uint32_t levelIndex) const;
+            uint32_t       GetCountOfNodesInLevel(uint32_t levelIndex) const;
+            uint32_t       GetNodeCount() const;
+            OctreeNode*    GetNodes() const;
+            maths::Vector3 GetMin() const;
+            maths::Vector3 GetMax() const;
+            uint32_t       Level() const;
 
         private:
-            uint32_t      mLevel;
-            OctreeNode*   mNodes;
-            uint32_t      mCountOfNode;
-            Vector3 min;
-            Vector3 max;
+            uint32_t       mLevel;
+            OctreeNode*    mNodes;
+            uint32_t       mCountOfNode;
+            maths::Vector3 min;
+            maths::Vector3 max;
         };
 
     }  // namespace Physics

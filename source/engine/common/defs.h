@@ -7,7 +7,6 @@
 #ifndef ENGINE_SHADER_DIR
 #define ENGINE_SHADER_DIR ""
 #endif
-#include "maths_util.h"
 
 namespace engine
 {
@@ -22,6 +21,7 @@ namespace engine
 
     template <class T>
     concept FloatType = std::is_floating_point_v<T>;
+
 }  // namespace engine
 
 #endif

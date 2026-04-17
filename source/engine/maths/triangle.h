@@ -2,6 +2,7 @@
 #define ENGINE_MATHS_TRIANGLE_H_
 
 #include "bounding_box.h"
+#include "line_segment.h"
 #include "point.h"
 #include "primitive.h"
 
@@ -15,6 +16,11 @@ namespace engine
         {
             Point3D start;
             Point3D end;
+
+            LineSegment ToLineSegment() const
+            {
+                return LineSegment{start, end};
+            }
         };
 
         float CalculateSigned2DTriAreaCCW(const Point3D& a, const Point3D& b, const Point3D& c);
@@ -34,6 +40,7 @@ namespace engine
                 , vert_b_position_(b)
                 , vert_c_position_(c)
             {
+                object_label_.SetName("Triangle");
             }
 
             Triangle(const Triangle& other)
