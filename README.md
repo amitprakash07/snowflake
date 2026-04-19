@@ -1,6 +1,6 @@
 # Amit Labs
 
-Personal R&D workspace: a C++ **engine**, **standalone programs**, **tools**, and a **sandbox** for informal experiments and learning. The CMake project name is **`amit-labs`** (see root `CMakeLists.txt`).
+Personal R&D workspace: C++ **core** libraries, an **engine** layer on top of them, **standalone programs**, **tools**, and a **sandbox** for informal experiments and learning. The CMake project name is **`amit-labs`** (see root `CMakeLists.txt`).
 
 ## Repository layout
 
@@ -15,15 +15,29 @@ amit-labs/
 │   └── progress/
 ├── external/              Vendored third-party SDKs and libraries (own licenses)
 ├── source/
-│   ├── engine/            Core engine code: maths, graphics, GPU, platform, tests, shader build helpers, …
+│   ├── core/              Shared engine-agnostic code (CMake target `core` aggregates pieces below)
+│   │   ├── common/        Containers, messaging, utilities, shared pointers, …
+│   │   ├── cpu_renderer/  CPU rasterization (e.g. rasterizer)
+│   │   ├── graphics/      Pixels, images, render context, viewport, …
+│   │   ├── gpu/           GPU device / factory code; `gpu/shader/` holds shader compile helpers used by engine tools/tests
+│   │   └── maths/         Linear algebra and geometry
+│   ├── engine/            Higher-level engine: platform, input, networking, physics glue, tests, …
+│   │   ├── platform/      Win32 (and related) platform layer
+│   │   ├── input/
+│   │   ├── networking/
+│   │   ├── physics/
+│   │   ├── tests/
+│   │   └── tools/build_shaders/   Shader build helper executable (uses core shader code)
 │   ├── projects/          Standalone applications (e.g. CpuRasterizer)
-│   ├── tools/             Small command-line or build utilities
+│   ├── tools/             Small command-line or build utilities (e.g. hex2bin)
 │   └── sandbox/           Scratch work, prototypes, and study material (not all of it is built by CMake)
 ├── CMakeLists.txt
 ├── LICENSE
 ├── README.md
 └── tmp/                   Build outputs (binaries, libs, generated paths — see cmake/build_config.cmake)
 ```
+
+**CMake order:** the root build adds **`source/core`**, then **`source/engine`** (the `Engine` target links the `core` interface), then selected tools, projects, and sandbox targets.
 
 Use any empty directory for CMake’s **binary dir** (for example `bld/` locally); it only holds generated project files and intermediates and is not part of the layout above.
 
