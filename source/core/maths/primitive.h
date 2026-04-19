@@ -4,7 +4,7 @@
 #include <cstdint>
 
 #include "vector3.h"
-#include "engine/common/core.h"
+#include "core/common/core.h"
 
 namespace amit::geometry
 {

@@ -1,13 +1,12 @@
 
 #include <iostream>
 
-#include "engine/common/perf_stats.h"
-#include "engine/cpu_renderer/rasterizer.h"
-#include "engine/graphics/image_2d.h"
-#include "engine/graphics/pixel.h"
-#include "engine/graphics/viewport.h"
-#include "engine/graphics/render_context.h"
-#include "engine/graphics/text_overlay.h"
+#include "core/common/perf_stats.h"
+#include "core/cpu_renderer/rasterizer.h"
+#include "core/graphics/image_2d.h"
+#include "core/graphics/viewport.h"
+#include "core/graphics/render_context.h"
+#include "core/graphics/text_overlay.h"
 
 int main(int argc, char* argv[])
 {
@@ -20,10 +19,6 @@ int main(int argc, char* argv[])
     amit::geometry::Triangle screen_space_triangle(a, b, c);
 
     // Rasterization logic goes here. For now, we just set the triangle vertices to red color.
-    amit::graphics::Pixel vert_a_pixel = {static_cast<uint16_t>(a.x), static_cast<uint16_t>(a.y)};
-    amit::graphics::Pixel vert_b_pixel = {static_cast<uint16_t>(b.x), static_cast<uint16_t>(b.y)};
-    amit::graphics::Pixel vert_c_pixel = {static_cast<uint16_t>(c.x), static_cast<uint16_t>(c.y)};
-
     std::cout << "Rasterization started\n";
 
     amit::graphics::RenderContext render_context(viewport);

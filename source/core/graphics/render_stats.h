@@ -1,7 +1,7 @@
 #ifndef ENGINE_GRAPHICS_RENDER_STATS_H_
 #define ENGINE_GRAPHICS_RENDER_STATS_H_
 
-#include "engine/common/perf_stats.h"
+#include "core/common/perf_stats.h"
 
 namespace amit::graphics
 {

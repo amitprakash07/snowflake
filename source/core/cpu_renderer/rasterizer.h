@@ -3,9 +3,9 @@
 
 #include <functional>
 
-#include "engine/maths/geometry_primitives.h"
-#include "engine/graphics/pixel.h"
-#include "engine/graphics/render_context.h"
+#include "core/maths/geometry_primitives.h"
+#include "core/graphics/pixel.h"
+#include "core/graphics/render_context.h"
 
 namespace amit::render::cpu
 {

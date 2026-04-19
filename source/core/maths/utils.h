@@ -1,5 +1,9 @@
-#ifndef ENGINE_MATH_H_
-#define ENGINE_MATH_H_
+/*
+This file contains math-related functions
+*/
+
+#ifndef ENGINE_MATHS_UTILS_H
+#define ENGINE_MATHS_UTILS_H
 
 #include <numbers>
 

@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "engine/graphics/pixel.h"
+#include "core/graphics/pixel.h"
 
 namespace amit::graphics
 {

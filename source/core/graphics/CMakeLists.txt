@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-set(ENGINE_PROJECT_NAME EngineGraphics)
+set(ENGINE_PROJECT_NAME graphics)
 project(${ENGINE_PROJECT_NAME})
 message("Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 
@@ -21,14 +21,12 @@ viewport.h
 color.cc
 text_overlay.h
 text_overlay.cc
-frame_buffer.h
-frame_buffer.cc
-depth_buffer.h
-depth_buffer.cc
 render_stats.h
 render_context.h
 image_2d.h
-image_2d.cc)
+image_2d.cc
+render_primitives.h
+render_primitives.cc)
 
 file(GLOB FONT8X8_HEADERS CONFIGURE_DEPENDS
   "${PROJECT_EXTERNAL_SOURCE_DIR}/font8x8/*.h")
@@ -41,8 +39,8 @@ source_group("external/font8x8" FILES ${FONT8X8_HEADERS})
 
 set_target_properties(${ENGINE_PROJECT_NAME}
     PROPERTIES
-    FOLDER "Engine"
-    VS_SOLUTION_FOLDER "Engine")
+    FOLDER "Core"
+    VS_SOLUTION_FOLDER "Core")
 
 target_include_directories(${ENGINE_PROJECT_NAME} PRIVATE ${PROJECT_EXTERNAL_SOURCE_DIR}/font8x8/)
 

@@ -5,6 +5,7 @@
 #include "vector4.h"
 
 #include "engine_math.h"
+#include "utils.h"
 
 using namespace amit::maths;
 

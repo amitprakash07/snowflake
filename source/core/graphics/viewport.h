@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <utility>
 
-#include "engine/maths/point.h"
+#include "core/maths/point.h"
 
 namespace amit::graphics
 {

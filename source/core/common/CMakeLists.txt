@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-set(PROJECT_TARGET_NAME EngineShared)
+set(PROJECT_TARGET_NAME common)
 project(${PROJECT_TARGET_NAME} LANGUAGES CXX)
 
 set(ENGINE_SHARED_CORE_SRC  ${CMAKE_CURRENT_LIST_DIR}/additional_types.h
@@ -33,9 +33,7 @@ set(ENGINE_SHARED_DATA_CONTAINERS_SRC   ${CMAKE_CURRENT_LIST_DIR}/linked_list.h
                                         ${CMAKE_CURRENT_LIST_DIR}/dequeue.h
                                         ${CMAKE_CURRENT_LIST_DIR}/dequeue.inl
                                         ${CMAKE_CURRENT_LIST_DIR}/doubly_linked_list.h
-                                        ${CMAKE_CURRENT_LIST_DIR}/doubly_linked_list.inl
-                                        ${CMAKE_CURRENT_LIST_DIR}/octree.h
-                                        ${CMAKE_CURRENT_LIST_DIR}/octree.cc)
+                                        ${CMAKE_CURRENT_LIST_DIR}/doubly_linked_list.inl)
 source_group(DataContainers FILES ${ENGINE_SHARED_DATA_CONTAINERS_SRC})
 
 set(ENGINE_SHARED_UTILITY_HELPERS ${CMAKE_CURRENT_LIST_DIR}/util.h
@@ -73,6 +71,5 @@ set_target_properties(${PROJECT_TARGET_NAME} PROPERTIES
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED YES
     CXX_EXTENSIONS NO
-    OUTPUT_NAME "EngineShared"
-    FOLDER "Engine")
+    FOLDER "Core")
 

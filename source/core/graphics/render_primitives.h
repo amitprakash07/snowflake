@@ -1,9 +1,10 @@
 #ifndef ENGINE_GRAPHICS_RASTER_PRIMITIVES_H_
 #define ENGINE_GRAPHICS_RASTER_PRIMITIVES_H_
 
-#include "engine/graphics/color.h"
-#include "engine/maths/point.h"
-#include "engine/maths/triangle.h"
+#include "core/maths/point.h"
+#include "core/maths/triangle.h"
+
+#include "color.h"
 
 namespace amit::render::cpu
 {
@@ -15,9 +16,10 @@ namespace amit::render::cpu
 
     inline std::array<RasterVertex, 3> MakeRasterTriangleVertices(const geometry::Triangle& triangle)
     {
-        std::array<RasterVertex, 3> raster_vertices{RasterVertex{.position = triangle.VertA(), .color = graphics::Rgb8()},
-                                                    RasterVertex{.position = triangle.VertB(), .color = graphics::Rgb8()},
-                                                    RasterVertex{.position = triangle.VertC(), .color = graphics::Rgb8()}};
+        std::array<RasterVertex, 3> raster_vertices{
+            RasterVertex{.position = triangle.VertA(), .color = graphics::Rgb8()},
+            RasterVertex{.position = triangle.VertB(), .color = graphics::Rgb8()},
+            RasterVertex{.position = triangle.VertC(), .color = graphics::Rgb8()}};
 
         return raster_vertices;
     }
@@ -60,6 +62,6 @@ namespace amit::render::cpu
         RasterVertex vert_c_;
     };
 
-}  // namespace amit::graphics
+}  // namespace amit::render::cpu
 
 #endif

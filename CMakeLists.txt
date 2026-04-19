@@ -51,6 +51,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(font8x8)
 
 
+add_subdirectory(${PROJECT_SRC_DIR}/core)
 add_subdirectory(${PROJECT_SRC_DIR}/engine)
 add_subdirectory(${PROJECT_SRC_DIR}/tools/hex2bin)
 add_subdirectory(${PROJECT_SRC_DIR}/projects/cpu_rasterizer)

@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "engine/common/perf_stats.h"
+#include "core/common/perf_stats.h"
 
 #include "viewport.h"
 #include "render_stats.h"
