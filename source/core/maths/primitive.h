@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_PRIMITIVE_H_
-#define ENGINE_MATHS_PRIMITIVE_H_
+#ifndef CORE_MATHS_PRIMITIVE_H_
+#define CORE_MATHS_PRIMITIVE_H_
 
 #include <cstdint>
 

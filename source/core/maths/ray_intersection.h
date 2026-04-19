@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_RAY_INTERSECTION_H_
-#define ENGINE_MATHS_RAY_INTERSECTION_H_
+#ifndef CORE_MATHS_RAY_INTERSECTION_H_
+#define CORE_MATHS_RAY_INTERSECTION_H_
 
 #include "sphere.h"
 #include "plane.h"

@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_OCTREE_H
-#define ENGINE_COMMON_OCTREE_H
+#ifndef CORE_GRAPHICS_OCTREE_H
+#define CORE_GRAPHICS_OCTREE_H
 
 #include <vector>
 

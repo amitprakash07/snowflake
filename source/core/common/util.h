@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_UTIL_H
-#define ENGINE_COMMON_UTIL_H
+#ifndef CORE_COMMON_UTIL_H
+#define CORE_COMMON_UTIL_H
 
 #include <sstream>
 #include <vector>

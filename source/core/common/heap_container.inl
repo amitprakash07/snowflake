@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_HEAP_CONTAINER_INL
-#define ENGINE_COMMON_HEAP_CONTAINER_INL
+#ifndef CORE_COMMON_HEAP_CONTAINER_INL
+#define CORE_COMMON_HEAP_CONTAINER_INL
 
 #include <iostream>
 #include <stdexcept>

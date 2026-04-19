@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_POINT_H_
-#define ENGINE_MATHS_POINT_H_
+#ifndef CORE_MATHS_POINT_H_
+#define CORE_MATHS_POINT_H_
 
 #include "primitive.h"
 
@@ -60,4 +60,4 @@ namespace amit::geometry
 
 }  // namespace amit::geometry
 
-#endif  // ENGINE_MATHS_POINT_H_
+#endif  // CORE_MATHS_POINT_H_

@@ -1,5 +1,5 @@
-#ifndef ENGINE_GRAPHICS_TEXT_OVERLAY_H_
-#define ENGINE_GRAPHICS_TEXT_OVERLAY_H_
+#ifndef CORE_GRAPHICS_TEXT_OVERLAY_H_
+#define CORE_GRAPHICS_TEXT_OVERLAY_H_
 
 #include <string>
 
@@ -20,4 +20,4 @@ namespace amit::graphics
 
 }  // namespace amit::graphics
 
-#endif  // ENGINE_GRAPHICS_TEXT_OVERLAY_H_
+#endif  // CORE_GRAPHICS_TEXT_OVERLAY_H_

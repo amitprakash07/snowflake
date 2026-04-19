@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_HEAP_CONTAINER_H
-#define ENGINE_COMMON_HEAP_CONTAINER_H
+#ifndef CORE_COMMON_HEAP_CONTAINER_H
+#define CORE_COMMON_HEAP_CONTAINER_H
 
 #include <cstdint>
 #include <vector>

@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_LINE_SEGMENT_H_
-#define ENGINE_MATHS_LINE_SEGMENT_H_
+#ifndef CORE_MATHS_LINE_SEGMENT_H_
+#define CORE_MATHS_LINE_SEGMENT_H_
 
 #include "point.h"
 

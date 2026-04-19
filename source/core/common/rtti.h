@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_RTTI_H
-#define ENGINE_COMMON_RTTI_H
+#ifndef CORE_COMMON_RTTI_H
+#define CORE_COMMON_RTTI_H
 
 #include <string>
 

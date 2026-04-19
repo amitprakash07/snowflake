@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_TREE_H
-#define ENGINE_COMMON_TREE_H
+#ifndef CORE_COMMON_TREE_H
+#define CORE_COMMON_TREE_H
 
 #include <cstdint>
 #include <string>

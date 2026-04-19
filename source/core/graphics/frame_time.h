@@ -1,5 +1,5 @@
-#ifndef __FRAME_TIME_H
-#define __FRAME_TIME_H
+#ifndef CORE_GRAPHICS_FRAME_TIME_H_
+#define CORE_GRAPHICS_FRAME_TIME_H_
 
 #include <stdint.h>
 #include <windows.h>

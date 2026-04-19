@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_MATRIX_4x4_H_
-#define ENGINE_MATHS_MATRIX_4x4_H_
+#ifndef CORE_MATHS_MATRIX_4x4_H_
+#define CORE_MATHS_MATRIX_4x4_H_
 
 /*
         This class represents a full Transform

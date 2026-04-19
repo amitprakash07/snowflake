@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_SORT_H
-#define ENGINE_COMMON_SORT_H
+#ifndef CORE_COMMON_SORT_H
+#define CORE_COMMON_SORT_H
 
 #include <vector>
 

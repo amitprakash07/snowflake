@@ -1,5 +1,5 @@
-#ifndef ENGINE_GRAPHICS_RENDER_CONTEXT_H_
-#define ENGINE_GRAPHICS_RENDER_CONTEXT_H_
+#ifndef CORE_GRAPHICS_RENDER_CONTEXT_H_
+#define CORE_GRAPHICS_RENDER_CONTEXT_H_
 
 #include <cstdint>
 
@@ -149,4 +149,4 @@ namespace amit::graphics
     };
 }  // namespace amit::graphics
 
-#endif  // ENGINE_GRAPHICS_RENDER_CONTEXT_H_
+#endif  // CORE_GRAPHICS_RENDER_CONTEXT_H_

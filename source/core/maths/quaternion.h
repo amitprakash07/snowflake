@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_QUATERNION_H_
-#define ENGINE_MATHS_QUATERNION_H_
+#ifndef CORE_MATHS_QUATERNION_H_
+#define CORE_MATHS_QUATERNION_H_
 
 #include "Vector3.h"
 
@@ -115,4 +115,4 @@ namespace amit::maths
 
 }  // namespace engine
 
-#endif  // _MATH_CQUATERNION_H
+#endif  // CORE_MATHS_QUATERNION_H_

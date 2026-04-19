@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_QUEUE_INL
-#define ENGINE_COMMON_QUEUE_INL
+#ifndef CORE_COMMON_QUEUE_INL
+#define CORE_COMMON_QUEUE_INL
 
 #include <iostream>
 #include <stdexcept>

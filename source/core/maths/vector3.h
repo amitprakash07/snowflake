@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_VECTOR_3_H_
-#define ENGINE_MATHS_VECTOR_3_H_
+#ifndef CORE_MATHS_VECTOR_3_H_
+#define CORE_MATHS_VECTOR_3_H_
 #include <string>
 
 namespace amit::maths
@@ -70,4 +70,4 @@ namespace amit::maths
     };
 }  // namespace engine
 
-#endif  // ENGINE_MATH_VECTOR_3_H_
+#endif  // CORE_MATHS_VECTOR_3_H_

@@ -1,5 +1,5 @@
-#ifndef ENGINE_GPU_GPU_DEVICE_H_
-#define ENGINE_GPU_GPU_DEVICE_H_
+#ifndef CORE_GPU_GPU_DEVICE_H_
+#define CORE_GPU_GPU_DEVICE_H_
 
 #include <vector>
 #include <map>

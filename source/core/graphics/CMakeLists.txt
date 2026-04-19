@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.25.0)
 
-set(ENGINE_PROJECT_NAME graphics)
-project(${ENGINE_PROJECT_NAME})
-message("Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
+set(CORE_PROJECT_NAME graphics)
+project(${CORE_PROJECT_NAME})
+message("Processing ${CORE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 
 #camera.h
 #camera.cc
@@ -14,7 +14,7 @@ message("Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 #scene.h
 #scene.cc
 
-set(ENGINE_GRAPHICS_SOURCES
+set(CORE_GRAPHICS_SOURCES
 pixel.h
 color.h
 viewport.h
@@ -31,19 +31,19 @@ render_primitives.cc)
 file(GLOB FONT8X8_HEADERS CONFIGURE_DEPENDS
   "${PROJECT_EXTERNAL_SOURCE_DIR}/font8x8/*.h")
 
-add_library(${ENGINE_PROJECT_NAME} ${ENGINE_GRAPHICS_SOURCES})
+add_library(${CORE_PROJECT_NAME} ${CORE_GRAPHICS_SOURCES})
 
-target_sources(${ENGINE_PROJECT_NAME} PRIVATE ${FONT8X8_HEADERS})
+target_sources(${CORE_PROJECT_NAME} PRIVATE ${FONT8X8_HEADERS})
 set_source_files_properties(${FONT8X8_HEADERS} PROPERTIES HEADER_FILE_ONLY TRUE)
 source_group("external/font8x8" FILES ${FONT8X8_HEADERS})
 
-set_target_properties(${ENGINE_PROJECT_NAME}
+set_target_properties(${CORE_PROJECT_NAME}
     PROPERTIES
     FOLDER "Core"
     VS_SOLUTION_FOLDER "Core")
 
-target_include_directories(${ENGINE_PROJECT_NAME} PRIVATE ${PROJECT_EXTERNAL_SOURCE_DIR}/font8x8/)
+target_include_directories(${CORE_PROJECT_NAME} PRIVATE ${PROJECT_EXTERNAL_SOURCE_DIR}/font8x8/)
 
-message("End Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
+message("End Processing ${CORE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 
 

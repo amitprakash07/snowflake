@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_LINKED_LIST_H
-#define ENGINE_COMMON_LINKED_LIST_H
+#ifndef CORE_COMMON_LINKED_LIST_H
+#define CORE_COMMON_LINKED_LIST_H
 
 #include <string>
 #include <vector>

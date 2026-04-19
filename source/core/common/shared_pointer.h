@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_SHARED_PTR_H
-#define ENGINE_COMMON_SHARED_PTR_H
+#ifndef CORE_COMMON_SHARED_PTR_H
+#define CORE_COMMON_SHARED_PTR_H
 
 #include <string>
 

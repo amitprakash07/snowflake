@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_AFFINE_TRANSFORM_H_
-#define ENGINE_MATHS_AFFINE_TRANSFORM_H_
+#ifndef CORE_MATHS_AFFINE_TRANSFORM_H_
+#define CORE_MATHS_AFFINE_TRANSFORM_H_
 
 #include "matrix_4x4.h"
 #include "Quaternion.h"

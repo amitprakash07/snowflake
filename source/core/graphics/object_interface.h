@@ -1,5 +1,5 @@
-#ifndef __OBJECT_H
-#define __OBJECT_H
+#ifndef CORE_GRAPHICS_OBJECT_INTERFACE_H_
+#define CORE_GRAPHICS_OBJECT_INTERFACE_H_
 
 #include <string>
 

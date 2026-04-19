@@ -1,5 +1,5 @@
-#ifndef ENGINE_GPU_SHADER_SHADER_HANDLER_H_
-#define ENGINE_GPU_SHADER_SHADER_HANDLER_H_
+#ifndef CORE_GPU_SHADER_SHADER_HANDLER_H_
+#define CORE_GPU_SHADER_SHADER_HANDLER_H_
 
 #include <string>
 #include <nlohmann/json.hpp>
@@ -71,8 +71,8 @@ namespace engine
         bool PopulateShaderDesc();
 
         static ShaderHandler*   shader_handler_singleton_ptr_;
-        const std::string       kEngineShaderDir               = ENGINE_STRINGIZE_MACRO(ENGINE_SHADER_DIR);
-        const std::string       kEngineShaderAssetDescFileName = "asset_shaders.json";
+        const std::string       kCoreShaderDir               = CORE_STRINGIZE_MACRO(CORE_SHADER_DIR);
+        const std::string       kCoreShaderAssetDescFileName = "asset_shaders.json";
         bool                    use_dxc_for_compilation_       = false;
         IDxcUtils*              dxc_util_ptr_                  = nullptr;
         IDxcCompiler3*          dxc_compiler_3_ptr_            = nullptr;

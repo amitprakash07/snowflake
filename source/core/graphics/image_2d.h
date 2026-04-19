@@ -1,5 +1,5 @@
-#ifndef ENGINE_GRAPHICS_IMAGE_2D_H_
-#define ENGINE_GRAPHICS_IMAGE_2D_H_
+#ifndef CORE_GRAPHICS_IMAGE_2D_H_
+#define CORE_GRAPHICS_IMAGE_2D_H_
 
 #include <cstdint>
 

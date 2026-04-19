@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_MATHS_UTIL_H
-#define ENGINE_COMMON_MATHS_UTIL_H
+#ifndef CORE_COMMON_MATHS_UTIL_H
+#define CORE_COMMON_MATHS_UTIL_H
 
 namespace engine
 {

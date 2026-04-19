@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_TIME_HELPER_H
-#define ENGINE_COMMON_TIME_HELPER_H
+#ifndef CORE_COMMON_TIME_HELPER_H
+#define CORE_COMMON_TIME_HELPER_H
 
 #include <stdint.h>
 

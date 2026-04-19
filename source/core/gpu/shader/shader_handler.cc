@@ -70,7 +70,7 @@ amit::ShaderHandler::ShaderDesc::ShaderDesc(const nlohmann::json& json_shader_de
     macros_            = json_shader_dec_obj["macros"];
     enable_debug_info_ = json_shader_dec_obj["enable_debug_info"];
 
-    shader_authored_file_ = File(FilePath(ShaderHandler::Instance()->kEngineShaderDir, relative_path_));
+    shader_authored_file_ = File(FilePath(ShaderHandler::Instance()->kCoreShaderDir, relative_path_));
 
     FilePath current_module = FileSystem::GetCurrentModulePath();
     shader_bin_out_file_ =
@@ -224,7 +224,7 @@ bool amit::ShaderHandler::InstanceInit()
 
 bool amit::ShaderHandler::PopulateShaderDesc()
 {
-    File shader_asset(FilePath(kEngineShaderDir, kEngineShaderAssetDescFileName));
+    File shader_asset(FilePath(kCoreShaderDir, kCoreShaderAssetDescFileName));
     if (shader_asset.Open())
     {
         std::istream   input(shader_asset.GetRawBuffer());

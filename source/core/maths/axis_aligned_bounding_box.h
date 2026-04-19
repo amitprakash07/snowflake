@@ -1,5 +1,5 @@
-#ifndef __AABBV_H
-#define __AABBV_H
+#ifndef CORE_MATHS_AXIS_ALIGNED_BOUNDING_BOX_H_
+#define CORE_MATHS_AXIS_ALIGNED_BOUNDING_BOX_H_
 
 #include "vector3.h"
 

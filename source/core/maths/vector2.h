@@ -2,8 +2,8 @@
 This class represents a position or direction
 */
 
-#ifndef _MATH_VECTOR2_H
-#define _MATH_VECTOR2_H
+#ifndef CORE_MATHS_VECTOR2_H_
+#define CORE_MATHS_VECTOR2_H_
 
 // Class Declaration
 //==================
@@ -75,4 +75,4 @@ Vector2 Cross(const Vector2& i_lhs, const Vector2& i_rhs);
 }  // namespace Math
 }  
 
-#endif  // _MATH_CVECTOR_H
+#endif  // CORE_MATHS_VECTOR2_H_

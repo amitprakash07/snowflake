@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_TREE_INL
-#define ENGINE_COMMON_TREE_INL
+#ifndef CORE_COMMON_TREE_INL
+#define CORE_COMMON_TREE_INL
 
 #include <stack>
 

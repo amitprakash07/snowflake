@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_STACK_H
-#define ENGINE_COMMON_STACK_H
+#ifndef CORE_COMMON_STACK_H
+#define CORE_COMMON_STACK_H
 
 #include <string>
 

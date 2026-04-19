@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_SCOPED_TIMER_H
-#define ENGINE_COMMON_SCOPED_TIMER_H
+#ifndef CORE_COMMON_PERF_STATS_H
+#define CORE_COMMON_PERF_STATS_H
 
 #include <chrono>
 #include <iostream>

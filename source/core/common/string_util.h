@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_STRING_UTIL_H
-#define ENGINE_COMMON_STRING_UTIL_H
+#ifndef CORE_COMMON_STRING_UTIL_H
+#define CORE_COMMON_STRING_UTIL_H
 
 #include <stack>
 #include <string>

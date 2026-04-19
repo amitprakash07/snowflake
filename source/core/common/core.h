@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_CORE_H
-#define ENGINE_COMMON_CORE_H
+#ifndef CORE_COMMON_CORE_H
+#define CORE_COMMON_CORE_H
 
 #include <string>
 #include <atomic>

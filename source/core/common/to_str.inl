@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_TO_STR_INL
-#define ENGINE_COMMON_TO_STR_INL
+#ifndef CORE_COMMON_TO_STR_INL
+#define CORE_COMMON_TO_STR_INL
 
 #include "to_str.h"
 

@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_TO_STR_H
-#define ENGINE_COMMON_TO_STR_H
+#ifndef CORE_COMMON_TO_STR_H
+#define CORE_COMMON_TO_STR_H
 
 #include <cstdint>
 #include <vector>

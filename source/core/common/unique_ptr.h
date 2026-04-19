@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_UNIQUE_PTR
-#define ENGINE_COMMON_UNIQUE_PTR
+#ifndef CORE_COMMON_UNIQUE_PTR_H_
+#define CORE_COMMON_UNIQUE_PTR_H_
 
 namespace engine
 {

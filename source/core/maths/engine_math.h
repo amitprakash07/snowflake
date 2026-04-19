@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATH_H_
-#define ENGINE_MATH_H_
+#ifndef CORE_MATHS_ENGINE_MATH_H_
+#define CORE_MATHS_ENGINE_MATH_H_
 
 #include <numbers>
 

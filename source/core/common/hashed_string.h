@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_HASHED_STRING_H
-#define ENGINE_COMMON_HASHED_STRING_H
+#ifndef CORE_COMMON_HASHED_STRING_H
+#define CORE_COMMON_HASHED_STRING_H
 
 #include "rtti.h"
 #include "shared_pointer.h"

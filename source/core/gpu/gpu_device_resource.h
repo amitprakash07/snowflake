@@ -1,5 +1,5 @@
-#ifndef ENGINE_GPU_GPU_DEVICE_RESOURCE_H_
-#define ENGINE_GPU_GPU_DEVICE_RESOURCE_H_
+#ifndef CORE_GPU_GPU_DEVICE_RESOURCE_H_
+#define CORE_GPU_GPU_DEVICE_RESOURCE_H_
 
 #include <cstdint>
 #include <d3d12.h>

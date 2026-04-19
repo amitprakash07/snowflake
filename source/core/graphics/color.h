@@ -1,5 +1,5 @@
-#ifndef ENGINE_GRAPHICS_COLOR_H_
-#define ENGINE_GRAPHICS_COLOR_H_
+#ifndef CORE_GRAPHICS_COLOR_H_
+#define CORE_GRAPHICS_COLOR_H_
 #include "core/maths/geometry.h"
 
 namespace amit::graphics

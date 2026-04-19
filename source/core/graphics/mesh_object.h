@@ -1,5 +1,5 @@
-#ifndef __GAMEOBJECT_H
-#define __GAMEOBJECT_H
+#ifndef CORE_GRAPHICS_MESH_OBJECT_H_
+#define CORE_GRAPHICS_MESH_OBJECT_H_
 
 #include "../../../Core/Utilities/IMessageHandler.h"
 #include "../../../Core/Utilities/SharedPointer.h"

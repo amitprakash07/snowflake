@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_BOUNDING_BOX_H_
-#define ENGINE_MATHS_BOUNDING_BOX_H_
+#ifndef CORE_MATHS_BOUNDING_BOX_H_
+#define CORE_MATHS_BOUNDING_BOX_H_
 
 #include <array>
 

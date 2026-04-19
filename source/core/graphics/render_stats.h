@@ -1,5 +1,5 @@
-#ifndef ENGINE_GRAPHICS_RENDER_STATS_H_
-#define ENGINE_GRAPHICS_RENDER_STATS_H_
+#ifndef CORE_GRAPHICS_RENDER_STATS_H_
+#define CORE_GRAPHICS_RENDER_STATS_H_
 
 #include "core/common/perf_stats.h"
 
@@ -33,4 +33,4 @@ namespace amit::graphics
     };
 }  // namespace amit::graphics
 
-#endif  // ENGINE_GRAPHICS_RENDER_STATS_H_
+#endif  // CORE_GRAPHICS_RENDER_STATS_H_

@@ -1,5 +1,5 @@
-#ifndef __DEBUG_MENU_H
-#define __DEBUG_MENU_H
+#ifndef CORE_GRAPHICS_DEBUG_MENU_H_
+#define CORE_GRAPHICS_DEBUG_MENU_H_
 
 #include <map>
 

@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_GEOMETRY_H_
-#define ENGINE_MATHS_GEOMETRY_H_
+#ifndef CORE_MATHS_GEOMETRY_H_
+#define CORE_MATHS_GEOMETRY_H_
 
 #include "geometry_primitives.h"
 
@@ -68,4 +68,4 @@ namespace amit::geometry
 
 }  // namespace amit::geometry
 
-#endif  // ENGINE_MATHS_GEOMETRY_H_
+#endif  // CORE_MATHS_GEOMETRY_H_

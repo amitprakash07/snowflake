@@ -1,5 +1,5 @@
-#ifndef __CAMERA_H
-#define __CAMERA_H
+#ifndef CORE_GRAPHICS_CAMERA_H_
+#define CORE_GRAPHICS_CAMERA_H_
 
 #include "../../../Core/Utilities/IMessageHandler.h"
 #include "../../../Core/Utilities/SharedPointer.h"

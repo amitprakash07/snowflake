@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_GEOMETRY_PRIMITIVES_H_
-#define ENGINE_MATHS_GEOMETRY_PRIMITIVES_H_
+#ifndef CORE_MATHS_GEOMETRY_PRIMITIVES_H_
+#define CORE_MATHS_GEOMETRY_PRIMITIVES_H_
 
 #include <cstdint>
 #include <concepts>
@@ -19,4 +19,4 @@ namespace amit::geometry
 #include "point.h"
 #include "plane.h"
 
-#endif  // ENGINE_MATHS_GEOMETRY_PRIMITIVES_H_
+#endif  // CORE_MATHS_GEOMETRY_PRIMITIVES_H_

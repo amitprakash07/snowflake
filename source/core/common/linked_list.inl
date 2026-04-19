@@ -1,5 +1,5 @@
-#ifndef ENGINE_COMMON_LINKED_LIST_INL
-#define ENGINE_COMMON_LINKED_LIST_INL
+#ifndef CORE_COMMON_LINKED_LIST_INL
+#define CORE_COMMON_LINKED_LIST_INL
 
 #include <iostream>
 #include <sstream>

@@ -1,5 +1,5 @@
-#ifndef ENGINE_MATHS_TRIANGLE_H_
-#define ENGINE_MATHS_TRIANGLE_H_
+#ifndef CORE_MATHS_TRIANGLE_H_
+#define CORE_MATHS_TRIANGLE_H_
 
 #include "bounding_box.h"
 #include "line_segment.h"

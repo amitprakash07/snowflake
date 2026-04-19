@@ -1,12 +1,12 @@
 #pragma once
 
-#ifndef __DEBUG_SHAPES_H
-#define __DEBUG_SHAPES_H
+#ifndef CORE_GRAPHICS_DEBUG_SHAPES_H_
+#define CORE_GRAPHICS_DEBUG_SHAPES_H_
 
-#define GAME_ENGINE_DEBUG_MODE
+#define CORE_GRAPHICS_DEBUG_MODE
 #include "../../Graphics/Line.h"
 
-#ifdef GAME_ENGINE_DEBUG_MODE
+#ifdef CORE_GRAPHICS_DEBUG_MODE
 
 #include "../../Graphics/typedefs.h"
 #include "../EngineCore/Objects/MeshObject.h"
