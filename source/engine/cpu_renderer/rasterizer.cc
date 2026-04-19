@@ -5,7 +5,7 @@
 
 // Triangle
 template <>
-void engine::render::cpu::Rasterizer::Rasterize<engine::geometry::Triangle>(
+void amit::render::cpu::Rasterizer::Rasterize<amit::geometry::Triangle>(
     graphics::RenderContext&                                                                             render_context,
     graphics::DrawContext&                                                                               draw_context,
     const geometry::Triangle&                                                                            triangle,
@@ -14,7 +14,7 @@ void engine::render::cpu::Rasterizer::Rasterize<engine::geometry::Triangle>(
 {
     draw_context.StartRenderStatCollection(triangle);
 
-    engine::geometry::AxisAlignedBoundingBox bounding_box = triangle.GetBoundingBox();
+    amit::geometry::AxisAlignedBoundingBox bounding_box = triangle.GetBoundingBox();
 
     std::array<RasterVertex, 3> raster_vertices = MakeRasterTriangleVertices(triangle);
     raster_vertices.at(0).color                 = graphics::kRgb8ColorRed;
@@ -59,8 +59,8 @@ void engine::render::cpu::Rasterizer::Rasterize<engine::geometry::Triangle>(
                     geometry::BaryCentricCoordinate barycentric_coordinate = geometry::CalculateBaryCentricCoordinate(
                         triangle.VertA(), triangle.VertB(), triangle.VertC(), geometry::Point3D(x_iter, y_iter));
 
-                    engine::graphics::FloatColor interpolated_color =
-                        engine::graphics::InterpolateColor(raster_vertices[0].color.ToFloatColor(),
+                    amit::graphics::FloatColor interpolated_color =
+                        amit::graphics::InterpolateColor(raster_vertices[0].color.ToFloatColor(),
                                                            raster_vertices[1].color.ToFloatColor(),
                                                            raster_vertices[2].color.ToFloatColor(),
                                                            barycentric_coordinate);
@@ -121,10 +121,10 @@ void engine::render::cpu::Rasterizer::Rasterize<engine::geometry::Triangle>(
 
 // Line Segment
 template <>
-void engine::render::cpu::Rasterizer::Rasterize<engine::geometry::LineSegment>(
+void amit::render::cpu::Rasterizer::Rasterize<amit::geometry::LineSegment>(
     graphics::RenderContext&                                                                             render_context,
     graphics::DrawContext&                                                                               draw_context,
-    const engine::geometry::LineSegment&                                                                 line,
+    const amit::geometry::LineSegment&                                                                 line,
     const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>& pixel_callback)
     const
 {

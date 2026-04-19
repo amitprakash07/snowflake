@@ -60,7 +60,7 @@ namespace Engine
 
 		struct NetworkPacket
 		{
-			Engine::Math::Transform mTransformData;		
+			amit::Math::Transform mTransformData;		
 
 			NetworkPacket()
 			{

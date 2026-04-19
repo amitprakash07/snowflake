@@ -3,7 +3,7 @@
 
 #include "geometry_primitives.h"
 
-namespace engine::geometry
+namespace amit::geometry
 {
     inline ImplicitLineCoefficients MakeImplicitLineCoefficients(const Point3D& a, const Point3D& b)
     {
@@ -66,6 +66,6 @@ namespace engine::geometry
         return barycentric;
     }
 
-}  // namespace engine::geometry
+}  // namespace amit::geometry
 
 #endif  // ENGINE_MATHS_GEOMETRY_H_

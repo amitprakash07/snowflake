@@ -94,8 +94,8 @@ m_referenceCount = i_other.m_referenceCount;
         {
             if ((*m_referenceCount - 1) == 0)
             {
-                // EngineController::GameEngine::isEngineInitialized() ?
-                // EngineController::GameEngine::getMemoryManager()->__free(m_WrappingObject)
+                // EngineController::Gameamit::isEngineInitialized() ?
+                // EngineController::Gameamit::getMemoryManager()->__free(m_WrappingObject)
                 // : delete m_WrappingObject;
                 if (m_WrappingObject)
                     delete m_WrappingObject;

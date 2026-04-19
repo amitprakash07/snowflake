@@ -9,9 +9,9 @@ SharedPointer<StringPool> StringPool::Instance()
 {
     if (string_pool_instance_.isNull())
     {
-        /*string_pool_instance_ = EngineController::GameEngine::isEngineInitialized() ?
+        /*string_pool_instance_ = EngineController::Gameamit::isEngineInitialized() ?
             new
-       (EngineController::GameEngine::getMemoryManager()->__alloc(sizeof(StringPool)))
+       (EngineController::Gameamit::getMemoryManager()->__alloc(sizeof(StringPool)))
        StringPool() :
     */
         SharedPointer<StringPool> tempPool(new StringPool(), "StringPool");

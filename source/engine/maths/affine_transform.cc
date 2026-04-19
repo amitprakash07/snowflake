@@ -1,24 +1,24 @@
 
 #include "affine_transform.h"
 
-using namespace engine::maths;
+using namespace amit::maths;
 
 Transform::Transform()
 {
-    position_       = engine::maths::Vector3(0.0f, 0.0f, 0.0f);
+    position_       = amit::maths::Vector3(0.0f, 0.0f, 0.0f);
     orientation_    = Quaternion();
-    forward_vector_ = engine::maths::Vector3(0, 0, -1);
-    up_vector_      = engine::maths::Vector3(0, 1, 0);
-    right_vector_   = engine::maths::Vector3(1, 0, 0);
+    forward_vector_ = amit::maths::Vector3(0, 0, -1);
+    up_vector_      = amit::maths::Vector3(0, 1, 0);
+    right_vector_   = amit::maths::Vector3(1, 0, 0);
 }
 
-Transform::Transform(const engine::maths::Vector3& position, const Quaternion& orientation)
+Transform::Transform(const amit::maths::Vector3& position, const Quaternion& orientation)
 {
     position_       = position;
     orientation_    = orientation;
-    forward_vector_ = engine::maths::Vector3(0, 0, -1);
-    up_vector_      = engine::maths::Vector3(0, 1, 0);
-    right_vector_   = engine::maths::Vector3(1, 0, 0);
+    forward_vector_ = amit::maths::Vector3(0, 0, -1);
+    up_vector_      = amit::maths::Vector3(0, 1, 0);
+    right_vector_   = amit::maths::Vector3(1, 0, 0);
     if (orientation_ != Quaternion::GetIdentityQuaternion())
     {
         Matrix4x4 non_translating_matrix = Matrix4x4(orientation_, position_);
@@ -28,17 +28,17 @@ Transform::Transform(const engine::maths::Vector3& position, const Quaternion& o
     }
 }
 
-engine::maths::Vector3 Transform::GetForwardVector() const
+amit::maths::Vector3 Transform::GetForwardVector() const
 {
     return forward_vector_;
 }
 
-engine::maths::Vector3 Transform::GetRightVector() const
+amit::maths::Vector3 Transform::GetRightVector() const
 {
     return right_vector_;
 }
 
-engine::maths::Vector3 Transform::GetUpVector() const
+amit::maths::Vector3 Transform::GetUpVector() const
 {
     return up_vector_;
 }
@@ -48,27 +48,27 @@ Matrix4x4 Transform::GetLocalToWorldMatrix() const
     return Matrix4x4{orientation_, position_};
 }
 
-void Transform::TransformTo(engine::maths::Vector3& point) const
+void Transform::TransformTo(amit::maths::Vector3& point) const
 {
     point = GetLocalToWorldMatrix().Mul(point, false);
 }
 
-void Transform::TransformFrom(engine::maths::Vector3& point) const
+void Transform::TransformFrom(amit::maths::Vector3& point) const
 {
     point = GetLocalToWorldMatrix().Mul(point, false);
 }
 
-void Transform::VectorTransformFrom(engine::maths::Vector3& direction) const
+void Transform::VectorTransformFrom(amit::maths::Vector3& direction) const
 {
     direction = GetLocalToWorldMatrix().Mul(direction, true);
 }
 
-void Transform::VectorTransformTo(engine::maths::Vector3& direction) const
+void Transform::VectorTransformTo(amit::maths::Vector3& direction) const
 {
     direction = GetLocalToWorldMatrix().GetInverse().Mul(direction, true);
 }
 
-engine::maths::Vector3 Transform::GetPosition() const
+amit::maths::Vector3 Transform::GetPosition() const
 {
     return position_;
 }
@@ -78,7 +78,7 @@ Quaternion Transform::GetOrientation() const
     return orientation_;
 }
 
-void Transform::SetForwardVector(const engine::maths::Vector3& forWard_vector)
+void Transform::SetForwardVector(const amit::maths::Vector3& forWard_vector)
 {
     forward_vector_ = forWard_vector;
 }
@@ -93,7 +93,7 @@ void Transform::RotateByEulerAngles(float angle_in_radians_for_pitch, float angl
     // to do
 }
 
-void Transform::Move(engine::maths::Vector3 along, float unit)
+void Transform::Move(amit::maths::Vector3 along, float unit)
 {
     if (along.GetLength() > 1)
         along = along.CreateNormalized();
@@ -135,7 +135,7 @@ void Transform::MoveDown(float unit)
 
 void Transform::Rotate(float angle_in_radians, RotationAxis rotation_axis)
 {
-    engine::maths::Vector3 axis_of_rotation;
+    amit::maths::Vector3 axis_of_rotation;
     switch (rotation_axis)
     {
     case Up:
@@ -168,7 +168,7 @@ void Transform::Rotate(float angle_in_radians, RotationAxis rotation_axis)
     }
 }
 
-void Transform::Rotate(float angle_in_radians, engine::maths::Vector3 arbitrary_axis)
+void Transform::Rotate(float angle_in_radians, amit::maths::Vector3 arbitrary_axis)
 {
     if (arbitrary_axis.GetLength() > 1.0f)
         arbitrary_axis = arbitrary_axis.CreateNormalized();
@@ -190,7 +190,7 @@ void Transform::SetOrientation(const Quaternion& new_orientation)
     orientation_ = new_orientation;
 }
 
-void Transform::SetPosition(const engine::maths::Vector3& new_position)
+void Transform::SetPosition(const amit::maths::Vector3& new_position)
 {
     position_ = new_position;
 }

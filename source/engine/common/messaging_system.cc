@@ -12,8 +12,8 @@ SharedPointer<MessagingSystem> MessagingSystem::getMessagingSystem()
 {
     if (mMessagingSystem.isNull())
     {
-        /*mMessagingSystem = EngineController::GameEngine::isEngineInitialized() ?
-            new(EngineController::GameEngine::getMemoryManager()->__alloc(sizeof(MessagingSystem)))
+        /*mMessagingSystem = EngineController::Gameamit::isEngineInitialized() ?
+            new(EngineController::Gameamit::getMemoryManager()->__alloc(sizeof(MessagingSystem)))
        MessagingSystem() : new MessagingSystem();*/
 
         SharedPointer<MessagingSystem> temp(SharedPointer<MessagingSystem>(new MessagingSystem(), "MessagingSystem"));

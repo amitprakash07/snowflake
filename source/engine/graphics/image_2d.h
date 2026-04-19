@@ -5,7 +5,7 @@
 
 #include "engine/graphics/pixel.h"
 
-namespace engine::graphics
+namespace amit::graphics
 {
     struct ImageCoordinate
     {
@@ -62,7 +62,7 @@ namespace engine::graphics
     };
 
     template <typename ImageDataType>
-    engine::graphics::Image2D<ImageDataType>::Image2D(uint32_t width, uint32_t height)
+    amit::graphics::Image2D<ImageDataType>::Image2D(uint32_t width, uint32_t height)
         : image_data_(nullptr)
         , width_(width)
         , height_(height)
@@ -75,7 +75,7 @@ namespace engine::graphics
     }
 
     template <typename ImageDataType>
-    void engine::graphics::Image2D<ImageDataType>::SetImageData(const ImageCoordinate& image_coordinate,
+    void amit::graphics::Image2D<ImageDataType>::SetImageData(const ImageCoordinate& image_coordinate,
                                                                 const ImageDataType&   data)
     {
         if (image_coordinate.x >= width_ || image_coordinate.y >= height_)
@@ -91,12 +91,12 @@ namespace engine::graphics
     using ColorBuffer = Image2D<Rgb8>;
     using DepthBuffer = Image2D<float>;
 
-}  // namespace engine::graphics
+}  // namespace amit::graphics
 
 namespace amit::image
 {
-    void WriteColorBufferToPPM(const engine::graphics::ColorBuffer& color_buffer, const char* filename);
-    void WriteDepthBufferToPPM(const engine::graphics::DepthBuffer& depth_buffer, const char* filename);
+    void WriteColorBufferToPPM(const amit::graphics::ColorBuffer& color_buffer, const char* filename);
+    void WriteDepthBufferToPPM(const amit::graphics::DepthBuffer& depth_buffer, const char* filename);
 }  // namespace amit::image
 
 #endif

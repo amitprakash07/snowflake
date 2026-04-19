@@ -31,7 +31,7 @@
 #include "vector3.h"
 #include "plane.h"
 
-namespace engine::maths
+namespace amit::maths
 {
     class Quaternion;
 

@@ -3,7 +3,7 @@
 #include "geometry.h"
 #include "Triangle.h"
 
-using namespace engine;
+using namespace amit;
 
 float geometry::Triangle::Signed2DTriArea() const
 {

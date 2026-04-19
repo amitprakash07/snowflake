@@ -7,7 +7,7 @@
 
 #include "core.h"
 
-namespace engine
+namespace amit
 {
     enum class StatType : uint32_t
     {

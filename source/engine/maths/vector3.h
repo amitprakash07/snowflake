@@ -2,7 +2,7 @@
 #define ENGINE_MATHS_VECTOR_3_H_
 #include <string>
 
-namespace engine::maths
+namespace amit::maths
 {
     class Vector3
     {

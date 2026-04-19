@@ -5,7 +5,7 @@
 #include "engine/maths/point.h"
 #include "engine/maths/triangle.h"
 
-namespace engine::render::cpu
+namespace amit::render::cpu
 {
     struct RasterVertex
     {
@@ -60,6 +60,6 @@ namespace engine::render::cpu
         RasterVertex vert_c_;
     };
 
-}  // namespace engine::graphics
+}  // namespace amit::graphics
 
 #endif

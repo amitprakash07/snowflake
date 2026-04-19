@@ -6,10 +6,10 @@
 
 #include "platform/platform_systems.h"
 
-engine::Platform* engine::Platform::platform_ = nullptr;
-uint16_t const    engine::kFilePathMaxSize    = MAX_PATH;
+amit::Platform* amit::Platform::platform_ = nullptr;
+uint16_t const    amit::kFilePathMaxSize    = MAX_PATH;
 
-bool engine::Platform::Initialize(const EngineStartupInfo* engine_startup_info)
+bool amit::Platform::Initialize(const EngineStartupInfo* engine_startup_info)
 {
     if (platform_ == nullptr)
     {
@@ -75,12 +75,12 @@ bool engine::Platform::Initialize(const EngineStartupInfo* engine_startup_info)
     return false;
 }
 
-engine::Platform* engine::Platform::Instance()
+amit::Platform* amit::Platform::Instance()
 {
     return platform_;
 }
 
-bool engine::Platform::ShutDown()
+bool amit::Platform::ShutDown()
 {
     bool success = true;
     if (platform_)
@@ -110,7 +110,7 @@ bool engine::Platform::ShutDown()
     return success;
 }
 
-bool engine::Platform::GetEnvVar(const char* const env_var, std::string& env_val, std::string* error_message)
+bool amit::Platform::GetEnvVar(const char* const env_var, std::string& env_val, std::string* error_message)
 {
     // Windows requires a character buffer
     // to copy the environment variable into.
@@ -170,13 +170,13 @@ bool engine::Platform::GetEnvVar(const char* const env_var, std::string& env_val
     }
 }
 
-bool engine::Platform::SetEnvVar(const char* env_var, const std::string& env_val, std::string* error_message)
+bool amit::Platform::SetEnvVar(const char* env_var, const std::string& env_val, std::string* error_message)
 {
     //Assert(env_var, "Null VAriable name");
     return (::SetEnvironmentVariable(env_var, env_val.c_str()));
 }
 
-engine::FilePath engine::FileSystem::GetCurrentModulePath()
+amit::FilePath amit::FileSystem::GetCurrentModulePath()
 {
     char  module_path[kFilePathMaxSize];
     DWORD path_size = ::GetModuleFileName(nullptr, module_path, kFilePathMaxSize);
@@ -190,7 +190,7 @@ engine::FilePath engine::FileSystem::GetCurrentModulePath()
     return FilePath{""};
 }
 
-bool engine::FileSystem::Copy(const char* const path_source,
+bool amit::FileSystem::Copy(const char* const path_source,
                               const char* const path_target,
                               bool              overwrite,
                               bool              modify_time,
@@ -265,7 +265,7 @@ bool engine::FileSystem::Copy(const char* const path_source,
     return false;
 }
 
-bool engine::FileSystem::CreateDirectoryIfNecessary(const std::string& directory_path, std::string* error_message)
+bool amit::FileSystem::CreateDirectoryIfNecessary(const std::string& directory_path, std::string* error_message)
 {
     // If the path is to a file (likely), remove it so that only the directory remains
     std::string directory;
@@ -330,7 +330,7 @@ bool engine::FileSystem::CreateDirectoryIfNecessary(const std::string& directory
     return false;
 }
 
-bool engine::FileSystem::DoesFileExist(const std::string& file_path, std::string* error_message)
+bool amit::FileSystem::DoesFileExist(const std::string& file_path, std::string* error_message)
 {
     // Try to get information about the file
     WIN32_FIND_DATA fileData;
@@ -353,7 +353,7 @@ bool engine::FileSystem::DoesFileExist(const std::string& file_path, std::string
     return false;
 }
 
-bool engine::FileSystem::GetLastWriteTime(const std::string& file_path,
+bool amit::FileSystem::GetLastWriteTime(const std::string& file_path,
                                           uint64_t&          last_write_time,
                                           std::string*       error_message)
 {
@@ -392,7 +392,7 @@ bool engine::FileSystem::GetLastWriteTime(const std::string& file_path,
     return true;
 }
 
-bool engine::ProcessSystem::ExecuteCommand(const std::string& command,
+bool amit::ProcessSystem::ExecuteCommand(const std::string& command,
                                            const std::string* optional_arguments,
                                            std::string*       error_message)
 {
@@ -497,12 +497,12 @@ bool engine::ProcessSystem::ExecuteCommand(const std::string& command,
     }
 }
 
-bool engine::ProcessSystem::ExecuteCommand(const std::string& command, std::string* error_message)
+bool amit::ProcessSystem::ExecuteCommand(const std::string& command, std::string* error_message)
 {
     return ExecuteCommand(command, nullptr, error_message);
 }
 
-std::string engine::ErrorSystem::GetFormattedErrorMessage(engine::ErrorCode error_code)
+std::string amit::ErrorSystem::GetFormattedErrorMessage(amit::ErrorCode error_code)
 {
     DWORD       win_error_code = static_cast<DWORD>(error_code);
     std::string error_message;
@@ -544,7 +544,7 @@ std::string engine::ErrorSystem::GetFormattedErrorMessage(engine::ErrorCode erro
     return error_message;
 }
 
-engine::ErrorCode engine::ErrorSystem::GetLastError(std::string* error_message)
+amit::ErrorCode amit::ErrorSystem::GetLastError(std::string* error_message)
 {
     // Windows stores the error as a code
     const DWORD error_code = ::GetLastError();

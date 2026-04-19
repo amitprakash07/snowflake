@@ -4,7 +4,7 @@
 #include "primitive.h"
 #include "vector3.h"
 
-namespace engine::geometry
+namespace amit::geometry
 {
     class Plane : public Primitive
     {
@@ -36,6 +36,6 @@ namespace engine::geometry
         maths::Vector3 normal_;    //< Unit vector representing the normal of the plane
         float          distance_;  //< distance from the origin to the plane in the direction of the normal
     };
-}  // namespace engine::geometry
+}  // namespace amit::geometry
 
 #endif

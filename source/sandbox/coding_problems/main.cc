@@ -123,8 +123,8 @@ int main(int argCount, char* argc[]) {
   std::vector<int> array = {0, 0, 1, 0, 0, 0, 1, 1};
   int max_length = findMaxLength(array);
   numberOfSubarrays(array, 2);
-  std::vector<int> prefix_array = engine::util::PrefixArray(array);
-  std::cout << engine::util::ToStr(prefix_array);
+  std::vector<int> prefix_array = amit::util::PrefixArray(array);
+  std::cout << amit::util::ToStr(prefix_array);
   INSTANTIATE_PROBLEM(UniqueEmailAddressProblem);
   INSTANTIATE_PROBLEM(SortedSquareArray);
   INSTANTIATE_PROBLEM(MinStartValueProblem);

@@ -4,14 +4,14 @@
 #include <cstdint>
 #include <concepts>
 
-namespace engine::geometry
+namespace amit::geometry
 {
     class Primitive;
 
     template <typename T>
     concept PrimitiveTypeConcept = std::derived_from<T, Primitive>;
 
-}  // namespace engine::geometry
+}  // namespace amit::geometry
 
 #include "triangle.h"
 #include "bounding_box.h"

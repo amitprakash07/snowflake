@@ -7,14 +7,14 @@
 // #include "linked_list.h"
 
 template <typename DataType>
-engine::LinkedList<DataType>::Node::Node()
+amit::LinkedList<DataType>::Node::Node()
     : data()
     , next(nullptr)
 {
 }
 
 template <typename DataType>
-typename engine::LinkedList<DataType>::Node* engine::LinkedList<DataType>::Data() const
+typename amit::LinkedList<DataType>::Node* amit::LinkedList<DataType>::Data() const
 {
     if (head_ && head_->next)
     {
@@ -25,14 +25,14 @@ typename engine::LinkedList<DataType>::Node* engine::LinkedList<DataType>::Data(
 }
 
 template <typename DataType>
-engine::LinkedList<DataType>::LinkedList()
+amit::LinkedList<DataType>::LinkedList()
 {
     head_  = new Node();
     count_ = 0;
 }
 
 template <typename DataType>
-engine::LinkedList<DataType>::LinkedList(DataType data)
+amit::LinkedList<DataType>::LinkedList(DataType data)
     : LinkedList()
 {
     Node* new_node = new Node();
@@ -43,7 +43,7 @@ engine::LinkedList<DataType>::LinkedList(DataType data)
 }
 
 template <typename DataType>
-engine::LinkedList<DataType>::~LinkedList<DataType>()
+amit::LinkedList<DataType>::~LinkedList<DataType>()
 {
     while (head_)
     {
@@ -57,7 +57,7 @@ engine::LinkedList<DataType>::~LinkedList<DataType>()
 }
 
 template <typename DataType>
-bool engine::LinkedList<DataType>::Add(DataType data, int index)
+bool amit::LinkedList<DataType>::Add(DataType data, int index)
 {
     if (index != -1 && static_cast<size_t>(index) > count_)
     {
@@ -101,19 +101,19 @@ bool engine::LinkedList<DataType>::Add(DataType data, int index)
     return true;
 }
 template <typename DataType>
-size_t engine::LinkedList<DataType>::Size() const
+size_t amit::LinkedList<DataType>::Size() const
 {
     return count_;
 }
 
 template <typename DataType>
-DataType engine::LinkedList<DataType>::Remove(int index)
+DataType amit::LinkedList<DataType>::Remove(int index)
 {
     return DataType();
 }
 
 template <typename DataType>
-DataType engine::LinkedList<DataType>::operator[](size_t index) const
+DataType amit::LinkedList<DataType>::operator[](size_t index) const
 {
     if (index > count_)
     {
@@ -138,7 +138,7 @@ DataType engine::LinkedList<DataType>::operator[](size_t index) const
     }
 }
 template <typename DataType>
-DataType engine::LinkedList<DataType>::GetMiddle() const
+DataType amit::LinkedList<DataType>::GetMiddle() const
 {
     if (Node* middle_node = GetMiddleNode())
     {
@@ -149,7 +149,7 @@ DataType engine::LinkedList<DataType>::GetMiddle() const
 }
 
 template <typename DataType>
-std::string engine::LinkedList<DataType>::ToStr() const
+std::string amit::LinkedList<DataType>::ToStr() const
 {
     std::stringstream ss;
     Node*             iter = head_->next;
@@ -167,7 +167,7 @@ std::string engine::LinkedList<DataType>::ToStr() const
 }
 
 template <typename DataType>
-bool engine::LinkedList<DataType>::UnitTest()
+bool amit::LinkedList<DataType>::UnitTest()
 {
     LinkedList<int> list;
 

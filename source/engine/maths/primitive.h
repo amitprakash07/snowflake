@@ -6,7 +6,7 @@
 #include "vector3.h"
 #include "engine/common/core.h"
 
-namespace engine::geometry
+namespace amit::geometry
 {
     enum class PrimitiveType : std::uint8_t
     {
@@ -19,7 +19,7 @@ namespace engine::geometry
         kSphere
     };
 
-    inline std::string_view TypeToString(engine::geometry::PrimitiveType primitive_type)
+    inline std::string_view TypeToString(amit::geometry::PrimitiveType primitive_type)
     {
         switch (primitive_type)
         {
@@ -42,9 +42,9 @@ namespace engine::geometry
         return "InvalidPrimitiveType";
     }
 
-    const engine::maths::Vector3 kYAxis{0.0f, 1.0f, 0.0f};
-    const engine::maths::Vector3 kXAxis{1.0f, 0.0f, 0.0f};
-    const engine::maths::Vector3 kZAxis{0.0f, 0.0f, 1.0f};
+    const amit::maths::Vector3 kYAxis{0.0f, 1.0f, 0.0f};
+    const amit::maths::Vector3 kXAxis{1.0f, 0.0f, 0.0f};
+    const amit::maths::Vector3 kZAxis{0.0f, 0.0f, 1.0f};
 
     class Primitive
     {
@@ -77,5 +77,5 @@ namespace engine::geometry
 
         ObjectLabel<PrimitiveType> object_label_;
     };
-}  // namespace engine::geometry
+}  // namespace amit::geometry
 #endif

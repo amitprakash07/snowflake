@@ -7,12 +7,12 @@
 #include "bounding_box.h"
 #include "Triangle.h"
 
-namespace engine
+namespace amit
 {
     struct HitInfo
     {
-        engine::maths::Vector3 hit_point;
-        engine::maths::Vector3 normal;
+        amit::maths::Vector3 hit_point;
+        amit::maths::Vector3 normal;
         float                  distance;
         HitInfo();
     };
@@ -26,22 +26,22 @@ namespace engine
             return false;
         }
 
-        engine::maths::Vector3 origin;
-        engine::maths::Vector3 direction;
+        amit::maths::Vector3 origin;
+        amit::maths::Vector3 direction;
     };
 
 }  // namespace engine
 
 template <>
-bool engine::Ray::Intersect<engine::geometry::Plane>(const geometry::Plane& primitive, HitInfo& hit_info) const;
+bool amit::Ray::Intersect<amit::geometry::Plane>(const geometry::Plane& primitive, HitInfo& hit_info) const;
 
 template <>
-bool engine::Ray::Intersect<engine::geometry::Sphere>(const geometry::Sphere& primitive, HitInfo& hit_info) const;
+bool amit::Ray::Intersect<amit::geometry::Sphere>(const geometry::Sphere& primitive, HitInfo& hit_info) const;
 
 template <>
-bool engine::Ray::Intersect<engine::BoundingBox>(const BoundingBox& primitive, HitInfo& hit_info) const;
+bool amit::Ray::Intersect<amit::BoundingBox>(const BoundingBox& primitive, HitInfo& hit_info) const;
 
 template <>
-bool engine::Ray::Intersect<engine::geometry::Triangle>(const geometry::Triangle& primitive, HitInfo& hit_info) const;
+bool amit::Ray::Intersect<amit::geometry::Triangle>(const geometry::Triangle& primitive, HitInfo& hit_info) const;
 
 #endif

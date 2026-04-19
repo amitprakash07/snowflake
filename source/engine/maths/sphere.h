@@ -4,12 +4,12 @@
 #include "primitive.h"
 #include "vector3.h"
 
-namespace engine::geometry
+namespace amit::geometry
 {
     class Sphere : public geometry::Primitive
     {
     public:
-        Sphere(const engine::maths::Vector3& centre, float radius)
+        Sphere(const amit::maths::Vector3& centre, float radius)
             : Primitive(geometry::PrimitiveType::kSphere)
             , centre(centre)
             , radius(radius)
@@ -24,9 +24,9 @@ namespace engine::geometry
 
         bool DoesIntersect(const Sphere& other) const;
 
-        engine::maths::Vector3 centre;
+        amit::maths::Vector3 centre;
         float                  radius;
     };
-}  // namespace engine::geometry
+}  // namespace amit::geometry
 
 #endif

@@ -1,6 +1,6 @@
 #include "bounding_box.h"
 
-using namespace engine;
+using namespace amit;
 
 bool BoundingBox::DoesCollides(const BoundingBox& other) const
 {
@@ -23,7 +23,7 @@ bool BoundingBox::DoesCollides(const BoundingBox& other) const
 }
 
 // Computes the square distance between a point p and an AABB b
-float BoundingBox::SquareDistancePoint(const engine::maths::Vector3& point) const
+float BoundingBox::SquareDistancePoint(const amit::maths::Vector3& point) const
 {
     float sqDist = 0.0f;
     for (int i = 0; i < 3; i++)
@@ -38,11 +38,11 @@ float BoundingBox::SquareDistancePoint(const engine::maths::Vector3& point) cons
     return sqDist;
 }
 
-engine::maths::Vector3 BoundingBox::ClosestPtPointAABB(const engine::maths::Vector3& p) const
+amit::maths::Vector3 BoundingBox::ClosestPtPointAABB(const amit::maths::Vector3& p) const
 {
     // For each coordinate axis, if the point coordinate value is
     // outside box, clamp it to the box, else keep it as is
-    engine::maths::Vector3 q;
+    amit::maths::Vector3 q;
     for (int i = 0; i < 3; i++)
     {
         float v = p[i];
@@ -56,7 +56,7 @@ engine::maths::Vector3 BoundingBox::ClosestPtPointAABB(const engine::maths::Vect
     return q;
 }
 
-float BoundingBox::SqDistPointAABB(engine::maths::Vector3 point) const
+float BoundingBox::SqDistPointAABB(amit::maths::Vector3 point) const
 {
     // Computes the square distance between a point p and an AABB b
     float sqDist = 0.0f;

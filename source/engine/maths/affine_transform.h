@@ -5,7 +5,7 @@
 #include "Quaternion.h"
 #include "Vector3.h"
 
-namespace engine::maths
+namespace amit::maths
 {
     enum RotationAxis
     {

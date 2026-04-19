@@ -3,58 +3,56 @@
 
 #include "point.h"
 
-namespace engine
+namespace amit::geometry
 {
-    namespace geometry
+    struct ImplicitLineCoefficients
     {
-        struct ImplicitLineCoefficients
+        float a;
+        float b;
+        float c;
+    };
+
+    class LineSegment : public Primitive
+    {
+    public:
+        LineSegment() = delete;
+
+        LineSegment(const Point3D& start, const Point3D& end)
+            : Primitive(PrimitiveType::kLineSegment)
+            , start_(start)
+            , end_(end)
+
         {
-            float a;
-            float b;
-            float c;
-        };
+        }
 
-        class LineSegment : public Primitive
+        LineSegment(const LineSegment& other)
+            : start_(other.start_)
+            , end_(other.end_)
         {
-        public:
-            LineSegment() = delete;
+        }
 
-            LineSegment(const Point3D& start, const Point3D& end)
-                : Primitive(PrimitiveType::kLineSegment)
-                , start_(start)
-                , end_(end)
+        LineSegment& operator=(const LineSegment& other)
+        {
+            start_ = other.start_;
+            end_   = other.end_;
+            return *this;
+        }
 
-            {
-            }
+        inline const Point3D& Start() const
+        {
+            return start_;
+        }
 
-            LineSegment(const LineSegment& other)
-                : start_(other.start_)
-                , end_(other.end_)
-            {
-            }
+        inline const Point3D& End() const
+        {
+            return end_;
+        }
 
-            LineSegment& operator=(const LineSegment& other)
-            {
-                start_ = other.start_;
-                end_   = other.end_;
-                return *this;
-            }
+    private:
+        Point3D start_;
+        Point3D end_;
+    };
 
-            inline const Point3D& Start() const
-            {
-                return start_;
-            }
-
-            inline const Point3D& End() const
-            {
-                return end_;
-            }
-
-        private:
-            Point3D start_;
-            Point3D end_;
-        };
-    }  // namespace geometry
-}  // namespace engine
+}  // namespace amit::geometry
 
 #endif

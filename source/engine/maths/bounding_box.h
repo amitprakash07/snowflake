@@ -6,7 +6,7 @@
 #include "point.h"
 #include "Vector3.h"
 
-namespace engine
+namespace amit
 {
     class BoundingBox
     {

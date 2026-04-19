@@ -7,10 +7,10 @@ This file contains math-related functions
 
 #include "Math.h"
 
-namespace engine::maths
+namespace amit::maths
 {
     extern const float Pi;
 
-}  // namespace engine::maths
+}  // namespace amit::maths
 
 #endif

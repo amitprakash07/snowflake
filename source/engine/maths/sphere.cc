@@ -1,6 +1,6 @@
 #include "sphere.h"
 
-using namespace engine;
+using namespace amit;
 
 bool geometry::Sphere::DoesIntersect(const Sphere& other) const
 {

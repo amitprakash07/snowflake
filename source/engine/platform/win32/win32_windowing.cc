@@ -5,7 +5,7 @@
 #include "win32_resource.h"
 #include "platform/platform_systems.h"
 
-engine::Window::Window()
+amit::Window::Window()
 {
     parent_window = nullptr;
     module_handle = GetModuleHandle(nullptr);
@@ -22,7 +22,7 @@ engine::Window::Window()
     show_state    = 0;
 }
 
-void engine::Window::SetToFullResolution()
+void amit::Window::SetToFullResolution()
 {
     HWND desktopResolution = GetDesktopWindow();
     RECT fullResolution;
@@ -78,7 +78,7 @@ namespace engine
     }  // namespace util
 }  // namespace engine
 
-engine::WindowingSystem::WindowingSystem(int win_main_display_state)
+amit::WindowingSystem::WindowingSystem(int win_main_display_state)
     : IPlatformSystem(PlatformHandlerType::Windowing)
     , main_window_(nullptr)
     , main_window_handle_(nullptr)
@@ -102,7 +102,7 @@ engine::WindowingSystem::WindowingSystem(int win_main_display_state)
     }
 }
 
-engine::WindowHandle engine::WindowingSystem::ConstructWindow(const Window* window_info)
+amit::WindowHandle amit::WindowingSystem::ConstructWindow(const Window* window_info)
 {
     // Create the main window
     const Window* use_window = window_info;
@@ -206,7 +206,7 @@ engine::WindowHandle engine::WindowingSystem::ConstructWindow(const Window* wind
     return window_handle;
 }
 
-//engine::ResultPtr CALLBACK engine::WindowingSystem::DefaultWndProc(Window*    window,
+//amit::ResultPtr CALLBACK amit::WindowingSystem::DefaultWndProc(Window*    window,
 //                                                                   WndMessage message,
 //                                                                   Param      w_param,
 //                                                                   Param      l_param)
@@ -260,59 +260,59 @@ engine::WindowHandle engine::WindowingSystem::ConstructWindow(const Window* wind
 //        //}
 //        // If the key press wasn't handled pass it on to Windows to process in the
 //        // default way
-//        engine::utils::StringHash temp = engine::EngineCore::getStringPool()->FindString("KeyDown");
-//        engine::SharedPointer<engine::Windows::WindowingSystem> tempWindowingSystem =
-//            engine::EngineCore::getWindowingSystem();
-//        engine::EngineCore::getMessagingSystem()->sendMessage(
-//            temp, tempWindowingSystem.CastSharedPointer<engine::RTTI>(), reinterpret_cast<void*>(i_wParam));
+//        amit::utils::StringHash temp = amit::EngineCore::getStringPool()->FindString("KeyDown");
+//        amit::SharedPointer<amit::Windows::WindowingSystem> tempWindowingSystem =
+//            amit::EngineCore::getWindowingSystem();
+//        amit::EngineCore::getMessagingSystem()->sendMessage(
+//            temp, tempWindowingSystem.CastSharedPointer<amit::RTTI>(), reinterpret_cast<void*>(i_wParam));
 //        break;
 //    }
 //    case WM_KEYDOWN:
 //    {
-//        engine::utils::StringHash temp = engine::EngineCore::getStringPool()->FindString("KeyDown");
-//        engine::SharedPointer<engine::Windows::WindowingSystem> tempWindowingSystem =
-//            engine::EngineCore::getWindowingSystem();
-//        engine::EngineCore::getMessagingSystem()->sendMessage(
-//            temp, tempWindowingSystem.CastSharedPointer<engine::RTTI>(), reinterpret_cast<void*>(i_wParam));
+//        amit::utils::StringHash temp = amit::EngineCore::getStringPool()->FindString("KeyDown");
+//        amit::SharedPointer<amit::Windows::WindowingSystem> tempWindowingSystem =
+//            amit::EngineCore::getWindowingSystem();
+//        amit::EngineCore::getMessagingSystem()->sendMessage(
+//            temp, tempWindowingSystem.CastSharedPointer<amit::RTTI>(), reinterpret_cast<void*>(i_wParam));
 //        break;
 //    }
 //    case WM_LBUTTONDOWN:
 //    {
-//        engine::utils::StringHash temp = engine::EngineCore::getStringPool()->FindString("MouseButtonDownEvent");
-//        engine::SharedPointer<engine::MouseController> tempMouseController =
-//            engine::EngineCore::getMouseInputController();
+//        amit::utils::StringHash temp = amit::EngineCore::getStringPool()->FindString("MouseButtonDownEvent");
+//        amit::SharedPointer<amit::MouseController> tempMouseController =
+//            amit::EngineCore::getMouseInputController();
 //        WindowsParam windowsParameter;
 //        windowsParameter.windowsMessage = i_message;
 //        windowsParameter.wParam         = i_wParam;
 //        windowsParameter.lParam         = i_lParam;
-//        engine::EngineCore::getMessagingSystem()->sendMessage(
-//            temp, tempMouseController.CastSharedPointer<engine::RTTI>(), reinterpret_cast<void*>(&windowsParameter));
+//        amit::EngineCore::getMessagingSystem()->sendMessage(
+//            temp, tempMouseController.CastSharedPointer<amit::RTTI>(), reinterpret_cast<void*>(&windowsParameter));
 //        break;
 //    }
 //    case WM_MOUSEMOVE:
 //    {
-//        engine::utils::StringHash temp = engine::EngineCore::getStringPool()->FindString("MouseMoveEvent");
-//        engine::SharedPointer<engine::MouseController> tempMouseController =
-//            engine::EngineCore::getMouseInputController();
+//        amit::utils::StringHash temp = amit::EngineCore::getStringPool()->FindString("MouseMoveEvent");
+//        amit::SharedPointer<amit::MouseController> tempMouseController =
+//            amit::EngineCore::getMouseInputController();
 //        WindowsParam windowsParameter;
 //        windowsParameter.windowsMessage = i_message;
 //        windowsParameter.wParam         = i_wParam;
 //        windowsParameter.lParam         = i_lParam;
-//        engine::EngineCore::getMessagingSystem()->sendMessage(
-//            temp, tempMouseController.CastSharedPointer<engine::RTTI>(), reinterpret_cast<void*>(&windowsParameter));
+//        amit::EngineCore::getMessagingSystem()->sendMessage(
+//            temp, tempMouseController.CastSharedPointer<amit::RTTI>(), reinterpret_cast<void*>(&windowsParameter));
 //        break;
 //    }
 //    case WM_LBUTTONUP:
 //    {
-//        engine::utils::StringHash temp = engine::EngineCore::getStringPool()->FindString("MouseButtonUpEvent");
-//        engine::SharedPointer<engine::MouseController> tempMouseController =
-//            engine::EngineCore::getMouseInputController();
+//        amit::utils::StringHash temp = amit::EngineCore::getStringPool()->FindString("MouseButtonUpEvent");
+//        amit::SharedPointer<amit::MouseController> tempMouseController =
+//            amit::EngineCore::getMouseInputController();
 //        WindowsParam windowsParameter;
 //        windowsParameter.windowsMessage = i_message;
 //        windowsParameter.wParam         = i_wParam;
 //        windowsParameter.lParam         = i_lParam;
-//        engine::EngineCore::getMessagingSystem()->sendMessage(
-//            temp, tempMouseController.CastSharedPointer<engine::RTTI>(), reinterpret_cast<void*>(&windowsParameter));
+//        amit::EngineCore::getMessagingSystem()->sendMessage(
+//            temp, tempMouseController.CastSharedPointer<amit::RTTI>(), reinterpret_cast<void*>(&windowsParameter));
 //        break;
 //    }
 //
@@ -325,7 +325,7 @@ engine::WindowHandle engine::WindowingSystem::ConstructWindow(const Window* wind
 //        // (if this isn't done the application would continue to run with no
 //        // window). This is where the exitCode in WaitForShutdown() comes from:
 //        // mWindowingSystem->s_mainWindow = nullptr;
-//        engine::EngineCore::getWindowingSystem()->s_mainWindow = nullptr;
+//        amit::EngineCore::getWindowingSystem()->s_mainWindow = nullptr;
 //        int exitCode                                           = 0;  // Arbitrary de facto success code
 //        PostQuitMessage(exitCode);                                   // This sends a WM_QUIT message
 //                                                                     // For WM_NCDESTROY messages, return 0 to
@@ -338,7 +338,7 @@ engine::WindowHandle engine::WindowingSystem::ConstructWindow(const Window* wind
 //    return DefWindowProc(window, message, w_param, l_param);
 //}
 
-engine::WindowingSystem::~WindowingSystem()
+amit::WindowingSystem::~WindowingSystem()
 {
     for (auto it : all_window_map_)
     {
@@ -348,7 +348,7 @@ engine::WindowingSystem::~WindowingSystem()
     DeleteWindow(main_window_, true);
 }
 
-bool engine::WindowingSystem::DeleteWindow(WindowHandle wnd_handle, bool delete_main_window)
+bool amit::WindowingSystem::DeleteWindow(WindowHandle wnd_handle, bool delete_main_window)
 {
     bool          success  = true;
     const Window* wnd_info = all_window_map_[wnd_handle];

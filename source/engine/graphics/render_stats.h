@@ -3,7 +3,7 @@
 
 #include "engine/common/perf_stats.h"
 
-namespace engine::graphics
+namespace amit::graphics
 {
     enum class RenderStatCountKind : uint8_t
     {
@@ -23,7 +23,7 @@ namespace engine::graphics
         std::shared_ptr<TimerStat>   rasterization_timer_;
         std::shared_ptr<CounterStat> rasterized_pixel_counter_;
 
-        friend class engine::StatsCollector;
+        friend class amit::StatsCollector;
 
     private:
         RenderStats(const std::string& name)
@@ -31,6 +31,6 @@ namespace engine::graphics
         {
         }
     };
-}  // namespace engine::graphics
+}  // namespace amit::graphics
 
 #endif  // ENGINE_GRAPHICS_RENDER_STATS_H_

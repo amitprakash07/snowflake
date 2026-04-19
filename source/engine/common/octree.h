@@ -5,7 +5,7 @@
 
 #include "engine/maths/vector3.h"
 
-namespace engine
+namespace amit
 {
     namespace Physics
     {

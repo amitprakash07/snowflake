@@ -4,7 +4,7 @@
 #include "ppm_image.h"
 #include "viewport.h"
 
-namespace engine::graphics
+namespace amit::graphics
 {
     class FrameBuffer
     {
@@ -18,6 +18,6 @@ namespace engine::graphics
     private:
 
     };
-}  // namespace engine::graphics
+}  // namespace amit::graphics
 
 #endif

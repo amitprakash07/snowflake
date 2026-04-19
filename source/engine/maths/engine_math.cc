@@ -2,7 +2,7 @@
 #include "engine_math.h"
 #include "vector3.h"
 
-using namespace engine;
+using namespace amit;
 
 // Given segment ab and point c, computes closest point d on ab.
 // Also returns t for the position of d, d(t) = a + t*(b - a)

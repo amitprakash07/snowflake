@@ -12,7 +12,7 @@ Link http://www.euclideanspace.com/
 #include "Quaternion.h"
 #include "Vector3.h"
 
-using namespace engine::maths;
+using namespace amit::maths;
 
 Matrix4x4 Matrix4x4::CreateWorldToViewTransform(const Quaternion& camera_orientation, const Vector3& camera_position)
 {

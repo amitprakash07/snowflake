@@ -3,7 +3,7 @@
 
 #include "Vector3.h"
 
-namespace engine::maths
+namespace amit::maths
 {
     class Quaternion
     {
@@ -77,22 +77,22 @@ namespace engine::maths
           The geometric interpretation of the quaternion Dot product is similar to
           the interpretation of the vector Dot product;
           The larger the absolute value of the quaternion Dot product ab, the more
-          “similar” the angular displacements represented by a and b.
+          ï¿½similarï¿½ the angular displacements represented by a and b.
         */
         float Dot(const Quaternion& other) const;
 
         // Exponent
         /*
           Quaternion exponentiation is useful because it allows us to
-          extract a “fraction” of an angular displacement.
+          extract a ï¿½fractionï¿½ of an angular displacement.
           For example, to compute a quaternion that represents one-third
           of the angular displacement represented by the quaternion q,
           we would compute q1/3.
 
           The caveat we here is this: a quaternion represents angular displacements
-          using the shortest arc. “Multiple spins” cannot be represented.
-          For our example from above, q4 is not a 240º clockwise rotation about the
-          x-axis as expected; it is an 80º counterclockwise rotation.
+          using the shortest arc. ï¿½Multiple spinsï¿½ cannot be represented.
+          For our example from above, q4 is not a 240ï¿½ clockwise rotation about the
+          x-axis as expected; it is an 80ï¿½ counterclockwise rotation.
         */
         Quaternion operator^(const float power) const;
 

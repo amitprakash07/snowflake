@@ -3,7 +3,7 @@
 
 #include "text_overlay.h"
 
-bool engine::graphics::TextOverlay::Render(const std::string& text,
+bool amit::graphics::TextOverlay::Render(const std::string& text,
                                            uint16_t           x,
                                            uint16_t           y,
                                            Rgb8               color,
@@ -39,7 +39,7 @@ bool engine::graphics::TextOverlay::Render(const std::string& text,
     return true;
 }
 
-void engine::graphics::TextOverlay::RenderGlyph(const char*  bitmap,
+void amit::graphics::TextOverlay::RenderGlyph(const char*  bitmap,
                                                 uint16_t     x,
                                                 uint16_t     y,
                                                 Rgb8         color,

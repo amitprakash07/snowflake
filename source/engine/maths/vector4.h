@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace engine::maths
+namespace amit::maths
 {
     class Vector4
     {

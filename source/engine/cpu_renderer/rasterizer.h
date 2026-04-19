@@ -7,7 +7,7 @@
 #include "engine/graphics/pixel.h"
 #include "engine/graphics/render_context.h"
 
-namespace engine::render::cpu
+namespace amit::render::cpu
 {
     struct RasterizedPixel
     {
@@ -26,7 +26,7 @@ namespace engine::render::cpu
     public:
         Rasterizer() = default;
 
-        template <engine::geometry::PrimitiveTypeConcept Primitive>
+        template <amit::geometry::PrimitiveTypeConcept Primitive>
         void Rasterize(
             graphics::RenderContext&,
             graphics::DrawContext&,
@@ -66,6 +66,6 @@ namespace engine::render::cpu
         const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>&
             pixel_callback) const;
 
-}  // namespace engine::render::cpu
+}  // namespace amit::render::cpu
 
 #endif

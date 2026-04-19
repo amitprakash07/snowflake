@@ -45,12 +45,12 @@ namespace engine
 }  // namespace engine
 
 template <>
-engine::GpuDeviceResource<ID3D12CommandList>* engine::GpuDevice::Create<ID3D12CommandList, engine::GpuCmdListDesc>(
-    const engine::GpuCmdListDesc& desc);
+amit::GpuDeviceResource<ID3D12CommandList>* amit::GpuDevice::Create<ID3D12CommandList, amit::GpuCmdListDesc>(
+    const amit::GpuCmdListDesc& desc);
 
 #define DECLARE_SPECIALIZED_CREATE_D3D_DESC(resource_type, resource_ptr_type, resource_desc) \
     template <>                                                                              \
-    engine::GpuDeviceResource<resource_ptr_type>* engine::GpuDevice::Create(const resource_desc& desc)
+    amit::GpuDeviceResource<resource_ptr_type>* amit::GpuDevice::Create(const resource_desc& desc)
 
 DECLARE_SPECIALIZED_CREATE_D3D_DESC(CmdQueue, ID3D12CommandQueue, D3D12_COMMAND_QUEUE_DESC);
 DECLARE_SPECIALIZED_CREATE_D3D_DESC(ComputePipeline, ID3D12PipelineState, D3D12_COMPUTE_PIPELINE_STATE_DESC);
@@ -61,8 +61,8 @@ DECLARE_SPECIALIZED_CREATE_D3D_DESC(QueryHeap, ID3D12QueryHeap, D3D12_QUERY_HEAP
 
 #define DECLARE_SPECIALIZED_CREATE(resource_type, resource_ptr_type, resource_desc) \
     template <>                                                                     \
-    engine::GpuDeviceResource<resource_ptr_type>* engine::GpuDevice::Create(        \
-        const engine::GpuDeviceResourceDesc<resource_desc>& desc)
+    amit::GpuDeviceResource<resource_ptr_type>* amit::GpuDevice::Create(        \
+        const amit::GpuDeviceResourceDesc<resource_desc>& desc)
 
 DECLARE_SPECIALIZED_CREATE(CommittedResource, ID3D12Resource, GpuCommittedResDesc);
 DECLARE_SPECIALIZED_CREATE(PlacedResource, ID3D12Resource, GpuPlacedResDesc);

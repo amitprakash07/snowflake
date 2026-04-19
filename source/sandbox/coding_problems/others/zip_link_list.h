@@ -16,21 +16,21 @@
 class ZipLinkList : public ICodingProblem {
  public:
   void RunTests() override {
-    engine::LinkedList<uint32_t> init_data(
+    amit::LinkedList<uint32_t> init_data(
         std::vector<uint32_t>({1, 2, 3, 4, 5, 6, 7}));
 
     std::cout << init_data.ToStr();
 
-    engine::LinkedList<uint32_t>::Node* current_pair_start = init_data.Data();
-    engine::LinkedList<uint32_t>::Node* middle_node = init_data.GetMiddleNode();
-    engine::LinkedList<uint32_t>::Node* last_node = nullptr;
-    engine::LinkedList<uint32_t>::Node* second_last_node = nullptr;
+    amit::LinkedList<uint32_t>::Node* current_pair_start = init_data.Data();
+    amit::LinkedList<uint32_t>::Node* middle_node = init_data.GetMiddleNode();
+    amit::LinkedList<uint32_t>::Node* last_node = nullptr;
+    amit::LinkedList<uint32_t>::Node* second_last_node = nullptr;
 
     while (current_pair_start && current_pair_start->next &&
            current_pair_start != middle_node) {
       init_data.GetLastTwo(current_pair_start, second_last_node, last_node);
       second_last_node->next = nullptr;
-      engine::LinkedList<uint32_t>::Node* pair_next = current_pair_start->next;
+      amit::LinkedList<uint32_t>::Node* pair_next = current_pair_start->next;
       current_pair_start->next = last_node;
       last_node->next = pair_next;
       current_pair_start = pair_next;

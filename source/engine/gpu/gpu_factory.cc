@@ -4,12 +4,12 @@
 #include "gpu_factory.h"
 #include "gpu_device.h"
 
-engine::GpuFactory::GpuFactory()
+amit::GpuFactory::GpuFactory()
     : dxgi_factory_(nullptr)
 {
 }
 
-engine::GpuFactory::~GpuFactory()
+amit::GpuFactory::~GpuFactory()
 {
     for (auto adapter : adapter_devices_)
     {
@@ -19,12 +19,12 @@ engine::GpuFactory::~GpuFactory()
     adapter_devices_.clear();
 }
 
-uint8_t engine::GpuFactory::GetDeviceCount() const
+uint8_t amit::GpuFactory::GetDeviceCount() const
 {
     return static_cast<uint8_t>(available_adapters_.size());
 }
 
-engine::GpuDevice* engine::GpuFactory::GetDevice(uint8_t device_adapter) const
+amit::GpuDevice* amit::GpuFactory::GetDevice(uint8_t device_adapter) const
 {
     uint8_t device_count = GetDeviceCount();
     if (device_adapter < device_count)
@@ -53,7 +53,7 @@ engine::GpuDevice* engine::GpuFactory::GetDevice(uint8_t device_adapter) const
     return nullptr;
 }
 
-bool engine::GpuFactory::Initialize()
+bool amit::GpuFactory::Initialize()
 {
     if (dxgi_factory_ == nullptr)
     {

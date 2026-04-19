@@ -2,22 +2,22 @@
 #include "platform/platform_objects.h"
 #include "common/string_util.h"
 
-engine::FilePath::FilePath(const std::string& file_abs_path)
+amit::FilePath::FilePath(const std::string& file_abs_path)
 {
     Init(file_abs_path);
 }
 
-engine::FilePath::FilePath(const std::string& dir, const std::string& file_name)
+amit::FilePath::FilePath(const std::string& dir, const std::string& file_name)
 {
     Init(dir + "\\" + file_name);
 }
 
-std::string_view engine::FilePath::ParentDirectory() const
+std::string_view amit::FilePath::ParentDirectory() const
 {
     return file_parent_directory_;
 }
 
-void engine::FilePath::Init(const std::string& abs_path)
+void amit::FilePath::Init(const std::string& abs_path)
 {
     if (!abs_path.empty())
     {
@@ -26,7 +26,7 @@ void engine::FilePath::Init(const std::string& abs_path)
     }
 }
 
-engine::FileMetaData::FileMetaData(const FilePath& file_path)
+amit::FileMetaData::FileMetaData(const FilePath& file_path)
 {
     std::string temp_path_string = file_path.AsCharArray();
 

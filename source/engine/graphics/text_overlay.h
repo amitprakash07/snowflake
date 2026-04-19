@@ -6,7 +6,7 @@
 #include "color.h"
 #include "image_2d.h"
 
-namespace engine::graphics
+namespace amit::graphics
 {
     class TextOverlay
     {
@@ -18,6 +18,6 @@ namespace engine::graphics
         static void RenderGlyph(const char* bitmap, uint16_t x, uint16_t y, Rgb8 color, ColorBuffer& color_buffer);
     };
 
-}  // namespace engine::graphics
+}  // namespace amit::graphics
 
 #endif  // ENGINE_GRAPHICS_TEXT_OVERLAY_H_

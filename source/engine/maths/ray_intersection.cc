@@ -1,9 +1,10 @@
 #include "engine_math.h"
 #include "ray_intersection.h"
 
-using namespace engine;
+using namespace amit;
+
 HitInfo::HitInfo()
-    : distance(kBigFloat)
+    : distance(amit::maths::kBigFloat)
 {
 }
 
@@ -75,7 +76,7 @@ bool Ray::Intersect<BoundingBox>(const BoundingBox& primitive, HitInfo& hit_info
     float ty1, ty2, ty_entry, ty_exit;
     float tz1, tz2, tz_entry, tz_exit;
 
-    tx1 = tx2 = tx_entry = tx_exit = ty1 = ty2 = ty_entry = ty_exit = tz1 = tz2 = tz_entry = tz_exit = kBigFloat;
+    tx1 = tx2 = tx_entry = tx_exit = ty1 = ty2 = ty_entry = ty_exit = tz1 = tz2 = tz_entry = tz_exit = amit::maths::kBigFloat;
 
     // Check X-Normal
     if (direction.x() != 0.0f)

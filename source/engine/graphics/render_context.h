@@ -9,7 +9,7 @@
 #include "render_stats.h"
 #include "image_2d.h"
 
-namespace engine::graphics
+namespace amit::graphics
 {
     enum class PrimitiveDrawMode : std::uint8_t
     {
@@ -147,6 +147,6 @@ namespace engine::graphics
         ColorBuffer color_buffer_;
         DepthBuffer depth_buffer_;
     };
-}  // namespace engine::graphics
+}  // namespace amit::graphics
 
 #endif  // ENGINE_GRAPHICS_RENDER_CONTEXT_H_

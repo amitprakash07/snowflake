@@ -4,7 +4,7 @@
 
 #include "octree.h"
 
-using namespace engine;
+using namespace amit;
 
 Physics::Octree::Octree()
 {

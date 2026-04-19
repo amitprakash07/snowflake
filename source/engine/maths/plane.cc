@@ -1,7 +1,7 @@
 
 #include "plane.h"
 
-engine::geometry::Plane::Plane(const engine::maths::Vector3& normal, const engine::maths::Vector3& point_on_plane)
+amit::geometry::Plane::Plane(const amit::maths::Vector3& normal, const amit::maths::Vector3& point_on_plane)
     : Primitive(geometry::PrimitiveType::kPlane)
 {
     normal_   = normal;
@@ -11,16 +11,16 @@ engine::geometry::Plane::Plane(const engine::maths::Vector3& normal, const engin
     distance_ = a * point_on_plane.x() + b * point_on_plane.y() + c * point_on_plane.z();
 }
 
-engine::maths::Vector3 engine::geometry::Plane::ClosestPointFromPointOnPlane(
-    const engine::maths::Vector3& point_on_plane) const
+amit::maths::Vector3 amit::geometry::Plane::ClosestPointFromPointOnPlane(
+    const amit::maths::Vector3& point_on_plane) const
 {
     float t = (normal_.Dot(point_on_plane) - distance_) / normal_.Dot(normal_);
     return (point_on_plane - (normal_ * t));
 }
 
-engine::geometry::Plane engine::geometry::Plane::ComputePlane(const engine::maths::Vector3& vec_a,
-                                                              const engine::maths::Vector3& vec_b,
-                                                              const engine::maths::Vector3& vec_c)
+amit::geometry::Plane amit::geometry::Plane::ComputePlane(const amit::maths::Vector3& vec_a,
+                                                              const amit::maths::Vector3& vec_b,
+                                                              const amit::maths::Vector3& vec_c)
 {
     Plane p;
     p.normal_   = (vec_b - vec_a).Cross(vec_c - vec_a).CreateNormalized();

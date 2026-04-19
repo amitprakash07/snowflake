@@ -9,14 +9,14 @@
 #include "platform/platform_objects.h"
 #include "platform/platform_systems.h"
 
-engine::ShaderHandler* engine::ShaderHandler::shader_handler_singleton_ptr_ = nullptr;
+amit::ShaderHandler* amit::ShaderHandler::shader_handler_singleton_ptr_ = nullptr;
 
 std::wstring engine_string_util::ToWideString(const std::string& in)
 {
     return std::wstring{in.cbegin(), in.cend()};
 }
 
-bool engine::ShaderHandler::Init()
+bool amit::ShaderHandler::Init()
 {
     if (shader_handler_singleton_ptr_ == nullptr)
     {
@@ -27,7 +27,7 @@ bool engine::ShaderHandler::Init()
     return success;
 }
 
-engine::ShaderHandler* engine::ShaderHandler::Instance()
+amit::ShaderHandler* amit::ShaderHandler::Instance()
 {
     if (Init())
     {
@@ -37,14 +37,14 @@ engine::ShaderHandler* engine::ShaderHandler::Instance()
     return nullptr;
 }
 
-bool engine::ShaderHandler::DenInit()
+bool amit::ShaderHandler::DenInit()
 {
     delete shader_handler_singleton_ptr_;
     shader_handler_singleton_ptr_ = nullptr;
     return true;
 }
 
-bool engine::ShaderHandler::CompileDefaultShaders()
+bool amit::ShaderHandler::CompileDefaultShaders()
 {
     if (PopulateShaderDesc())
     {
@@ -59,7 +59,7 @@ bool engine::ShaderHandler::CompileDefaultShaders()
     return false;
 }
 
-engine::ShaderHandler::ShaderDesc::ShaderDesc(const nlohmann::json& json_shader_dec_obj)
+amit::ShaderHandler::ShaderDesc::ShaderDesc(const nlohmann::json& json_shader_dec_obj)
     : shader_bin_out_file_(FilePath(""))
     , shader_authored_file_(FilePath(""))
 {
@@ -78,7 +78,7 @@ engine::ShaderHandler::ShaderDesc::ShaderDesc(const nlohmann::json& json_shader_
                       std::string(shader_authored_file_.GetMetaData().GetFileNameWithoutExtension()) + ".out"));
 }
 
-bool engine::ShaderHandler::CompileDefaultShadersUsingDxc()
+bool amit::ShaderHandler::CompileDefaultShadersUsingDxc()
 {
     bool              success = false;
     std::stringstream ss;
@@ -116,7 +116,7 @@ bool engine::ShaderHandler::CompileDefaultShadersUsingDxc()
     return success;
 }
 
-bool engine::ShaderHandler::CompileDefaultShadersUsingDxcApi()
+bool amit::ShaderHandler::CompileDefaultShadersUsingDxcApi()
 {
     if (dxc_compiler_3_ptr_ != nullptr && dxc_util_ptr_ != nullptr)
     {
@@ -214,7 +214,7 @@ bool engine::ShaderHandler::CompileDefaultShadersUsingDxcApi()
     return false;
 }
 
-bool engine::ShaderHandler::InstanceInit()
+bool amit::ShaderHandler::InstanceInit()
 {
     DxcCreateInstance(CLSID_DxcUtils, __uuidof(IDxcUtils), reinterpret_cast<void**>(&dxc_util_ptr_));
     DxcCreateInstance(CLSID_DxcCompiler, __uuidof(IDxcCompiler3), reinterpret_cast<void**>(&dxc_compiler_3_ptr_));
@@ -222,7 +222,7 @@ bool engine::ShaderHandler::InstanceInit()
     return dxc_compiler_3_ptr_ != nullptr && dxc_util_ptr_ != nullptr;
 }
 
-bool engine::ShaderHandler::PopulateShaderDesc()
+bool amit::ShaderHandler::PopulateShaderDesc()
 {
     File shader_asset(FilePath(kEngineShaderDir, kEngineShaderAssetDescFileName));
     if (shader_asset.Open())
