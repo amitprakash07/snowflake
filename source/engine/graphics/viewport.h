@@ -29,11 +29,11 @@ namespace engine
             {
             }
 
-            inline uint16_t Width() const
+            inline uint16_t GetWidth() const
             {
                 return width_;
             }
-            inline uint16_t Height() const
+            inline uint16_t GetHeight() const
             {
                 return height_;
             }

@@ -7,7 +7,7 @@ bool engine::graphics::TextOverlay::Render(const std::string& text,
                                            uint16_t           x,
                                            uint16_t           y,
                                            Rgb8               color,
-                                           PpmImage&          ppm_image)
+                                           ColorBuffer&       color_buffer)
 {
     if (!text.empty())
     {
@@ -31,7 +31,7 @@ bool engine::graphics::TextOverlay::Render(const std::string& text,
 
             uint8_t ascii_code = static_cast<uint8_t>(ch);
             char*   bitmap     = font8x8_basic[ascii_code];
-            RenderGlyph(bitmap, x_iter, y_iter, color, ppm_image);
+            RenderGlyph(bitmap, x_iter, y_iter, color, color_buffer);
             x_iter += 8;
         }
     }
@@ -39,11 +39,11 @@ bool engine::graphics::TextOverlay::Render(const std::string& text,
     return true;
 }
 
-void engine::graphics::TextOverlay::RenderGlyph(const char* bitmap,
-                                                uint16_t    x,
-                                                uint16_t    y,
-                                                Rgb8        color,
-                                                PpmImage&   ppm_image)
+void engine::graphics::TextOverlay::RenderGlyph(const char*  bitmap,
+                                                uint16_t     x,
+                                                uint16_t     y,
+                                                Rgb8         color,
+                                                ColorBuffer& color_buffer)
 {
     for (uint16_t bitmap_iter = 0; bitmap_iter < 8; bitmap_iter++)
     {
@@ -51,8 +51,8 @@ void engine::graphics::TextOverlay::RenderGlyph(const char* bitmap,
         {
             if (bitmap[bitmap_iter] & 1 << bit_iter)
             {
-                ppm_image.SetPixelColor({static_cast<uint16_t>(x + bit_iter), static_cast<uint16_t>(y + bitmap_iter)},
-                                        color);
+                color_buffer.SetImageData({static_cast<uint16_t>(x + bit_iter), static_cast<uint16_t>(y + bitmap_iter)},
+                                          color);
             }
         }
     }

@@ -17,16 +17,18 @@ message("Processing ${ENGINE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 set(ENGINE_GRAPHICS_SOURCES
 pixel.h
 color.h
-ppm_image.h
-ppm_image.cc
-rasterizer.h
-rasterizer.cc
 viewport.h
-raster_primitives.h
-raster_primitives.cc
 color.cc
 text_overlay.h
-text_overlay.cc)
+text_overlay.cc
+frame_buffer.h
+frame_buffer.cc
+depth_buffer.h
+depth_buffer.cc
+render_stats.h
+render_context.h
+image_2d.h
+image_2d.cc)
 
 file(GLOB FONT8X8_HEADERS CONFIGURE_DEPENDS
   "${PROJECT_EXTERNAL_SOURCE_DIR}/font8x8/*.h")

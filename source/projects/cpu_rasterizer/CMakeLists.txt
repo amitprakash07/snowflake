@@ -8,9 +8,9 @@ set(CPU_RASTERIZER_SOURCES cpu_rasterizer_main.cc)
 include_directories(${PROJECT_SRC_DIR})
 add_executable(${PROJECT_NAME} ${CPU_RASTERIZER_SOURCES})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE EngineShared EngineMaths EngineGraphics)
+target_link_libraries(${PROJECT_NAME} PRIVATE EngineShared EngineMaths EngineGraphics EngineRenderCpu)
 
-add_dependencies(${PROJECT_NAME} EngineGraphics EngineMaths EngineShared)
+add_dependencies(${PROJECT_NAME} EngineGraphics EngineMaths EngineShared EngineRenderCpu)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Projects"

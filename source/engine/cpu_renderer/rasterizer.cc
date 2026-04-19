@@ -5,19 +5,21 @@
 
 // Triangle
 template <>
-void engine::graphics::Rasterizer::Rasterize<engine::geometry::Triangle>(
-    RenderContext&                                                                        render_context,
-    const geometry::Triangle&                                                             triangle,
-    const std::function<void(const engine::graphics::RasterizedPixel& rasterized_pixel)>& pixel_callback) const
+void engine::render::cpu::Rasterizer::Rasterize<engine::geometry::Triangle>(
+    graphics::RenderContext&                                                                             render_context,
+    graphics::DrawContext&                                                                               draw_context,
+    const geometry::Triangle&                                                                            triangle,
+    const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>& pixel_callback)
+    const
 {
-    render_context.StartRenderStatCollection(triangle);
+    draw_context.StartRenderStatCollection(triangle);
 
-    geometry::AxisAlignedBoundingBox bounding_box = triangle.GetBoundingBox();
+    engine::geometry::AxisAlignedBoundingBox bounding_box = triangle.GetBoundingBox();
 
     std::array<RasterVertex, 3> raster_vertices = MakeRasterTriangleVertices(triangle);
-    raster_vertices.at(0).color                 = kRgb8ColorRed;
-    raster_vertices.at(1).color                 = kRgb8ColorGreen;
-    raster_vertices.at(2).color                 = kRgb8ColorBlue;
+    raster_vertices.at(0).color                 = graphics::kRgb8ColorRed;
+    raster_vertices.at(1).color                 = graphics::kRgb8ColorGreen;
+    raster_vertices.at(2).color                 = graphics::kRgb8ColorBlue;
 
     geometry::Point3D viewport_clamped_min = render_context.GetViewport().ClampToView(bounding_box.GetMin());
     geometry::Point3D viewport_clamped_max = render_context.GetViewport().ClampToView(bounding_box.GetMax());
@@ -40,8 +42,7 @@ void engine::graphics::Rasterizer::Rasterize<engine::geometry::Triangle>(
         geometry::Orient2D(triangle_edge_coefficients[1], geometry::Point3D(x_start, y_start)),
         geometry::Orient2D(triangle_edge_coefficients[2], geometry::Point3D(x_start, y_start))};
 
-    if (render_context.GetRasterizeMode() == RasterizeMode::PrimitiveOnly ||
-        render_context.GetRasterizeMode() == RasterizeMode::PrimitiveAndBoundingBox)
+    if (draw_context.GetDrawMode() == graphics::PrimitiveDrawMode::kSolid)
     {
         for (uint32_t y_iter = y_start; y_iter <= y_end; y_iter++)
         {
@@ -67,15 +68,15 @@ void engine::graphics::Rasterizer::Rasterize<engine::geometry::Triangle>(
                     RasterizedPixel primitive_pixel{.pixel      = {x_iter, y_iter, interpolated_color.ToRgb8()},
                                                     .pixel_kind = RasterizedPixel::Kind::Primitive};
 
-                    RenderPixel(render_context, primitive_pixel, pixel_callback);
+                    RenderPixel(render_context, draw_context, primitive_pixel, pixel_callback);
                 }
 
-                if (render_context.GetRasterizeMode() == RasterizeMode::PrimitiveAndBoundingBox &&
+                if (draw_context.GetDrawDebugFlag() == graphics::DrawDebugFlag::kWireframeBoundingBox &&
                     (is_first_or_last_column || is_first_or_last_row))
                 {
-                    RasterizedPixel bounding_box_pixel{.pixel      = {x_iter, y_iter, kRgb8ColorGreen},
+                    RasterizedPixel bounding_box_pixel{.pixel      = {x_iter, y_iter, graphics::kRgb8ColorGreen},
                                                        .pixel_kind = RasterizedPixel::Kind::BoundingBox};
-                    RenderPixel(render_context, bounding_box_pixel, pixel_callback);
+                    RenderPixel(render_context, draw_context, bounding_box_pixel, pixel_callback);
                 }
 
                 edge_value[0] += triangle_edge_coefficients[0].a;
@@ -88,7 +89,8 @@ void engine::graphics::Rasterizer::Rasterize<engine::geometry::Triangle>(
             triangle_edge_function_value_row_start[2] += triangle_edge_coefficients[2].b;
         }
     }
-    else if (render_context.GetRasterizeMode() == RasterizeMode::BoundingBoxOnly)
+    else if (draw_context.GetDrawMode() == graphics::PrimitiveDrawMode::kNone &&
+             draw_context.GetDrawDebugFlag() == graphics::DrawDebugFlag::kWireframeBoundingBox)
     {
         for (uint32_t y_iter = y_start; y_iter <= y_end; y_iter++)
         {
@@ -100,27 +102,35 @@ void engine::graphics::Rasterizer::Rasterize<engine::geometry::Triangle>(
 
                 if (is_first_or_last_column || is_first_or_last_row)
                 {
-                    RasterizedPixel bounding_box_pixel{.pixel      = {x_iter, y_iter, kRgb8ColorGreen},
+                    RasterizedPixel bounding_box_pixel{.pixel      = {x_iter, y_iter, graphics::kRgb8ColorGreen},
                                                        .pixel_kind = RasterizedPixel::Kind::BoundingBox};
-                    RenderPixel(render_context, bounding_box_pixel, pixel_callback);
+                    RenderPixel(render_context, draw_context, bounding_box_pixel, pixel_callback);
                 }
             }
         }
     }
+    else if (draw_context.GetDrawMode() == graphics::PrimitiveDrawMode::kWireframe)
+    {
+        Rasterize(render_context, draw_context, triangle.Edge_0().ToLineSegment(), pixel_callback);
+        Rasterize(render_context, draw_context, triangle.Edge_1().ToLineSegment(), pixel_callback);
+        Rasterize(render_context, draw_context, triangle.Edge_2().ToLineSegment(), pixel_callback);
+    }
 
-    render_context.EndRenderStatCollection();
+    draw_context.EndRenderStatCollection();
 }
 
 // Line Segment
 template <>
-void engine::graphics::Rasterizer::Rasterize<engine::geometry::LineSegment>(
-    RenderContext&                                                                        render_context,
-    const geometry::LineSegment&                                                          line,
-    const std::function<void(const engine::graphics::RasterizedPixel& rasterized_pixel)>& pixel_callback) const
+void engine::render::cpu::Rasterizer::Rasterize<engine::geometry::LineSegment>(
+    graphics::RenderContext&                                                                             render_context,
+    graphics::DrawContext&                                                                               draw_context,
+    const engine::geometry::LineSegment&                                                                 line,
+    const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>& pixel_callback)
+    const
 {
-    render_context.StartRenderStatCollection(line);
+    draw_context.StartRenderStatCollection(line);
 
-    auto RasterizeEdgeUsingLineEquation = [this, &render_context, &pixel_callback, &line]() {
+    auto RasterizeEdgeUsingLineEquation = [this, &render_context, &draw_context, &pixel_callback, &line]() {
         // Equation of a line y - y1 = m(x - x1), where m = (y2 - y1) / (x2 - x1)
         float x1 = line.Start().x;
         float y1 = line.Start().y;
@@ -130,7 +140,7 @@ void engine::graphics::Rasterizer::Rasterize<engine::geometry::LineSegment>(
 
         float slope_denominator = x2 - x1;
 
-        if (slope_denominator != 0)
+        if (slope_denominator != 0.0f)
         {
             float slope = 0.0f;
             slope       = (y2 - y1) / slope_denominator;
@@ -155,14 +165,14 @@ void engine::graphics::Rasterizer::Rasterize<engine::geometry::LineSegment>(
 
                 RasterizedPixel primitive_pixel{.pixel      = {static_cast<uint16_t>(pixel_coordinate_x),
                                                                static_cast<uint16_t>(pixel_coordinate_y),
-                                                               kRgb8ColorRed},
+                                                               graphics::kRgb8ColorRed},
                                                 .pixel_kind = RasterizedPixel::Kind::Primitive};
-                RenderPixel(render_context, primitive_pixel, pixel_callback);
+                RenderPixel(render_context, draw_context, primitive_pixel, pixel_callback);
             }
         }
     };
 
-    auto RasterizeEdgeUsingMidPointAlgo = [this, &render_context, &pixel_callback, line]() {
+    auto RasterizeEdgeUsingMidPointAlgo = [this, &render_context, &draw_context, &pixel_callback, line]() {
         /* Bresenham Mid-point algo
          * 1. Calculate the differences dx and dy between the start and end points of the line.
          * F(x,y) = ax + by + c
@@ -210,9 +220,9 @@ void engine::graphics::Rasterizer::Rasterize<engine::geometry::LineSegment>(
             for (int32_t i = 0; i <= dx; ++i)
             {
                 RasterizedPixel primitive_pixel{
-                    .pixel      = {static_cast<uint16_t>(x), static_cast<uint16_t>(y), kRgb8ColorRed},
+                    .pixel      = {static_cast<uint16_t>(x), static_cast<uint16_t>(y), graphics::kRgb8ColorRed},
                     .pixel_kind = RasterizedPixel::Kind::Primitive};
-                RenderPixel(render_context, primitive_pixel, pixel_callback);
+                RenderPixel(render_context, draw_context, primitive_pixel, pixel_callback);
 
                 x = x + sx;  // Move to the next x coordinate
                 if (d > 0)
@@ -233,9 +243,9 @@ void engine::graphics::Rasterizer::Rasterize<engine::geometry::LineSegment>(
             for (int32_t i = 0; i <= dy; ++i)
             {
                 RasterizedPixel primitive_pixel{
-                    .pixel      = {static_cast<uint16_t>(x), static_cast<uint16_t>(y), kRgb8ColorRed},
+                    .pixel      = {static_cast<uint16_t>(x), static_cast<uint16_t>(y), graphics::kRgb8ColorRed},
                     .pixel_kind = RasterizedPixel::Kind::Primitive};
-                RenderPixel(render_context, primitive_pixel, pixel_callback);
+                RenderPixel(render_context, draw_context, primitive_pixel, pixel_callback);
                 y = y + sy;  // Move to the next y coordinate
                 if (d > 0)
                 {
@@ -261,5 +271,5 @@ void engine::graphics::Rasterizer::Rasterize<engine::geometry::LineSegment>(
         RasterizeEdgeUsingMidPointAlgo();
     }
 
-    render_context.EndRenderStatCollection();
+    draw_context.EndRenderStatCollection();
 }
