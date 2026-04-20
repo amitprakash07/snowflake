@@ -5,21 +5,18 @@
 
 // Triangle
 template <>
-void amit::render::cpu::Rasterizer::Rasterize<amit::geometry::Triangle>(
-    graphics::RenderContext&                                                                             render_context,
-    graphics::DrawContext&                                                                               draw_context,
-    const geometry::Triangle&                                                                            triangle,
-    const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>& pixel_callback)
-    const
+void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveType::kTriangle>(
+    graphics::RenderContext&                                                               render_context,
+    graphics::DrawContext&                                                                 draw_context,
+    const amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kTriangle>& triangle,
+    const std::function<void(graphics::RenderContext&,
+                             graphics::DrawContext&,
+                             const RasterizedPixel& rasterized_pixel)>&                    pixel_callback) const
 {
     draw_context.StartRenderStatCollection(triangle);
 
-    amit::geometry::AxisAlignedBoundingBox bounding_box = triangle.GetBoundingBox();
-
-    std::array<RasterVertex, 3> raster_vertices = MakeRasterTriangleVertices(triangle);
-    raster_vertices.at(0).color                 = graphics::kRgb8ColorRed;
-    raster_vertices.at(1).color                 = graphics::kRgb8ColorGreen;
-    raster_vertices.at(2).color                 = graphics::kRgb8ColorBlue;
+    amit::geometry::AxisAlignedBoundingBox bounding_box;
+    bounding_box.Expand({triangle.VertA().position, triangle.VertB().position, triangle.VertC().position});
 
     geometry::Point3D viewport_clamped_min = render_context.GetViewport().ClampToView(bounding_box.GetMin());
     geometry::Point3D viewport_clamped_max = render_context.GetViewport().ClampToView(bounding_box.GetMax());
@@ -33,9 +30,9 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::geometry::Triangle>(
     using EdgeFunctionValue = float;
 
     const std::array<geometry::ImplicitLineCoefficients, 3> triangle_edge_coefficients{
-        geometry::MakeImplicitLineCoefficients(triangle.Edge_0().start, triangle.Edge_0().end),
-        geometry::MakeImplicitLineCoefficients(triangle.Edge_1().start, triangle.Edge_1().end),
-        geometry::MakeImplicitLineCoefficients(triangle.Edge_2().start, triangle.Edge_2().end)};
+        geometry::MakeImplicitLineCoefficients(triangle.Edge_0().Start().position, triangle.Edge_0().End().position),
+        geometry::MakeImplicitLineCoefficients(triangle.Edge_1().Start().position, triangle.Edge_1().End().position),
+        geometry::MakeImplicitLineCoefficients(triangle.Edge_2().Start().position, triangle.Edge_2().End().position)};
 
     std::array<EdgeFunctionValue, 3> triangle_edge_function_value_row_start{
         geometry::Orient2D(triangle_edge_coefficients[0], geometry::Point3D(x_start, y_start)),
@@ -56,14 +53,17 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::geometry::Triangle>(
                 if ((edge_value[0] < 0 && edge_value[1] < 0 && edge_value[2] < 0) ||
                     (edge_value[0] >= 0 && edge_value[1] >= 0 && edge_value[2] >= 0))
                 {
-                    geometry::BaryCentricCoordinate barycentric_coordinate = geometry::CalculateBaryCentricCoordinate(
-                        triangle.VertA(), triangle.VertB(), triangle.VertC(), geometry::Point3D(x_iter, y_iter));
+                    geometry::BaryCentricCoordinate barycentric_coordinate =
+                        geometry::CalculateBaryCentricCoordinate(triangle.VertA().position,
+                                                                 triangle.VertB().position,
+                                                                 triangle.VertC().position,
+                                                                 geometry::Point3D(x_iter, y_iter));
 
                     amit::graphics::FloatColor interpolated_color =
-                        amit::graphics::InterpolateColor(raster_vertices[0].color.ToFloatColor(),
-                                                           raster_vertices[1].color.ToFloatColor(),
-                                                           raster_vertices[2].color.ToFloatColor(),
-                                                           barycentric_coordinate);
+                        amit::graphics::InterpolateColor(triangle.VertA().color.ToFloatColor(),
+                                                         triangle.VertB().color.ToFloatColor(),
+                                                         triangle.VertC().color.ToFloatColor(),
+                                                         barycentric_coordinate);
 
                     RasterizedPixel primitive_pixel{.pixel      = {x_iter, y_iter, interpolated_color.ToRgb8()},
                                                     .pixel_kind = RasterizedPixel::Kind::Primitive};
@@ -111,9 +111,9 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::geometry::Triangle>(
     }
     else if (draw_context.GetDrawMode() == graphics::PrimitiveDrawMode::kWireframe)
     {
-        Rasterize(render_context, draw_context, triangle.Edge_0().ToLineSegment(), pixel_callback);
-        Rasterize(render_context, draw_context, triangle.Edge_1().ToLineSegment(), pixel_callback);
-        Rasterize(render_context, draw_context, triangle.Edge_2().ToLineSegment(), pixel_callback);
+        Rasterize(render_context, draw_context, triangle.Edge_0(), pixel_callback);
+        Rasterize(render_context, draw_context, triangle.Edge_1(), pixel_callback);
+        Rasterize(render_context, draw_context, triangle.Edge_2(), pixel_callback);
     }
 
     draw_context.EndRenderStatCollection();
@@ -121,10 +121,10 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::geometry::Triangle>(
 
 // Line Segment
 template <>
-void amit::render::cpu::Rasterizer::Rasterize<amit::geometry::LineSegment>(
+void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveType::kLine>(
     graphics::RenderContext&                                                                             render_context,
     graphics::DrawContext&                                                                               draw_context,
-    const amit::geometry::LineSegment&                                                                 line,
+    const amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kLine>&                   line,
     const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>& pixel_callback)
     const
 {
@@ -132,11 +132,11 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::geometry::LineSegment>(
 
     auto RasterizeEdgeUsingLineEquation = [this, &render_context, &draw_context, &pixel_callback, &line]() {
         // Equation of a line y - y1 = m(x - x1), where m = (y2 - y1) / (x2 - x1)
-        float x1 = line.Start().x;
-        float y1 = line.Start().y;
+        float x1 = line.Start().position.x;
+        float y1 = line.Start().position.y;
 
-        float x2 = line.End().x;
-        float y2 = line.End().y;
+        float x2 = line.End().position.x;
+        float y2 = line.End().position.y;
 
         float slope_denominator = x2 - x1;
 
@@ -195,11 +195,11 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::geometry::LineSegment>(
          * For other case where m > 1, we need to swap the role of x and y. It means y will move every time while
          * x change will be based on d.
          */
-        int32_t x1 = static_cast<int32_t>(line.Start().x);
-        int32_t y1 = static_cast<int32_t>(line.Start().y);
+        int32_t x1 = static_cast<int32_t>(line.Start().position.x);
+        int32_t y1 = static_cast<int32_t>(line.Start().position.y);
 
-        int32_t x2 = static_cast<int32_t>(line.End().x);
-        int32_t y2 = static_cast<int32_t>(line.End().y);
+        int32_t x2 = static_cast<int32_t>(line.End().position.x);
+        int32_t y2 = static_cast<int32_t>(line.End().position.y);
 
         int32_t dx = x2 - x1;
         int32_t dy = y2 - y1;

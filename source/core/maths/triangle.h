@@ -1,7 +1,6 @@
 #ifndef CORE_MATHS_TRIANGLE_H_
 #define CORE_MATHS_TRIANGLE_H_
 
-#include "bounding_box.h"
 #include "line_segment.h"
 #include "point.h"
 #include "primitive.h"
@@ -87,15 +86,11 @@ namespace amit::geometry
             return vert_c_position_;
         }
 
-        AxisAlignedBoundingBox GetBoundingBox() const;
-
     private:
         // CounterClockwise Direction
-        Point3D                        vert_a_position_;
-        Point3D                        vert_b_position_;
-        Point3D                        vert_c_position_;
-        mutable AxisAlignedBoundingBox bounding_box_;
-        bool                           is_bounding_box_computed_ = false;
+        Point3D vert_a_position_;
+        Point3D vert_b_position_;
+        Point3D vert_c_position_;
     };
 }  // namespace amit::geometry
 

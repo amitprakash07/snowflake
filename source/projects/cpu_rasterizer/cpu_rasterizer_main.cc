@@ -13,10 +13,22 @@ int main(int argc, char* argv[])
     uint16_t                 width  = 800;
     uint16_t                 height = 600;
     amit::graphics::Viewport viewport(width, height);
+
     amit::geometry::Point3D  a{400u, 100u};
     amit::geometry::Point3D  b{200u, 500u};
     amit::geometry::Point3D  c{600u, 500u};
-    amit::geometry::Triangle screen_space_triangle(a, b, c);
+
+    std::array<amit::graphics::VertexAttributes, 3> screen_space_triangle_vertices;
+
+    screen_space_triangle_vertices[0] =
+        amit::graphics::VertexAttributes{.position = a, .color = amit::graphics::kRgb8ColorRed};
+    screen_space_triangle_vertices[1] =
+        amit::graphics::VertexAttributes{.position = b, .color = amit::graphics::kRgb8ColorGreen};
+    screen_space_triangle_vertices[2] =
+        amit::graphics::VertexAttributes{.position = c, .color = amit::graphics::kRgb8ColorBlue};
+
+    amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kTriangle> screen_space_triangle(
+        screen_space_triangle_vertices);
 
     // Rasterization logic goes here. For now, we just set the triangle vertices to red color.
     std::cout << "Rasterization started\n";

@@ -6,6 +6,7 @@
 #include "core/maths/geometry_primitives.h"
 #include "core/graphics/pixel.h"
 #include "core/graphics/render_context.h"
+#include "core/graphics/render_primitives.h"
 
 namespace amit::render::cpu
 {
@@ -26,13 +27,12 @@ namespace amit::render::cpu
     public:
         Rasterizer() = default;
 
-        template <amit::geometry::PrimitiveTypeConcept Primitive>
+        template <amit::graphics::RenderPrimitiveType type>
         void Rasterize(
             graphics::RenderContext&,
             graphics::DrawContext&,
-            const Primitive&,
-            const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>&)
-            const
+            const amit::graphics::RenderPrimitive<type>&,
+            const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>&) const
         {
         }
 
@@ -50,19 +50,19 @@ namespace amit::render::cpu
     };
 
     template <>
-    void Rasterizer::Rasterize<geometry::Triangle>(
-        graphics::RenderContext&                                            render_context,
-        graphics::DrawContext&                                              draw_context,
-        const geometry::Triangle&                                           triangle,
+    void Rasterizer::Rasterize<amit::graphics::RenderPrimitiveType::kTriangle>(
+        graphics::RenderContext&                                                               render_context,
+        graphics::DrawContext&                                                                 draw_context,
+        const amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kTriangle>& triangle,
         const std::function<void(graphics::RenderContext&,
                                  graphics::DrawContext&,
-                                 const RasterizedPixel& rasterized_pixel)>& pixel_callback) const;
+                                 const RasterizedPixel& rasterized_pixel)>&                    pixel_callback) const;
 
     template <>
-    void Rasterizer::Rasterize<geometry::LineSegment>(
-        graphics::RenderContext&     render_context,
-        graphics::DrawContext&       draw_context,
-        const geometry::LineSegment& line,
+    void Rasterizer::Rasterize<amit::graphics::RenderPrimitiveType::kLine>(
+        graphics::RenderContext&                                                           render_context,
+        graphics::DrawContext&                                                             draw_context,
+        const amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kLine>& line,
         const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>&
             pixel_callback) const;
 

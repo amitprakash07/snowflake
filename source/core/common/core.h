@@ -64,8 +64,10 @@ namespace amit
 
         std::string ToString() const
         {
-            std::string ret_string =
-                std::format("[Type:{}, Name: {}, Id: {}]", TypeToString(object_type), object_name, object_id.value());
+            std::string ret_string = std::format("[Type:{}, Name: {}, Id: {}]",
+                                                 TypeToString(object_type),
+                                                 object_name.empty() ? "None" : object_name,
+                                                 object_id.value());
             return ret_string;
         }
 
@@ -75,6 +77,6 @@ namespace amit
         ObjectId    object_id;
     };
 
-}  // namespace engine
+}  // namespace amit
 
 #endif

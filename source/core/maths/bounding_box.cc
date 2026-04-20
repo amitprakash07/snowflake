@@ -92,7 +92,3 @@ bool geometry::AxisAlignedBoundingBox::IsInside(Point3D point) const
     return true;
 }
 
-const std::array<geometry::Point3D, 4>& geometry::AxisAlignedBoundingBox::GetVertices() const
-{
-    return vertices_;
-}

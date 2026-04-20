@@ -8,6 +8,7 @@
 #include "viewport.h"
 #include "render_stats.h"
 #include "image_2d.h"
+#include "render_primitives.h"
 
 namespace amit::graphics
 {
@@ -43,7 +44,8 @@ namespace amit::graphics
         {
         }
 
-        void StartRenderStatCollection(const geometry::Primitive& primitive)
+        template <RenderPrimitiveType PrimitiveType>
+        void StartRenderStatCollection(const RenderPrimitive<PrimitiveType>& primitive)
         {
             if (!collect_draw_stats_)
             {

@@ -2,6 +2,7 @@
 #define CORE_MATHS_BOUNDING_BOX_H_
 
 #include <array>
+#include <vector>
 
 #include "point.h"
 #include "Vector3.h"
@@ -34,16 +35,29 @@ namespace amit
                 : min_(min)
                 , max_(max)
             {
-                vertices_[0] = Point3D(min_.x, min_.y, min_.z);
-                vertices_[1] = Point3D(max_.x, min_.y, min_.z);
-                vertices_[2] = Point3D(max_.x, max_.y, min_.z);
-                vertices_[3] = Point3D(min_.x, max_.y, min_.z);
             }
 
-            bool                          IsInside(Point3D point) const;
-            const std::array<Point3D, 4>& GetVertices() const;
-            
-            Point3D                       GetMin() const
+            void Expand(const std::vector<Point3D>& points)
+            {
+                for (const auto& point : points)
+                {
+                    AddToBox(point);
+                }
+            }
+
+            bool IsInside(Point3D point) const;
+
+            std::array<Point3D, 4> GetVertices() const
+            {
+                std::array<Point3D, 4> ret_vertices;
+                ret_vertices[0] = Point3D(min_.x, min_.y, min_.z);
+                ret_vertices[1] = Point3D(max_.x, min_.y, min_.z);
+                ret_vertices[2] = Point3D(max_.x, max_.y, min_.z);
+                ret_vertices[3] = Point3D(min_.x, max_.y, min_.z);
+                return ret_vertices;
+            }
+
+            Point3D GetMin() const
             {
                 return min_;
             }
@@ -54,12 +68,27 @@ namespace amit
             }
 
         private:
-            std::array<Point3D, 4> vertices_;
-            Point3D                min_;
-            Point3D                max_;
+            void AddToBox(const Point3D& point)
+            {
+                min_.x = std::min(min_.x, point.x);
+                min_.y = std::min(min_.y, point.y);
+                min_.z = std::min(min_.z, point.z);
+
+                max_.x = std::max(max_.x, point.x);
+                max_.y = std::max(max_.y, point.y);
+                max_.z = std::max(max_.z, point.z);
+            }
+
+            Point3D min_{std::numeric_limits<float>::max(),
+                         std::numeric_limits<float>::max(),
+                         std::numeric_limits<float>::max()};
+
+            Point3D max_{std::numeric_limits<float>::lowest(),
+                         std::numeric_limits<float>::lowest(),
+                         std::numeric_limits<float>::lowest()};
         };
     }  // namespace geometry
 
-}  // namespace engine
+}  // namespace amit
 
 #endif
