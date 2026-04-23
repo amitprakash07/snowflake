@@ -40,7 +40,8 @@ ray_intersection.cc
 point.h
 point.cc
 line_segment.h
-geometry.h)
+geometry.h
+geometry_common.h)
 
 add_library(maths_geometry STATIC ${CORE_MATHS_GEOMETRY_SOURCE})
 target_link_libraries(maths_geometry maths_linear_algebra)

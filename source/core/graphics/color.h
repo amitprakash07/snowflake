@@ -41,8 +41,13 @@ namespace amit::graphics
     const Rgb8 kRgb8ColorRed   = {255, 0, 0};
     const Rgb8 kRgb8ColorGreen = {0, 255, 0};
     const Rgb8 kRgb8ColorBlue  = {0, 0, 255};
+
     const Rgb8 kRgb8ColorWhite = {255, 255, 255};
     const Rgb8 kRgb8ColorBlack = {0, 0, 0};
+
+    const Rgb8 kRgb8ColorCyan    = {0, 255, 255};
+    const Rgb8 kRgb8ColorMagenta = {255, 0, 255};
+    const Rgb8 kRgb8ColorYellow  = {255, 255, 0};
 
     class FloatColor
     {
@@ -85,6 +90,17 @@ namespace amit::graphics
                                color3.b * barycentric_coordinate.gamma;
         return interpolated_color;
     }
+
+    inline float InterpolateDepth(const float&                    data1,
+                                  const float&                    data2,
+                                  const float&                    data3,
+                                  geometry::BaryCentricCoordinate barycentric_coordinate)
+    {
+        float interpolated_data = data1 * barycentric_coordinate.alpha + data2 * barycentric_coordinate.beta +
+                                  data3 * barycentric_coordinate.gamma;
+        return interpolated_data;
+    }
+
 }  // namespace amit::graphics
 
 #endif

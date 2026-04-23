@@ -125,6 +125,7 @@ namespace amit::graphics
             , color_buffer_(viewport.GetWidth(), viewport.GetHeight())
             , depth_buffer_(viewport.GetWidth(), viewport.GetHeight())
         {
+            depth_buffer_.FillImage(std::numeric_limits<float>::infinity());
         }
 
         RenderContext() = delete;

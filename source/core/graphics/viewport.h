@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <utility>
 
+#include "graphics_common.h"
 #include "core/maths/point.h"
 
 namespace amit::graphics
@@ -13,59 +14,60 @@ namespace amit::graphics
     public:
         Viewport() = delete;
 
-        Viewport(geometry::Point3D origin, uint16_t width, uint16_t height)
+        Viewport(geometry::Point3D origin, core::graphics::Width width, core::graphics::Height height)
             : origin_(origin)
             , width_(width)
             , height_(height)
         {
         }
 
-        Viewport(uint16_t width, uint16_t height)
+        Viewport(core::graphics::Width width, core::graphics::Height height)
             : origin_()
             , width_(width)
             , height_(height)
         {
         }
 
-        inline uint16_t GetWidth() const
+        core::graphics::Width GetWidth() const
         {
             return width_;
         }
-        inline uint16_t GetHeight() const
+
+        core::graphics::Height GetHeight() const
         {
             return height_;
         }
 
-        inline const geometry::Point3D& Origin() const
+        const geometry::Point3D& Origin() const
         {
             return origin_;
         }
 
-        inline uint32_t ClampX(int32_t x) const
+        uint32_t ClampX(int32_t x) const
         {
             if (std::cmp_less(x, 0))
             {
                 return 0;
             }
 
-            if (std::cmp_greater(x, width_))
+            if (std::cmp_greater(x, width_.value))
             {
-                return width_;
+                return width_.value;
             }
 
             return static_cast<uint32_t>(x);
         }
 
-        inline uint32_t ClampY(int32_t y) const
+        uint32_t ClampY(int32_t y) const
         {
             if (std::cmp_less(y, 0))
             {
                 return 0;
             }
 
-            if (std::cmp_greater(y, height_))
+            if (std::cmp_greater(y, height_.value))
             {
-                return width_;
+                return height_.value;
             }
 
             return static_cast<uint32_t>(y);
@@ -79,9 +81,9 @@ namespace amit::graphics
         }
 
     private:
-        geometry::Point3D origin_;
-        uint16_t          width_;
-        uint16_t          height_;
+        geometry::Point3D      origin_;
+        core::graphics::Width  width_;
+        core::graphics::Height height_;
     };
 }  // namespace amit::graphics
 

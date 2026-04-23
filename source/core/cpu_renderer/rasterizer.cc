@@ -41,12 +41,12 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveTyp
 
     if (draw_context.GetDrawMode() == graphics::PrimitiveDrawMode::kSolid)
     {
-        for (uint32_t y_iter = y_start; y_iter <= y_end; y_iter++)
+        for (uint32_t y_iter = y_start; y_iter < y_end; y_iter++)
         {
             std::array<EdgeFunctionValue, 3> edge_value           = triangle_edge_function_value_row_start;
             bool                             is_first_or_last_row = (y_iter == y_start || y_iter == y_end);
 
-            for (uint32_t x_iter = x_start; x_iter <= x_end; x_iter++)
+            for (uint32_t x_iter = x_start; x_iter < x_end; x_iter++)
             {
                 bool is_first_or_last_column = (x_iter == x_start || x_iter == x_end);
 
@@ -59,16 +59,30 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveTyp
                                                                  triangle.VertC().position,
                                                                  geometry::Point3D(x_iter, y_iter));
 
-                    amit::graphics::FloatColor interpolated_color =
-                        amit::graphics::InterpolateColor(triangle.VertA().color.ToFloatColor(),
-                                                         triangle.VertB().color.ToFloatColor(),
-                                                         triangle.VertC().color.ToFloatColor(),
-                                                         barycentric_coordinate);
+                    float depth_buffer_value = render_context.GetDepthBuffer().GetImageData(
+                        graphics::ImageCoordinate{.x = x_iter, .y = y_iter});
 
-                    RasterizedPixel primitive_pixel{.pixel      = {x_iter, y_iter, interpolated_color.ToRgb8()},
-                                                    .pixel_kind = RasterizedPixel::Kind::Primitive};
+                    float interpolated_depth = amit::graphics::InterpolateDepth(triangle.VertA().position.z,
+                                                                                triangle.VertB().position.z,
+                                                                                triangle.VertC().position.z,
+                                                                                barycentric_coordinate);
 
-                    RenderPixel(render_context, draw_context, primitive_pixel, pixel_callback);
+                    if (interpolated_depth < depth_buffer_value)
+                    {
+                        render_context.GetDepthBuffer().SetImageData(graphics::ImageCoordinate{x_iter, y_iter},
+                                                                     interpolated_depth);
+
+                        amit::graphics::FloatColor interpolated_color =
+                            amit::graphics::InterpolateColor(triangle.VertA().color.ToFloatColor(),
+                                                             triangle.VertB().color.ToFloatColor(),
+                                                             triangle.VertC().color.ToFloatColor(),
+                                                             barycentric_coordinate);
+
+                        RasterizedPixel primitive_pixel{.pixel      = {x_iter, y_iter, interpolated_color.ToRgb8()},
+                                                        .pixel_kind = RasterizedPixel::Kind::Primitive};
+
+                        RenderPixel(render_context, draw_context, primitive_pixel, pixel_callback);
+                    }
                 }
 
                 if (draw_context.GetDrawDebugFlag() == graphics::DrawDebugFlag::kWireframeBoundingBox &&

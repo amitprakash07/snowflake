@@ -4,40 +4,11 @@
 #include <cstdint>
 
 #include "color.h"
-#include "core/maths/point.h"
+#include "graphics_common.h"
 
 namespace amit::graphics
 {
-    class PixelCoordinate
-    {
-    public:
-        enum class Origin : uint8_t
-        {
-            kTopLeft,
-            kBottomLeft
-        };
-
-        PixelCoordinate() = default;
-        PixelCoordinate(uint32_t x_in, uint32_t y_in, Origin origin_in = Origin::kTopLeft)
-            : x(x_in)
-            , y(y_in)
-            , origin(origin_in)
-        {
-        }
-
-        explicit PixelCoordinate(const geometry::Point3D& point)
-            : x(static_cast<uint32_t>(point.x))
-            , y(static_cast<uint32_t>(point.y))
-            , origin(Origin::kTopLeft)
-        {
-        }
-
-        uint32_t x, y;
-        Origin   origin;
-
-    private:
-        [[maybe_unused]] uint8_t _padding_ = 0;
-    };
+    using PixelCoordinate = core::graphics::DiscreteCoordinate;
 
     class Pixel
     {

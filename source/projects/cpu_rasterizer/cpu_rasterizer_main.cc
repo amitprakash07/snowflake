@@ -4,31 +4,24 @@
 #include "core/common/perf_stats.h"
 #include "core/cpu_renderer/rasterizer.h"
 #include "core/graphics/image_2d.h"
+#include "core/graphics/image_generator.h"
 #include "core/graphics/viewport.h"
 #include "core/graphics/render_context.h"
 #include "core/graphics/text_overlay.h"
 
 int main(int argc, char* argv[])
 {
-    uint16_t                 width  = 800;
-    uint16_t                 height = 600;
-    amit::graphics::Viewport viewport(width, height);
+    amit::graphics::Viewport viewport({.value = 800}, {.value = 600});
 
-    amit::geometry::Point3D  a{400u, 100u};
-    amit::geometry::Point3D  b{200u, 500u};
-    amit::geometry::Point3D  c{600u, 500u};
+    amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kTriangle> screen_space_triangle_1{
+        {.position = amit::geometry::Point3D{500u, 100u, 10u}, .color = amit::graphics::kRgb8ColorRed},
+        {.position = amit::geometry::Point3D{300u, 500u, 10u}, .color = amit::graphics::kRgb8ColorGreen},
+        {.position = amit::geometry::Point3D{700u, 500u, 10u}, .color = amit::graphics::kRgb8ColorBlue}};
 
-    std::array<amit::graphics::VertexAttributes, 3> screen_space_triangle_vertices;
-
-    screen_space_triangle_vertices[0] =
-        amit::graphics::VertexAttributes{.position = a, .color = amit::graphics::kRgb8ColorRed};
-    screen_space_triangle_vertices[1] =
-        amit::graphics::VertexAttributes{.position = b, .color = amit::graphics::kRgb8ColorGreen};
-    screen_space_triangle_vertices[2] =
-        amit::graphics::VertexAttributes{.position = c, .color = amit::graphics::kRgb8ColorBlue};
-
-    amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kTriangle> screen_space_triangle(
-        screen_space_triangle_vertices);
+    amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kTriangle> screen_space_triangle_2{
+        {.position = amit::geometry::Point3D{200u, 200u, 20u}, .color = amit::graphics::kRgb8ColorYellow},
+        {.position = amit::geometry::Point3D{200u, 550u, 20u}, .color = amit::graphics::kRgb8ColorRed},
+        {.position = amit::geometry::Point3D{500u, 550u, 20u}, .color = amit::graphics::kRgb8ColorYellow}};
 
     // Rasterization logic goes here. For now, we just set the triangle vertices to red color.
     std::cout << "Rasterization started\n";
@@ -46,7 +39,8 @@ int main(int argc, char* argv[])
         amit::graphics::PrimitiveDrawMode::kSolid, amit::graphics::DrawDebugFlag::kNone, true);
 
     amit::render::cpu::Rasterizer triangle_rasterizer;
-    triangle_rasterizer.Rasterize(render_context, draw_context, screen_space_triangle, pixel_shader);
+    triangle_rasterizer.Rasterize(render_context, draw_context, screen_space_triangle_2, pixel_shader);
+    triangle_rasterizer.Rasterize(render_context, draw_context, screen_space_triangle_1, pixel_shader);
 
     std::cout << "Rasterization Finished\n";
 
@@ -57,6 +51,17 @@ int main(int argc, char* argv[])
 
     // Save the frame buffer to disk as a PPM image
     amit::image::WriteColorBufferToPPM(color_buffer, "output.ppm");
+
+    amit::graphics::Image2D<amit::graphics::Rgb8> checker_board =
+        amit::graphics::ImageGenerator::GetCheckerBoard({.value = 200}, {.value = 200}, {.value = 8});
+    // Save the frame buffer to disk as a PPM image
+    amit::image::WriteColorBufferToPPM(checker_board, "checker_board.ppm");
+
+    amit::graphics::Image2D<amit::graphics::Rgb8> checker_board_8_8 =
+        amit::graphics::ImageGenerator::GetCheckerBoard({.value = 16}, 8, 8);
+    // Save the frame buffer to disk as a PPM image
+    amit::image::WriteColorBufferToPPM(checker_board_8_8, "checker_board_8_8.ppm");
+
     std::cout << "Color buffer saved to disk\n";
 
     std::cout << stats;
