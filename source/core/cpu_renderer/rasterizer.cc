@@ -3,6 +3,8 @@
 #include "core/graphics/render_primitives.h"
 #include "core/maths/geometry/geometry.h"
 
+#include "core/graphics/barycentric_interpolation.h"
+
 // Triangle
 template <>
 void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveType::kTriangle>(

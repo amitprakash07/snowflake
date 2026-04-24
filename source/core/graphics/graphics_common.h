@@ -4,7 +4,9 @@
 #include <cstdint>
 #include <type_traits>
 
-namespace core::graphics
+#include "core/maths/linear_algebra/intervals.h"
+
+namespace amit::graphics
 {
     struct Width
     {
@@ -23,7 +25,7 @@ namespace core::graphics
     };
 
     template <typename T>
-        requires std::is_same_v<T, uint32_t> || std::is_same_v<T, float>
+        requires std::is_arithmetic_v<T> || std::is_same_v<T, std::uint32_t>
     struct Coordinate
     {
         T x;
@@ -33,6 +35,11 @@ namespace core::graphics
     using DiscreteCoordinate   = Coordinate<std::uint32_t>;
     using ContinuousCoordinate = Coordinate<float>;
 
-}  // namespace core::graphics
+    using UVCoordinate           = ContinuousCoordinate;
+    using NormalizedUVCoordinate = amit::maths::ClosedInterval<double, 0.0f, 1.0f>;
+
+    using PixelCoordinate = DiscreteCoordinate;
+
+}  // namespace amit::graphics
 
 #endif  // CORE_GRAPHICS_GRAPHICS_COMMON_H_

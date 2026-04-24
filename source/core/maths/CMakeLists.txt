@@ -13,7 +13,8 @@ set(CORE_MATHS_LINEAR_ALGEBRA_SOURCE
     linear_algebra/matrix_4x4.h
     linear_algebra/matrix_4x4.cc
     linear_algebra/quaternion.h
-    linear_algebra/quaternion.cc)
+    linear_algebra/quaternion.cc
+    linear_algebra/intervals.h)
     
 add_library(maths_linear_algebra STATIC ${CORE_MATHS_LINEAR_ALGEBRA_SOURCE})
 target_include_directories(maths_linear_algebra

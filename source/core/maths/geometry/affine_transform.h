@@ -62,6 +62,5 @@ namespace amit::maths
         maths::Vector3 euler_angles_;
     };
 
-}  // namespace engine
-
+}  // namespace amit::maths
 #endif

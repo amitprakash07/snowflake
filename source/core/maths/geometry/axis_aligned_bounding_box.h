@@ -144,6 +144,6 @@ namespace amit
             return TestAABBPlane(b2, p);
         }
     }  // namespace Physics
-}  // namespace engine
+}  // namespace amit
 
 #endif

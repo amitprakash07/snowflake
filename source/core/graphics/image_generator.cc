@@ -1,9 +1,8 @@
 #include "image_generator.h"
 
-amit::graphics::Image2D<amit::graphics::Rgb8> amit::graphics::ImageGenerator::GetCheckerBoard(
-    core::graphics::Width    width,
-    core::graphics::Height   height,
-    core::graphics::TileSize tile_size)
+amit::graphics::Image2D<amit::graphics::Rgb8> amit::graphics::ImageGenerator::GetCheckerBoard(Width    width,
+                                                                                              Height   height,
+                                                                                              TileSize tile_size)
 {
     Image2D<Rgb8> checker_board{width, height};
 
@@ -19,13 +18,12 @@ amit::graphics::Image2D<amit::graphics::Rgb8> amit::graphics::ImageGenerator::Ge
     return checker_board;
 }
 
-amit::graphics::Image2D<amit::graphics::Rgb8> amit::graphics::ImageGenerator::GetCheckerBoard(
-    core::graphics::TileSize tile_size,
-    uint32_t                 tile_count_x,
-    uint32_t                 tile_count_y)
+amit::graphics::Image2D<amit::graphics::Rgb8> amit::graphics::ImageGenerator::GetCheckerBoard(TileSize tile_size,
+                                                                                              uint32_t tile_count_x,
+                                                                                              uint32_t tile_count_y)
 {
-    core::graphics::Width  image_width{.value = tile_size.value * tile_count_x};
-    core::graphics::Height image_height{.value = tile_size.value * tile_count_y};
+    Width  image_width{.value = tile_size.value * tile_count_x};
+    Height image_height{.value = tile_size.value * tile_count_y};
 
     return GetCheckerBoard(image_width, image_height, tile_size);
 }

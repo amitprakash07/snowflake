@@ -14,26 +14,26 @@ namespace amit::graphics
     public:
         Viewport() = delete;
 
-        Viewport(geometry::Point3D origin, core::graphics::Width width, core::graphics::Height height)
+        Viewport(geometry::Point3D origin, Width width, Height height)
             : origin_(origin)
             , width_(width)
             , height_(height)
         {
         }
 
-        Viewport(core::graphics::Width width, core::graphics::Height height)
+        Viewport(Width width, Height height)
             : origin_()
             , width_(width)
             , height_(height)
         {
         }
 
-        core::graphics::Width GetWidth() const
+        Width GetWidth() const
         {
             return width_;
         }
 
-        core::graphics::Height GetHeight() const
+        Height GetHeight() const
         {
             return height_;
         }
@@ -82,8 +82,8 @@ namespace amit::graphics
 
     private:
         geometry::Point3D      origin_;
-        core::graphics::Width  width_;
-        core::graphics::Height height_;
+        Width  width_;
+        Height height_;
     };
 }  // namespace amit::graphics
 

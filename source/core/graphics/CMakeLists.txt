@@ -29,7 +29,8 @@ render_primitives.h
 render_primitives.cc
 image_generator.h
 image_generator.cc
-graphics_common.h)
+graphics_common.h
+barycentric_interpolation.h)
 
 file(GLOB FONT8X8_HEADERS CONFIGURE_DEPENDS
   "${PROJECT_EXTERNAL_SOURCE_DIR}/font8x8/*.h")

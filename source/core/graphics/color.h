@@ -76,31 +76,6 @@ namespace amit::graphics
         float b;
     };
 
-    inline FloatColor InterpolateColor(const FloatColor&               color1,
-                                       const FloatColor&               color2,
-                                       const FloatColor&               color3,
-                                       geometry::BaryCentricCoordinate barycentric_coordinate)
-    {
-        FloatColor interpolated_color;
-        interpolated_color.r = color1.r * barycentric_coordinate.alpha + color2.r * barycentric_coordinate.beta +
-                               color3.r * barycentric_coordinate.gamma;
-        interpolated_color.g = color1.g * barycentric_coordinate.alpha + color2.g * barycentric_coordinate.beta +
-                               color3.g * barycentric_coordinate.gamma;
-        interpolated_color.b = color1.b * barycentric_coordinate.alpha + color2.b * barycentric_coordinate.beta +
-                               color3.b * barycentric_coordinate.gamma;
-        return interpolated_color;
-    }
-
-    inline float InterpolateDepth(const float&                    data1,
-                                  const float&                    data2,
-                                  const float&                    data3,
-                                  geometry::BaryCentricCoordinate barycentric_coordinate)
-    {
-        float interpolated_data = data1 * barycentric_coordinate.alpha + data2 * barycentric_coordinate.beta +
-                                  data3 * barycentric_coordinate.gamma;
-        return interpolated_data;
-    }
-
 }  // namespace amit::graphics
 
 #endif

@@ -7,7 +7,7 @@
 
 namespace amit::graphics
 {
-    using ImageCoordinate = core::graphics::DiscreteCoordinate;
+    using ImageCoordinate = amit::graphics::DiscreteCoordinate;
 
     template <typename ImageDataType>
     class Image2D
@@ -15,19 +15,19 @@ namespace amit::graphics
     public:
         Image2D() = delete;
 
-        Image2D(core::graphics::Width width, core::graphics::Height height);
+        Image2D(amit::graphics::Width width, amit::graphics::Height height);
 
         ~Image2D()
         {
             delete[] image_data_;
         }
 
-        core::graphics::Width GetWidth() const
+        amit::graphics::Width GetWidth() const
         {
             return width_;
         }
 
-        core::graphics::Height GetHeight() const
+        amit::graphics::Height GetHeight() const
         {
             return height_;
         }
@@ -58,7 +58,7 @@ namespace amit::graphics
                 image_data_, static_cast<size_t>(width_.value) * static_cast<size_t>(height_.value), image_data);
         }
 
-        void FillTile(ImageDataType image_data, ImageCoordinate start, core::graphics::TileSize tile_size)
+        void FillTile(ImageDataType image_data, ImageCoordinate start, amit::graphics::TileSize tile_size)
         {
             if (start.x >= width_.value || start.y >= height_.value)
             {
@@ -74,12 +74,12 @@ namespace amit::graphics
 
     private:
         ImageDataType*         image_data_;  // Array to hold pixel colors by row-major order
-        core::graphics::Width  width_;
-        core::graphics::Height height_;
+        amit::graphics::Width  width_;
+        amit::graphics::Height height_;
     };
 
     template <typename ImageDataType>
-    amit::graphics::Image2D<ImageDataType>::Image2D(core::graphics::Width width, core::graphics::Height height)
+    amit::graphics::Image2D<ImageDataType>::Image2D(amit::graphics::Width width, amit::graphics::Height height)
         : image_data_(nullptr)
         , width_(width)
         , height_(height)

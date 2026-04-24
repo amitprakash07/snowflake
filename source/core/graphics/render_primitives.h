@@ -3,14 +3,16 @@
 
 #include "core/maths/geometry/point.h"
 
-#include "color.h"
+#include "graphics_common.h"
 
 namespace amit::graphics
 {
     struct VertexAttributes
     {
-        geometry::Point3D position;
-        graphics::Rgb8    color;
+        geometry::Point3D      position                 = {};
+        graphics::Rgb8         color                    = {};
+        UVCoordinate           uv_coordinate            = {};
+        NormalizedUVCoordinate normalized_uv_coordinate = {};
     };
 
     enum class RenderPrimitiveType

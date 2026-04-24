@@ -8,8 +8,6 @@
 
 namespace amit::graphics
 {
-    using PixelCoordinate = core::graphics::DiscreteCoordinate;
-
     class Pixel
     {
     public:
