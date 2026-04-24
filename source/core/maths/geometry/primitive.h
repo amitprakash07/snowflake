@@ -1,9 +1,9 @@
-#ifndef CORE_MATHS_PRIMITIVE_H_
-#define CORE_MATHS_PRIMITIVE_H_
+#ifndef CORE_MATHS_GEOMETRY_PRIMITIVE_H_
+#define CORE_MATHS_GEOMETRY_PRIMITIVE_H_
 
 #include <cstdint>
 
-#include "vector3.h"
+#include "core/maths/linear_algebra/vector3.h"
 #include "core/common/core.h"
 
 namespace amit::geometry

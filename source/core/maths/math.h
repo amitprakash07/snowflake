@@ -1,7 +1,9 @@
 #ifndef CORE_MATHS_MATH_H_
 #define CORE_MATHS_MATH_H_
 
-#include "Vector3.h"
+#include "core/maths/linear_algebra/vector3.h"
+
+using amit::maths::Vector3;
 
 namespace engine {
 namespace Math {

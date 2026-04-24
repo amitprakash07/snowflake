@@ -1,7 +1,7 @@
-#ifndef CORE_MATHS_QUATERNION_H_
-#define CORE_MATHS_QUATERNION_H_
+#ifndef CORE_MATHS_LINEAR_ALGEBRA_QUATERNION_H_
+#define CORE_MATHS_LINEAR_ALGEBRA_QUATERNION_H_
 
-#include "Vector3.h"
+#include "vector3.h"
 
 namespace amit::maths
 {

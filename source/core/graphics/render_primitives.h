@@ -1,7 +1,7 @@
 #ifndef CORE_GRAPHICS_RENDER_PRIMITIVES_H_
 #define CORE_GRAPHICS_RENDER_PRIMITIVES_H_
 
-#include "core/maths/point.h"
+#include "core/maths/geometry/point.h"
 
 #include "color.h"
 

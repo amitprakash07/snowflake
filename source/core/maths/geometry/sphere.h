@@ -1,8 +1,8 @@
-#ifndef CORE_MATHS_SPHERE_H_
-#define CORE_MATHS_SPHERE_H_
+#ifndef CORE_MATHS_GEOMETRY_SPHERE_H_
+#define CORE_MATHS_GEOMETRY_SPHERE_H_
 
+#include "core/maths/linear_algebra/vector3.h"
 #include "primitive.h"
-#include "vector3.h"
 
 namespace amit::geometry
 {

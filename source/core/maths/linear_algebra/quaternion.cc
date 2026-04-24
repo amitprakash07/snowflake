@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "utils.h"
-#include "Quaternion.h"
+#include "quaternion.h"
 
 using namespace amit::maths;
 

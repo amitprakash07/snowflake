@@ -1,5 +1,5 @@
-#ifndef CORE_MATHS_TRIANGLE_H_
-#define CORE_MATHS_TRIANGLE_H_
+#ifndef CORE_MATHS_GEOMETRY_TRIANGLE_H_
+#define CORE_MATHS_GEOMETRY_TRIANGLE_H_
 
 #include "line_segment.h"
 #include "point.h"

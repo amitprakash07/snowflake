@@ -1,4 +1,4 @@
-#include "Math.h"
+#include "math.h"
 
 Math::Plane::Plane(Vector3 iNormal, Vector3 iPointOnPlane) {
   normal = iNormal;

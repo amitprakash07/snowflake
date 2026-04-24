@@ -3,7 +3,7 @@
 
 #include <functional>
 
-#include "core/maths/geometry_primitives.h"
+#include "core/maths/geometry/geometry_primitives.h"
 #include "core/graphics/pixel.h"
 #include "core/graphics/render_context.h"
 #include "core/graphics/render_primitives.h"

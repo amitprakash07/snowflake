@@ -2,8 +2,8 @@
 This file contains math-related functions
 */
 
-#ifndef CORE_MATHS_UTILS_H
-#define CORE_MATHS_UTILS_H
+#ifndef CORE_MATHS_LINEAR_ALGEBRA_UTILS_H_
+#define CORE_MATHS_LINEAR_ALGEBRA_UTILS_H_
 
 #include <numbers>
 

@@ -9,8 +9,8 @@ Link http://www.euclideanspace.com/
 
 #include "matrix_4x4.h"
 #include "plane.h"
-#include "Quaternion.h"
-#include "Vector3.h"
+#include "quaternion.h"
+#include "vector3.h"
 
 using namespace amit::maths;
 

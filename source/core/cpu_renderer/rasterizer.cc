@@ -1,7 +1,7 @@
 #include "rasterizer.h"
 
 #include "core/graphics/render_primitives.h"
-#include "core/maths/geometry.h"
+#include "core/maths/geometry/geometry.h"
 
 // Triangle
 template <>

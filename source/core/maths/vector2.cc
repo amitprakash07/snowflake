@@ -1,7 +1,7 @@
 // Header Files
 //=============
 
-#include "Vector2.h"
+#include "vector2.h"
 
 #include <cassert>
 #include <cmath>

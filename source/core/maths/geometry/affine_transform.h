@@ -1,9 +1,8 @@
-#ifndef CORE_MATHS_AFFINE_TRANSFORM_H_
-#define CORE_MATHS_AFFINE_TRANSFORM_H_
+#ifndef CORE_MATHS_GEOMETRY_AFFINE_TRANSFORM_H_
+#define CORE_MATHS_GEOMETRY_AFFINE_TRANSFORM_H_
 
-#include "matrix_4x4.h"
-#include "Quaternion.h"
-#include "Vector3.h"
+#include "core/maths/linear_algebra/matrix_4x4.h"
+#include "core/maths/linear_algebra/quaternion.h"
 
 namespace amit::maths
 {

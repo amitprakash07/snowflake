@@ -1,6 +1,6 @@
 #ifndef CORE_GRAPHICS_COLOR_H_
 #define CORE_GRAPHICS_COLOR_H_
-#include "core/maths/geometry.h"
+#include "core/maths/geometry/geometry.h"
 
 namespace amit::graphics
 {

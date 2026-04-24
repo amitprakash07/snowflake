@@ -1,7 +1,7 @@
 
 #include "engine_core.h"
 #include "common/hashed_string.h"
-#include "maths/utils.h"
+#include "core/maths/linear_algebra/utils.h"
 #include "input/../../Utilities/IObjectController.h"
 
 #include "camera.h"

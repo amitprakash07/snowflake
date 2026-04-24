@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "core/common/perf_stats.h"
+#include "core/maths/geometry/point.h"
 #include "core/cpu_renderer/rasterizer.h"
 #include "core/graphics/image_2d.h"
 #include "core/graphics/image_generator.h"

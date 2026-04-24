@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "engine/maths/vector3.h"
+#include "core/maths/linear_algebra/vector3.h"
 
 namespace amit
 {

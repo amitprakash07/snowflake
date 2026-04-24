@@ -5,7 +5,7 @@
 #include <utility>
 
 #include "graphics_common.h"
-#include "core/maths/point.h"
+#include "core/maths/geometry/point.h"
 
 namespace amit::graphics
 {

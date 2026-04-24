@@ -1,5 +1,5 @@
-#ifndef CORE_MATHS_VECTOR_3_H_
-#define CORE_MATHS_VECTOR_3_H_
+#ifndef CORE_MATHS_LINEAR_ALGEBRA_VECTOR3_H_
+#define CORE_MATHS_LINEAR_ALGEBRA_VECTOR3_H_
 #include <string>
 
 namespace amit::maths

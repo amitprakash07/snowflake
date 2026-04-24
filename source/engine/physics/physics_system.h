@@ -8,7 +8,7 @@
 #endif
 
 #include "common/shared_pointer.h"
-#include "maths/ray_intersection.h"
+#include "core/maths/geometry/ray_intersection.h"
 #include "../../Graphics/Line.h"
 #include "../../Graphics/Mesh.h"
 #include "../EngineCore/Objects/MeshObject.h"

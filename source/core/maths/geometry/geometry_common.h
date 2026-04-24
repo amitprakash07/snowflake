@@ -1,0 +1,4 @@
+#ifndef CORE_MATHS_GEOMETRY_COMMON_H_
+#define CORE_MATHS_GEOMETRY_COMMON_H_
+
+#endif

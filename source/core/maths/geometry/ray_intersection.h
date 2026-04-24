@@ -1,11 +1,12 @@
-#ifndef CORE_MATHS_RAY_INTERSECTION_H_
-#define CORE_MATHS_RAY_INTERSECTION_H_
+#ifndef CORE_MATHS_GEOMETRY_RAY_INTERSECTION_H_
+#define CORE_MATHS_GEOMETRY_RAY_INTERSECTION_H_
+
+#include "core/maths/linear_algebra/vector3.h"
 
 #include "sphere.h"
 #include "plane.h"
-#include "vector3.h"
 #include "bounding_box.h"
-#include "Triangle.h"
+#include "triangle.h"
 
 namespace amit
 {

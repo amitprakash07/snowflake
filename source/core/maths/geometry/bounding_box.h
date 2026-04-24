@@ -1,11 +1,11 @@
-#ifndef CORE_MATHS_BOUNDING_BOX_H_
-#define CORE_MATHS_BOUNDING_BOX_H_
+#ifndef CORE_MATHS_GEOMETRY_BOUNDING_BOX_H_
+#define CORE_MATHS_GEOMETRY_BOUNDING_BOX_H_
 
 #include <array>
 #include <vector>
 
+#include "core/maths/linear_algebra/vector3.h"
 #include "point.h"
-#include "Vector3.h"
 
 namespace amit
 {

@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "utils.h"
-#include "Vector3.h"
+#include "vector3.h"
 
 using namespace amit::maths;
 

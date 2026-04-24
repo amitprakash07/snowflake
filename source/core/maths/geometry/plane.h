@@ -1,8 +1,7 @@
-#ifndef CORE_MATHS_PLANE_H_
-#define CORE_MATHS_PLANE_H_
+#ifndef CORE_MATHS_GEOMETRY_PLANE_H_
+#define CORE_MATHS_GEOMETRY_PLANE_H_
 
 #include "primitive.h"
-#include "vector3.h"
 
 namespace amit::geometry
 {

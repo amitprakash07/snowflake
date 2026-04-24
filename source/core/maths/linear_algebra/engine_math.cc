@@ -6,7 +6,7 @@ using namespace amit;
 
 // Given segment ab and point c, computes closest point d on ab.
 // Also returns t for the position of d, d(t) = a + t*(b - a)
-void math::ClosestPointFromPointOnLineSegment(Vector3 c, Vector3 a, Vector3 b, float& t, Vector3& d)
+void maths::ClosestPointFromPointOnLineSegment(Vector3 c, Vector3 a, Vector3 b, float& t, Vector3& d)
 {
     Vector3 ab = b - a;
     // Project c onto ab, computing parameterized position d(t) = a + t*(b – a)

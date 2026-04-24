@@ -1,58 +1,58 @@
-#ifndef CORE_MATHS_AXIS_ALIGNED_BOUNDING_BOX_H_
-#define CORE_MATHS_AXIS_ALIGNED_BOUNDING_BOX_H_
+#ifndef CORE_MATHS_GEOMETRY_AXIS_ALIGNED_BOUNDING_BOX_H_
+#define CORE_MATHS_GEOMETRY_AXIS_ALIGNED_BOUNDING_BOX_H_
 
-#include "vector3.h"
+#include "core/maths/linear_algebra/vector3.h"
 
-namespace engine
+namespace amit
 {
     namespace Physics
     {
         struct Plane
         {
             Plane() = default;
-            Math::Vector3 _normal;  // Plane normal. Points x on the plane satisfy Dot(n,x) = d
+            maths::Vector3 _normal;  // Plane normal. Points x on the plane satisfy Dot(n,x) = d
             float         _d;       // d = Dot(n,p) for a given point p on the plane
         };
 
         struct Sphere
         {
             Sphere() = default;
-            Math::Vector3 _center;
+            maths::Vector3 _center;
             float         _radius;
         };
 
         struct Capsule
         {
             Capsule() = default;
-            Math::Vector3 _a;
-            Math::Vector3 _b;
+            maths::Vector3 _a;
+            maths::Vector3 _b;
             float         _radius;
         };
 
         struct AABBV2
         {
             AABBV2() = default;
-            Math::Vector3 _pos;
-            Math::Vector3 _extents;
+            maths::Vector3 _pos;
+            maths::Vector3 _extents;
         };
 
         struct OBB
         {
             OBB() = default;
-            Math::Vector3 _pos;
-            Math::Vector3 _extent;
-            Math::Vector3 _axis[3];  // Local x-, y-, and z-axes
+            maths::Vector3 _pos;
+            maths::Vector3 _extent;
+            maths::Vector3 _axis[3];  // Local x-, y-, and z-axes
         };
 
         struct Ray
         {
             Ray() = default;
-            Math::Vector3 _pos;
-            Math::Vector3 _dir;
+            maths::Vector3 _pos;
+            maths::Vector3 _dir;
         };
 
         // Given three noncollinear points (ordered ccw), compute plane equation
-        inline Plane ComputePlane(Math::Vector3 a, Math::Vector3 b, Math::Vector3 c)
+        inline Plane ComputePlane(maths::Vector3 a, maths::Vector3 b, maths::Vector3 c)
         {
             Plane p;
             p._normal = (b - a).Cross(c - a).CreateNormalized();
@@ -63,16 +63,16 @@ namespace engine
         struct AABBV1
         {
             AABBV1() = default;
-            Math::Vector3 _min;
-            Math::Vector3 _max;
+            maths::Vector3 _min;
+            maths::Vector3 _max;
         };
 
         // Test if AABB b intersects plane p
         inline bool TestAABBPlane(AABBV1 b, Plane p)
         {
             // These two lines not necessary with a (center, extents) AABB representation
-            Math::Vector3 c = (b._max + b._min) * 0.5f;  // Compute AABB center
-            Math::Vector3 e = b._max - c;                // Compute positive extents
+            maths::Vector3 c = (b._max + b._min) * 0.5f;  // Compute AABB center
+            maths::Vector3 e = b._max - c;                // Compute positive extents
 
             // Compute the projection interval radius of b onto L(t) = b.c + t * p.n
             float r =
@@ -83,10 +83,10 @@ namespace engine
             return std::fabsf(s) <= r;
         }
 
-        inline bool TestTriangleAABB(Math::Vector3 v0, Math::Vector3 v1, Math::Vector3 v2, AABBV1 b)
+        inline bool TestTriangleAABB(maths::Vector3 v0, maths::Vector3 v1, maths::Vector3 v2, AABBV1 b)
         {
             // Compute box center and extents (if not already given in that format)
-            Math::Vector3 c  = (b._min + b._max) * 0.5f;
+            maths::Vector3 c  = (b._min + b._max) * 0.5f;
             float         e0 = (b._max.x - b._min.x) * 0.5f;
             float         e1 = (b._max.y - b._min.y) * 0.5f;
             float         e2 = (b._max.z - b._min.z) * 0.5f;
@@ -95,11 +95,11 @@ namespace engine
             v1 = v1 - c;
             v2 = v2 - c;
             // Compute edge vectors for triangle
-            Math::Vector3 axis[3];
-            axis[0] = Math::Vector3(1, 0, 0);
-            axis[1] = Math::Vector3(0, 1, 0);
-            axis[2] = Math::Vector3(0, 0, -1);
-            Math::Vector3 edge[3];
+            maths::Vector3 axis[3];
+            axis[0] = maths::Vector3(1, 0, 0);
+            axis[1] = maths::Vector3(0, 1, 0);
+            axis[2] = maths::Vector3(0, 0, -1);
+            maths::Vector3 edge[3];
             edge[0] = v1 - v0, edge[1] = v2 - v1, edge[2] = v0 - v2;
             // Test axes a00..a22 (category 3)
             float p0, p1, p2, r;
@@ -107,7 +107,7 @@ namespace engine
             {
                 for (int j = 0; j < 3; ++j)
                 {
-                    Math::Vector3 projectionSATAxis = axis[i].Cross(edge[j]);
+                    maths::Vector3 projectionSATAxis = axis[i].Cross(edge[j]);
                     r                               = std::fabsf(axis[0].dot(projectionSATAxis)) * e0 +
                         std::fabsf(axis[1].dot(projectionSATAxis)) * e1 +
                         std::fabsf(axis[2].dot(projectionSATAxis)) * e2;

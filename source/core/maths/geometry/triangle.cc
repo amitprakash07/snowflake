@@ -1,5 +1,5 @@
 #include "geometry.h"
-#include "Triangle.h"
+#include "triangle.h"
 
 using namespace amit;
 
