@@ -8,6 +8,7 @@
 #include "core/graphics/image_generator.h"
 #include "core/graphics/viewport.h"
 #include "core/graphics/render_context.h"
+#include "core/graphics/texture.h"
 #include "core/graphics/text_overlay.h"
 
 int main(int argc, char* argv[])
@@ -34,22 +35,45 @@ int main(int argc, char* argv[])
     // Rasterization logic goes here. For now, we just set the triangle vertices to red color.
     std::cout << "Rasterization started\n";
 
-    amit::graphics::RenderFrame render_frame(viewport);
+    amit::graphics::RenderFrame    render_frame(viewport);
     amit::graphics::RenderOutputs& render_outputs = render_frame.GetRenderOutputs();
 
-    auto pixel_shader = [&render_outputs](const amit::render::cpu::RasterizedFragment& raster_fragment) {
+    amit::graphics::Image2D<amit::graphics::Rgb8> checker_board =
+        amit::graphics::ImageGenerator::GetCheckerBoard({.value = 200}, {.value = 200}, {.value = 8});
+    amit::graphics::Texture<amit::graphics::Rgb8> checker_texture(checker_board);
+
+    auto color_shader = [&render_outputs](const amit::render::cpu::RasterizedFragment& raster_fragment) {
         amit::graphics::ImageCoordinate image_coordinate{raster_fragment.coordinate.x, raster_fragment.coordinate.y};
         render_outputs.GetColorBuffer().SetImageData(image_coordinate, raster_fragment.color.ToRgb8());
+    };
+
+    auto checkerboard_shader = [&render_outputs,
+                                &checker_texture](const amit::render::cpu::RasterizedFragment& raster_fragment) {
+        amit::graphics::ImageCoordinate image_coordinate{raster_fragment.coordinate.x, raster_fragment.coordinate.y};
+
+        if (raster_fragment.fragment_kind == amit::render::cpu::RasterizedFragment::Kind::BoundingBox)
+        {
+            render_outputs.GetColorBuffer().SetImageData(image_coordinate, raster_fragment.color.ToRgb8());
+            return;
+        }
+
+        render_outputs.GetColorBuffer().SetImageData(image_coordinate, checker_texture.Sample(raster_fragment.uv));
     };
 
     amit::graphics::DrawContext draw_context(
         amit::graphics::PrimitiveDrawMode::kSolid, amit::graphics::DrawDebugFlag::kNone, true);
 
     amit::render::cpu::Rasterizer triangle_rasterizer;
-    triangle_rasterizer.Rasterize(
-        render_frame.GetRenderConfig(), render_frame.GetRenderState(), draw_context, screen_space_triangle_2, pixel_shader);
-    triangle_rasterizer.Rasterize(
-        render_frame.GetRenderConfig(), render_frame.GetRenderState(), draw_context, screen_space_triangle_1, pixel_shader);
+    triangle_rasterizer.Rasterize(render_frame.GetRenderConfig(),
+                                  render_frame.GetRenderState(),
+                                  draw_context,
+                                  screen_space_triangle_2,
+                                  checkerboard_shader);
+    triangle_rasterizer.Rasterize(render_frame.GetRenderConfig(),
+                                  render_frame.GetRenderState(),
+                                  draw_context,
+                                  screen_space_triangle_1,
+                                  color_shader);
 
     std::cout << "Rasterization Finished\n";
 
@@ -61,8 +85,6 @@ int main(int argc, char* argv[])
     // Save the frame buffer to disk as a PPM image
     amit::image::WriteColorBufferToPPM(color_buffer, "output.ppm");
 
-    amit::graphics::Image2D<amit::graphics::Rgb8> checker_board =
-        amit::graphics::ImageGenerator::GetCheckerBoard({.value = 200}, {.value = 200}, {.value = 8});
     // Save the frame buffer to disk as a PPM image
     amit::image::WriteColorBufferToPPM(checker_board, "checker_board.ppm");
 
@@ -75,4 +97,5 @@ int main(int argc, char* argv[])
 
     std::cout << stats;
     return 0;
+}
 }

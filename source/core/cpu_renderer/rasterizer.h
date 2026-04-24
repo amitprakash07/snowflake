@@ -4,7 +4,6 @@
 #include <functional>
 
 #include "core/maths/geometry/geometry_primitives.h"
-#include "core/graphics/pixel.h"
 #include "core/graphics/render_context.h"
 #include "core/graphics/render_primitives.h"
 
@@ -20,6 +19,7 @@ namespace amit::render::cpu
 
         graphics::PixelCoordinate            coordinate;
         graphics::FloatColor                 color;
+        graphics::UVCoordinate               uv = {};
         geometry::BaryCentricCoordinate      barycentric_coordinate;
         float                                depth = 0.0f;
         Kind                                 fragment_kind;

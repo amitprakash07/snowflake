@@ -1,5 +1,6 @@
 #include "rasterizer.h"
 
+#include "core/graphics/barycentric_interpolation.h"
 #include "core/graphics/color.h"
 #include "core/graphics/render_primitives.h"
 #include "core/maths/geometry/geometry.h"
@@ -78,9 +79,13 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveTyp
                             color_a.b * barycentric_coordinate.alpha + color_b.b * barycentric_coordinate.beta +
                                 color_c.b * barycentric_coordinate.gamma};
 
+                        const graphics::UVCoordinate interpolated_uv = graphics::InterpolateUV(
+                            triangle.VertA().uv, triangle.VertB().uv, triangle.VertC().uv, barycentric_coordinate);
+
                         RasterizedFragment primitive_fragment{
                             .coordinate             = {x_iter, y_iter},
                             .color                  = interpolated_color,
+                            .uv                     = interpolated_uv,
                             .barycentric_coordinate = barycentric_coordinate,
                             .depth                  = interpolated_depth,
                             .fragment_kind          = RasterizedFragment::Kind::Primitive};
