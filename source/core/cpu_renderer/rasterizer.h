@@ -10,7 +10,7 @@
 
 namespace amit::render::cpu
 {
-    struct RasterizedPixel
+    struct RasterizedFragment
     {
         enum class Kind : uint8_t
         {
@@ -18,9 +18,14 @@ namespace amit::render::cpu
             BoundingBox
         };
 
-        graphics::Pixel pixel;
-        Kind            pixel_kind;
+        graphics::PixelCoordinate            coordinate;
+        graphics::FloatColor                 color;
+        geometry::BaryCentricCoordinate      barycentric_coordinate;
+        float                                depth = 0.0f;
+        Kind                                 fragment_kind;
     };
+
+    using FragmentShader = std::function<void(const RasterizedFragment&)>;
 
     class Rasterizer
     {
@@ -29,42 +34,39 @@ namespace amit::render::cpu
 
         template <amit::graphics::RenderPrimitiveType type>
         void Rasterize(
-            graphics::RenderContext&,
+            const graphics::RenderConfig&,
+            graphics::RenderState&,
             graphics::DrawContext&,
             const amit::graphics::RenderPrimitive<type>&,
-            const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>&) const
+            const FragmentShader&) const
         {
         }
 
     private:
-        void RenderPixel(graphics::RenderContext&                                            render_context,
-                         graphics::DrawContext&                                              draw_context,
-                         const RasterizedPixel&                                              pixel,
-                         const std::function<void(graphics::RenderContext&,
-                                                  graphics::DrawContext&,
-                                                  const RasterizedPixel& rasterized_pixel)>& pixel_callback) const
+        void RenderFragment(graphics::DrawContext&         draw_context,
+                            const RasterizedFragment&      fragment,
+                            const FragmentShader&          fragment_shader) const
         {
-            pixel_callback(render_context, draw_context, pixel);
+            fragment_shader(fragment);
             draw_context.IncrementRenderStat(graphics::RenderStatCountKind::kRasterizedPixelCount);
         }
     };
 
     template <>
     void Rasterizer::Rasterize<amit::graphics::RenderPrimitiveType::kTriangle>(
-        graphics::RenderContext&                                                               render_context,
+        const graphics::RenderConfig&                                                          render_config,
+        graphics::RenderState&                                                                 render_state,
         graphics::DrawContext&                                                                 draw_context,
         const amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kTriangle>& triangle,
-        const std::function<void(graphics::RenderContext&,
-                                 graphics::DrawContext&,
-                                 const RasterizedPixel& rasterized_pixel)>&                    pixel_callback) const;
+        const FragmentShader&                                                                  fragment_shader) const;
 
     template <>
     void Rasterizer::Rasterize<amit::graphics::RenderPrimitiveType::kLine>(
-        graphics::RenderContext&                                                           render_context,
+        const graphics::RenderConfig&                                                      render_config,
+        graphics::RenderState&                                                             render_state,
         graphics::DrawContext&                                                             draw_context,
         const amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kLine>& line,
-        const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>&
-            pixel_callback) const;
+        const FragmentShader&                                                              fragment_shader) const;
 
 }  // namespace amit::render::cpu
 

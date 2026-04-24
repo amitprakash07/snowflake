@@ -1,27 +1,25 @@
 #include "rasterizer.h"
 
+#include "core/graphics/color.h"
 #include "core/graphics/render_primitives.h"
 #include "core/maths/geometry/geometry.h"
-
-#include "core/graphics/barycentric_interpolation.h"
 
 // Triangle
 template <>
 void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveType::kTriangle>(
-    graphics::RenderContext&                                                               render_context,
+    const graphics::RenderConfig&                                                          render_config,
+    graphics::RenderState&                                                                 render_state,
     graphics::DrawContext&                                                                 draw_context,
     const amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kTriangle>& triangle,
-    const std::function<void(graphics::RenderContext&,
-                             graphics::DrawContext&,
-                             const RasterizedPixel& rasterized_pixel)>&                    pixel_callback) const
+    const FragmentShader&                                                                  fragment_shader) const
 {
     draw_context.StartRenderStatCollection(triangle);
 
     amit::geometry::AxisAlignedBoundingBox bounding_box;
     bounding_box.Expand({triangle.VertA().position, triangle.VertB().position, triangle.VertC().position});
 
-    geometry::Point3D viewport_clamped_min = render_context.GetViewport().ClampToView(bounding_box.GetMin());
-    geometry::Point3D viewport_clamped_max = render_context.GetViewport().ClampToView(bounding_box.GetMax());
+    geometry::Point3D viewport_clamped_min = render_config.GetViewport().ClampToView(bounding_box.GetMin());
+    geometry::Point3D viewport_clamped_max = render_config.GetViewport().ClampToView(bounding_box.GetMax());
 
     uint32_t x_start = static_cast<uint32_t>(viewport_clamped_min.x);
     uint32_t x_end   = static_cast<uint32_t>(viewport_clamped_max.x);
@@ -61,38 +59,44 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveTyp
                                                                  triangle.VertC().position,
                                                                  geometry::Point3D(x_iter, y_iter));
 
-                    float depth_buffer_value = render_context.GetDepthBuffer().GetImageData(
-                        graphics::ImageCoordinate{.x = x_iter, .y = y_iter});
+                    float interpolated_depth =
+                        triangle.VertA().position.z * barycentric_coordinate.alpha +
+                        triangle.VertB().position.z * barycentric_coordinate.beta +
+                        triangle.VertC().position.z * barycentric_coordinate.gamma;
 
-                    float interpolated_depth = amit::graphics::InterpolateDepth(triangle.VertA().position.z,
-                                                                                triangle.VertB().position.z,
-                                                                                triangle.VertC().position.z,
-                                                                                barycentric_coordinate);
-
-                    if (interpolated_depth < depth_buffer_value)
+                    if (render_state.TryUpdateDepth(graphics::ImageCoordinate{x_iter, y_iter}, interpolated_depth))
                     {
-                        render_context.GetDepthBuffer().SetImageData(graphics::ImageCoordinate{x_iter, y_iter},
-                                                                     interpolated_depth);
+                        const graphics::FloatColor color_a = triangle.VertA().color.ToFloatColor();
+                        const graphics::FloatColor color_b = triangle.VertB().color.ToFloatColor();
+                        const graphics::FloatColor color_c = triangle.VertC().color.ToFloatColor();
 
-                        amit::graphics::FloatColor interpolated_color =
-                            amit::graphics::InterpolateColor(triangle.VertA().color.ToFloatColor(),
-                                                             triangle.VertB().color.ToFloatColor(),
-                                                             triangle.VertC().color.ToFloatColor(),
-                                                             barycentric_coordinate);
+                        amit::graphics::FloatColor interpolated_color{
+                            color_a.r * barycentric_coordinate.alpha + color_b.r * barycentric_coordinate.beta +
+                                color_c.r * barycentric_coordinate.gamma,
+                            color_a.g * barycentric_coordinate.alpha + color_b.g * barycentric_coordinate.beta +
+                                color_c.g * barycentric_coordinate.gamma,
+                            color_a.b * barycentric_coordinate.alpha + color_b.b * barycentric_coordinate.beta +
+                                color_c.b * barycentric_coordinate.gamma};
 
-                        RasterizedPixel primitive_pixel{.pixel      = {x_iter, y_iter, interpolated_color.ToRgb8()},
-                                                        .pixel_kind = RasterizedPixel::Kind::Primitive};
+                        RasterizedFragment primitive_fragment{
+                            .coordinate             = {x_iter, y_iter},
+                            .color                  = interpolated_color,
+                            .barycentric_coordinate = barycentric_coordinate,
+                            .depth                  = interpolated_depth,
+                            .fragment_kind          = RasterizedFragment::Kind::Primitive};
 
-                        RenderPixel(render_context, draw_context, primitive_pixel, pixel_callback);
+                        RenderFragment(draw_context, primitive_fragment, fragment_shader);
                     }
                 }
 
                 if (draw_context.GetDrawDebugFlag() == graphics::DrawDebugFlag::kWireframeBoundingBox &&
                     (is_first_or_last_column || is_first_or_last_row))
                 {
-                    RasterizedPixel bounding_box_pixel{.pixel      = {x_iter, y_iter, graphics::kRgb8ColorGreen},
-                                                       .pixel_kind = RasterizedPixel::Kind::BoundingBox};
-                    RenderPixel(render_context, draw_context, bounding_box_pixel, pixel_callback);
+                    RasterizedFragment bounding_box_fragment{
+                        .coordinate    = {x_iter, y_iter},
+                        .color         = graphics::kRgb8ColorGreen.ToFloatColor(),
+                        .fragment_kind = RasterizedFragment::Kind::BoundingBox};
+                    RenderFragment(draw_context, bounding_box_fragment, fragment_shader);
                 }
 
                 edge_value[0] += triangle_edge_coefficients[0].a;
@@ -118,18 +122,20 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveTyp
 
                 if (is_first_or_last_column || is_first_or_last_row)
                 {
-                    RasterizedPixel bounding_box_pixel{.pixel      = {x_iter, y_iter, graphics::kRgb8ColorGreen},
-                                                       .pixel_kind = RasterizedPixel::Kind::BoundingBox};
-                    RenderPixel(render_context, draw_context, bounding_box_pixel, pixel_callback);
+                    RasterizedFragment bounding_box_fragment{
+                        .coordinate    = {x_iter, y_iter},
+                        .color         = graphics::kRgb8ColorGreen.ToFloatColor(),
+                        .fragment_kind = RasterizedFragment::Kind::BoundingBox};
+                    RenderFragment(draw_context, bounding_box_fragment, fragment_shader);
                 }
             }
         }
     }
     else if (draw_context.GetDrawMode() == graphics::PrimitiveDrawMode::kWireframe)
     {
-        Rasterize(render_context, draw_context, triangle.Edge_0(), pixel_callback);
-        Rasterize(render_context, draw_context, triangle.Edge_1(), pixel_callback);
-        Rasterize(render_context, draw_context, triangle.Edge_2(), pixel_callback);
+        Rasterize(render_config, render_state, draw_context, triangle.Edge_0(), fragment_shader);
+        Rasterize(render_config, render_state, draw_context, triangle.Edge_1(), fragment_shader);
+        Rasterize(render_config, render_state, draw_context, triangle.Edge_2(), fragment_shader);
     }
 
     draw_context.EndRenderStatCollection();
@@ -138,15 +144,19 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveTyp
 // Line Segment
 template <>
 void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveType::kLine>(
-    graphics::RenderContext&                                                                             render_context,
+    const graphics::RenderConfig&                                                                        render_config,
+    graphics::RenderState&                                                                               render_state,
     graphics::DrawContext&                                                                               draw_context,
     const amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kLine>&                   line,
-    const std::function<void(graphics::RenderContext&, graphics::DrawContext&, const RasterizedPixel&)>& pixel_callback)
+    const FragmentShader&                                                                                 fragment_shader)
     const
 {
     draw_context.StartRenderStatCollection(line);
 
-    auto RasterizeEdgeUsingLineEquation = [this, &render_context, &draw_context, &pixel_callback, &line]() {
+    (void)render_config;
+    (void)render_state;
+
+    auto RasterizeEdgeUsingLineEquation = [this, &draw_context, &fragment_shader, &line]() {
         // Equation of a line y - y1 = m(x - x1), where m = (y2 - y1) / (x2 - x1)
         float x1 = line.Start().position.x;
         float y1 = line.Start().position.y;
@@ -179,16 +189,16 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveTyp
             {
                 float pixel_coordinate_y = y1 + (slope * (static_cast<float>(pixel_coordinate_x) - x1));
 
-                RasterizedPixel primitive_pixel{.pixel      = {static_cast<uint16_t>(pixel_coordinate_x),
-                                                               static_cast<uint16_t>(pixel_coordinate_y),
-                                                               graphics::kRgb8ColorRed},
-                                                .pixel_kind = RasterizedPixel::Kind::Primitive};
-                RenderPixel(render_context, draw_context, primitive_pixel, pixel_callback);
+                RasterizedFragment primitive_fragment{
+                    .coordinate    = {static_cast<uint32_t>(pixel_coordinate_x), static_cast<uint32_t>(pixel_coordinate_y)},
+                    .color         = graphics::kRgb8ColorRed.ToFloatColor(),
+                    .fragment_kind = RasterizedFragment::Kind::Primitive};
+                RenderFragment(draw_context, primitive_fragment, fragment_shader);
             }
         }
     };
 
-    auto RasterizeEdgeUsingMidPointAlgo = [this, &render_context, &draw_context, &pixel_callback, line]() {
+    auto RasterizeEdgeUsingMidPointAlgo = [this, &draw_context, &fragment_shader, line]() {
         /* Bresenham Mid-point algo
          * 1. Calculate the differences dx and dy between the start and end points of the line.
          * F(x,y) = ax + by + c
@@ -235,10 +245,11 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveTyp
 
             for (int32_t i = 0; i <= dx; ++i)
             {
-                RasterizedPixel primitive_pixel{
-                    .pixel      = {static_cast<uint16_t>(x), static_cast<uint16_t>(y), graphics::kRgb8ColorRed},
-                    .pixel_kind = RasterizedPixel::Kind::Primitive};
-                RenderPixel(render_context, draw_context, primitive_pixel, pixel_callback);
+                RasterizedFragment primitive_fragment{
+                    .coordinate    = {static_cast<uint32_t>(x), static_cast<uint32_t>(y)},
+                    .color         = graphics::kRgb8ColorRed.ToFloatColor(),
+                    .fragment_kind = RasterizedFragment::Kind::Primitive};
+                RenderFragment(draw_context, primitive_fragment, fragment_shader);
 
                 x = x + sx;  // Move to the next x coordinate
                 if (d > 0)
@@ -258,10 +269,11 @@ void amit::render::cpu::Rasterizer::Rasterize<amit::graphics::RenderPrimitiveTyp
 
             for (int32_t i = 0; i <= dy; ++i)
             {
-                RasterizedPixel primitive_pixel{
-                    .pixel      = {static_cast<uint16_t>(x), static_cast<uint16_t>(y), graphics::kRgb8ColorRed},
-                    .pixel_kind = RasterizedPixel::Kind::Primitive};
-                RenderPixel(render_context, draw_context, primitive_pixel, pixel_callback);
+                RasterizedFragment primitive_fragment{
+                    .coordinate    = {static_cast<uint32_t>(x), static_cast<uint32_t>(y)},
+                    .color         = graphics::kRgb8ColorRed.ToFloatColor(),
+                    .fragment_kind = RasterizedFragment::Kind::Primitive};
+                RenderFragment(draw_context, primitive_fragment, fragment_shader);
                 y = y + sy;  // Move to the next y coordinate
                 if (d > 0)
                 {

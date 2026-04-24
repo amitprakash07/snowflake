@@ -2,6 +2,7 @@
 #define CORE_GRAPHICS_RENDER_CONTEXT_H_
 
 #include <cstdint>
+#include <limits>
 
 #include "core/common/perf_stats.h"
 
@@ -117,38 +118,121 @@ namespace amit::graphics
         bool                         timer_started_ = false;
     };
 
-    class RenderContext
+    class RenderConfig
     {
     public:
-        RenderContext(const graphics::Viewport& viewport)
+        explicit RenderConfig(const graphics::Viewport& viewport)
             : viewport_(viewport)
-            , color_buffer_(viewport.GetWidth(), viewport.GetHeight())
-            , depth_buffer_(viewport.GetWidth(), viewport.GetHeight())
         {
-            depth_buffer_.FillImage(std::numeric_limits<float>::infinity());
         }
 
-        RenderContext() = delete;
+        RenderConfig() = delete;
 
         const graphics::Viewport& GetViewport() const
         {
             return viewport_;
         }
 
-        ColorBuffer& GetColorBuffer()
+    private:
+        Viewport viewport_;
+    };
+
+    class RenderState
+    {
+    public:
+        explicit RenderState(const graphics::Viewport& viewport)
+            : depth_buffer_(viewport.GetWidth(), viewport.GetHeight())
         {
-            return color_buffer_;
+            depth_buffer_.FillImage(std::numeric_limits<float>::infinity());
         }
 
-        DepthBuffer& GetDepthBuffer()
+        RenderState() = delete;
+
+        float GetDepth(const ImageCoordinate& image_coordinate) const
+        {
+            return depth_buffer_.GetImageData(image_coordinate);
+        }
+
+        bool TryUpdateDepth(const ImageCoordinate& image_coordinate, float candidate_depth)
+        {
+            if (candidate_depth < depth_buffer_.GetImageData(image_coordinate))
+            {
+                depth_buffer_.SetImageData(image_coordinate, candidate_depth);
+                return true;
+            }
+
+            return false;
+        }
+
+        const DepthBuffer& GetDepthBuffer() const
         {
             return depth_buffer_;
         }
 
     private:
-        Viewport    viewport_;
-        ColorBuffer color_buffer_;
         DepthBuffer depth_buffer_;
+    };
+
+    class RenderOutputs
+    {
+    public:
+        explicit RenderOutputs(const graphics::Viewport& viewport)
+            : color_buffer_(viewport.GetWidth(), viewport.GetHeight())
+        {
+        }
+
+        RenderOutputs() = delete;
+
+        ColorBuffer& GetColorBuffer()
+        {
+            return color_buffer_;
+        }
+
+        const ColorBuffer& GetColorBuffer() const
+        {
+            return color_buffer_;
+        }
+
+    private:
+        ColorBuffer color_buffer_;
+    };
+
+    class RenderFrame
+    {
+    public:
+        explicit RenderFrame(const graphics::Viewport& viewport)
+            : render_config_(viewport)
+            , render_state_(viewport)
+            , render_outputs_(viewport)
+        {
+        }
+
+        RenderFrame() = delete;
+
+        const RenderConfig& GetRenderConfig() const
+        {
+            return render_config_;
+        }
+
+        RenderState& GetRenderState()
+        {
+            return render_state_;
+        }
+
+        RenderOutputs& GetRenderOutputs()
+        {
+            return render_outputs_;
+        }
+
+        const RenderOutputs& GetRenderOutputs() const
+        {
+            return render_outputs_;
+        }
+
+    private:
+        RenderConfig  render_config_;
+        RenderState   render_state_;
+        RenderOutputs render_outputs_;
     };
 }  // namespace amit::graphics
 

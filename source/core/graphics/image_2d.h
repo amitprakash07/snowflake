@@ -1,6 +1,7 @@
 #ifndef CORE_GRAPHICS_IMAGE_2D_H_
 #define CORE_GRAPHICS_IMAGE_2D_H_
 
+#include <algorithm>
 #include <cstdint>
 
 #include "core/graphics/pixel.h"
