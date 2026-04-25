@@ -19,6 +19,11 @@ namespace amit
         {
         }
 
+        bool operator==(const ObjectId& rhs) const
+        {
+            return id_ == rhs.id_;
+        }
+
     private:
         uint64_t id_;
     };
@@ -35,7 +40,7 @@ namespace amit
 
     template <class ObjectType>
     concept ObjectTypeEnumConcept = std::is_enum_v<ObjectType> && requires(ObjectType enum_type) {
-        { TypeToString(enum_type) } -> std::convertible_to<std::string_view>;
+        { EnumTypeToString(enum_type) } -> std::convertible_to<std::string_view>;
     };
 
     template <ObjectTypeEnumConcept ObjectType>
@@ -49,7 +54,7 @@ namespace amit
         }
 
         ObjectLabel(ObjectType type)
-            : object_name("")
+            : object_name()
             , object_type(type)
             , object_id(IdGenerator::GetNextId())
         {
@@ -71,6 +76,11 @@ namespace amit
             return ret_string;
         }
 
+        const ObjectId& GetId() const
+        {
+            return object_id;
+        }
+
     private:
         std::string object_name;
         ObjectType  object_type;
@@ -78,5 +88,14 @@ namespace amit
     };
 
 }  // namespace amit
+
+template <>
+struct std::hash<amit::ObjectId>
+{
+    std::size_t operator()(const amit::ObjectId& obj) const noexcept
+    {
+        return std::hash<uint64_t>{}(obj.value());
+    }
+};
 
 #endif

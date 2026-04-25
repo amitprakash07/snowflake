@@ -1,5 +1,5 @@
-#ifndef CORE_GRAPHICS_GRAPHICS_COMMON_H_
-#define CORE_GRAPHICS_GRAPHICS_COMMON_H_
+#ifndef CORE_GRAPHICS_COMMON_GRAPHICS_COMMON_H_
+#define CORE_GRAPHICS_COMMON_GRAPHICS_COMMON_H_
 
 #include <cstdint>
 #include <type_traits>
@@ -42,4 +42,4 @@ namespace amit::graphics
 
 }  // namespace amit::graphics
 
-#endif  // CORE_GRAPHICS_GRAPHICS_COMMON_H_
+#endif  // CORE_GRAPHICS_COMMON_GRAPHICS_COMMON_H_

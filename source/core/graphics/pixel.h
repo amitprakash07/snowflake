@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-#include "color.h"
-#include "graphics_common.h"
+#include "core/graphics_common/color.h"
+#include "core/graphics_common/graphics_common.h"
 
 namespace amit::graphics
 {

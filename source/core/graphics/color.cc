@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "color.h"
+#include "core/graphics_common/color.h"
 
 amit::graphics::FloatColor amit::graphics::Rgb8::ToFloatColor() const
 {

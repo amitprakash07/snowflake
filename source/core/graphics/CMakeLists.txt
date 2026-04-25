@@ -16,7 +16,6 @@ message("Processing ${CORE_PROJECT_NAME} - ${CMAKE_CURRENT_LIST_DIR}")
 
 set(CORE_GRAPHICS_SOURCES
 pixel.h
-color.h
 viewport.h
 color.cc
 text_overlay.h
@@ -25,11 +24,9 @@ render_stats.h
 render_context.h
 image_2d.h
 image_2d.cc
-render_primitives.h
 render_primitives.cc
 image_generator.h
 image_generator.cc
-graphics_common.h
 texture.h
 barycentric_interpolation.h)
 
@@ -38,6 +35,7 @@ file(GLOB FONT8X8_HEADERS CONFIGURE_DEPENDS
 
 add_library(${CORE_PROJECT_NAME} ${CORE_GRAPHICS_SOURCES})
 
+target_link_libraries(${CORE_PROJECT_NAME} PUBLIC graphics_common)
 target_sources(${CORE_PROJECT_NAME} PRIVATE ${FONT8X8_HEADERS})
 set_source_files_properties(${FONT8X8_HEADERS} PROPERTIES HEADER_FILE_ONLY TRUE)
 source_group("external/font8x8" FILES ${FONT8X8_HEADERS})

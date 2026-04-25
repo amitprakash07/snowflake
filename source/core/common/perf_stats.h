@@ -16,7 +16,7 @@ namespace amit
         kCounter    = 0x20000000,
     };
 
-    inline std::string_view TypeToString(StatType stat_type)
+    inline std::string_view EnumTypeToString(StatType stat_type)
     {
         switch (stat_type)
         {

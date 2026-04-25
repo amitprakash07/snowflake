@@ -9,12 +9,22 @@ include_directories(${PROJECT_SRC_DIR})
 include_directories(${AgilitySdk_Include})
 
 add_subdirectory(common)
-add_subdirectory(cpu_renderer)
-add_subdirectory(graphics)
 add_subdirectory(maths)
+add_subdirectory(graphics_common)
+add_subdirectory(graphics)
+add_subdirectory(asset_loading)
+add_subdirectory(cpu_renderer)
+add_subdirectory(graphics_asset_adapter)
 
 add_library(${CORE_PROJECT_NAME} INTERFACE)
-target_link_libraries(${CORE_PROJECT_NAME} INTERFACE common cpu_renderer graphics maths)
+target_link_libraries(${CORE_PROJECT_NAME} INTERFACE
+    asset_loading
+    common
+    cpu_renderer
+    graphics
+    graphics_asset_adapter
+    graphics_common
+    maths)
 
 set_target_properties(${CORE_PROJECT_NAME}
     PROPERTIES

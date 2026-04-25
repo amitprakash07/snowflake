@@ -19,7 +19,7 @@ namespace amit::geometry
         kSphere
     };
 
-    inline std::string_view TypeToString(amit::geometry::PrimitiveType primitive_type)
+    inline std::string_view EnumTypeToString(amit::geometry::PrimitiveType primitive_type)
     {
         switch (primitive_type)
         {

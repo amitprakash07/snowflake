@@ -1,8 +1,8 @@
 #ifndef CORE_GRAPHICS_BARYCENTRIC_INTERPOLATION_H_
 #define CORE_GRAPHICS_BARYCENTRIC_INTERPOLATION_H_
 
-#include "color.h"
-#include "core/graphics/graphics_common.h"
+#include "core/graphics_common/color.h"
+#include "core/graphics_common/graphics_common.h"
 #include "core/maths/geometry/geometry.h"
 
 namespace amit::graphics

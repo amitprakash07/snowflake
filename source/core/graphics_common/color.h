@@ -1,10 +1,10 @@
-#ifndef CORE_GRAPHICS_COLOR_H_
-#define CORE_GRAPHICS_COLOR_H_
-#include "core/maths/geometry/geometry.h"
+#ifndef CORE_GRAPHICS_COMMON_COLOR_H_
+#define CORE_GRAPHICS_COMMON_COLOR_H_
+
+#include <cstdint>
 
 namespace amit::graphics
 {
-
     enum class ColorFormat : uint8_t
     {
         kRgb8,

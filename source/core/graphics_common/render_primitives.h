@@ -1,6 +1,10 @@
-#ifndef CORE_GRAPHICS_RENDER_PRIMITIVES_H_
-#define CORE_GRAPHICS_RENDER_PRIMITIVES_H_
+#ifndef CORE_GRAPHICS_COMMON_RENDER_PRIMITIVES_H_
+#define CORE_GRAPHICS_COMMON_RENDER_PRIMITIVES_H_
 
+#include <array>
+#include <string_view>
+
+#include "core/common/core.h"
 #include "core/maths/geometry/point.h"
 
 #include "color.h"
@@ -10,8 +14,8 @@ namespace amit::graphics
 {
     struct VertexAttributes
     {
-        geometry::Point3D position;
-        graphics::Rgb8    color;
+        geometry::Point3D      position;
+        graphics::Rgb8         color;
         graphics::UVCoordinate uv;
     };
 
@@ -22,7 +26,7 @@ namespace amit::graphics
         kTriangle = 0x3,
     };
 
-    inline std::string_view TypeToString(RenderPrimitiveType primitive_type)
+    inline std::string_view EnumTypeToString(RenderPrimitiveType primitive_type)
     {
         switch (primitive_type)
         {
@@ -63,6 +67,11 @@ namespace amit::graphics
         ObjectLabel<RenderPrimitiveType> GetObjectLabel() const
         {
             return object_label_;
+        }
+
+        const ObjectId& GetId() const
+        {
+            return object_label_.GetId();
         }
 
     private:
@@ -110,6 +119,11 @@ namespace amit::graphics
         ObjectLabel<RenderPrimitiveType> GetObjectLabel() const
         {
             return object_label_;
+        }
+
+        const ObjectId& GetId() const
+        {
+            return object_label_.GetId();
         }
 
     private:
@@ -171,6 +185,11 @@ namespace amit::graphics
         ObjectLabel<RenderPrimitiveType> GetObjectLabel() const
         {
             return object_label_;
+        }
+
+        const ObjectId& GetId() const
+        {
+            return object_label_.GetId();
         }
 
     private:

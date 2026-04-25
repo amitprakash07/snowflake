@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <utility>
 
-#include "graphics_common.h"
+#include "core/graphics_common/graphics_common.h"
 #include "core/maths/geometry/point.h"
 
 namespace amit::graphics

@@ -3,13 +3,14 @@
 
 #include <cstdint>
 #include <limits>
+#include <vector>
 
 #include "core/common/perf_stats.h"
 
 #include "viewport.h"
 #include "render_stats.h"
 #include "image_2d.h"
-#include "render_primitives.h"
+#include "core/graphics_common/render_primitives.h"
 
 namespace amit::graphics
 {
@@ -26,96 +27,20 @@ namespace amit::graphics
         kWireframeBoundingBox
     };
 
-    class DrawContext
+    struct DrawOptions
     {
-    public:
-        DrawContext(PrimitiveDrawMode primitive_draw_mode_in,
-                    DrawDebugFlag     draw_debug_flag_in,
-                    bool              collect_draw_stats_in)
-            : primitive_draw_mode_(primitive_draw_mode_in)
-            , draw_debug_flag_(draw_debug_flag_in)
-            , collect_draw_stats_(collect_draw_stats_in)
-        {
-        }
-
-        DrawContext()
-            : primitive_draw_mode_(PrimitiveDrawMode::kSolid)
-            , draw_debug_flag_(DrawDebugFlag::kNone)
-            , collect_draw_stats_(false)
-        {
-        }
-
-        template <RenderPrimitiveType PrimitiveType>
-        void StartRenderStatCollection(const RenderPrimitive<PrimitiveType>& primitive)
-        {
-            if (!collect_draw_stats_)
-            {
-                return;
-            }
-
-            if (render_stats_ == nullptr)
-            {
-                std::string name = std::format("Render stats of {}", primitive.GetObjectLabel().ToString());
-                render_stats_    = StatsCollector::GetInstance().GetOrCreateStatsBucket<RenderStats>(name);
-            }
-
-            if (render_stats_ && !timer_started_)
-            {
-                render_stats_->rasterization_timer_->StartTimer();
-                timer_started_ = true;
-            }
-        }
-
-        void EndRenderStatCollection()
-        {
-            if (!collect_draw_stats_)
-            {
-                return;
-            }
-
-            if (render_stats_ && timer_started_)
-            {
-                render_stats_->rasterization_timer_->EndTimer();
-                timer_started_ = false;
-            }
-        }
-
-        void IncrementRenderStat(RenderStatCountKind kind)
-        {
-            if (!collect_draw_stats_)
-            {
-                return;
-            }
-
-            if (render_stats_ == nullptr)
-            {
-                return;
-            }
-
-            switch (kind)
-            {
-            case RenderStatCountKind::kRasterizedPixelCount:
-                render_stats_->rasterized_pixel_counter_->Increment();
-                break;
-            }
-        }
-
         PrimitiveDrawMode GetDrawMode() const
         {
-            return primitive_draw_mode_;
+            return primitive_draw_mode;
         }
-
-        DrawDebugFlag GetDrawDebugFlag() const
+        DrawDebugFlag     GetDrawDebugFlag() const
         {
-            return draw_debug_flag_;
+            return draw_debug_flag;
         }
 
-    private:
-        PrimitiveDrawMode            primitive_draw_mode_;
-        DrawDebugFlag                draw_debug_flag_;
-        bool                         collect_draw_stats_;
-        std::shared_ptr<RenderStats> render_stats_;
-        bool                         timer_started_ = false;
+        const PrimitiveDrawMode primitive_draw_mode;
+        const DrawDebugFlag     draw_debug_flag;
+        const bool              collect_draw_stats;
     };
 
     class RenderConfig
@@ -173,15 +98,33 @@ namespace amit::graphics
         DepthBuffer depth_buffer_;
     };
 
-    class RenderOutputs
+    enum class RenderOutputFormat : std::uint8_t
+    {
+        kRgb8
+    };
+
+    struct RenderOutputDescription
+    {
+        Width              width;
+        Height             height;
+        RenderOutputFormat format = RenderOutputFormat::kRgb8;
+    };
+
+    class RenderOutput
     {
     public:
-        explicit RenderOutputs(const graphics::Viewport& viewport)
-            : color_buffer_(viewport.GetWidth(), viewport.GetHeight())
+        explicit RenderOutput(const RenderOutputDescription& description)
+            : format_(description.format)
+            , color_buffer_(description.width, description.height)
         {
         }
 
-        RenderOutputs() = delete;
+        RenderOutput() = delete;
+
+        RenderOutputFormat GetFormat() const
+        {
+            return format_;
+        }
 
         ColorBuffer& GetColorBuffer()
         {
@@ -194,7 +137,8 @@ namespace amit::graphics
         }
 
     private:
-        ColorBuffer color_buffer_;
+        RenderOutputFormat format_;
+        ColorBuffer        color_buffer_;
     };
 
     class RenderFrame
@@ -203,8 +147,10 @@ namespace amit::graphics
         explicit RenderFrame(const graphics::Viewport& viewport)
             : render_config_(viewport)
             , render_state_(viewport)
-            , render_outputs_(viewport)
+            , render_output_list_()
         {
+            render_output_list_.emplace_back(
+                RenderOutputDescription{viewport.GetWidth(), viewport.GetHeight(), RenderOutputFormat::kRgb8});
         }
 
         RenderFrame() = delete;
@@ -219,20 +165,20 @@ namespace amit::graphics
             return render_state_;
         }
 
-        RenderOutputs& GetRenderOutputs()
+        RenderOutput& GetRenderOutput(std::uint32_t index = 0)
         {
-            return render_outputs_;
+            return render_output_list_.at(index);
         }
 
-        const RenderOutputs& GetRenderOutputs() const
+        const RenderOutput& GetRenderOutput(std::uint32_t index = 0) const
         {
-            return render_outputs_;
+            return render_output_list_.at(index);
         }
 
     private:
-        RenderConfig  render_config_;
-        RenderState   render_state_;
-        RenderOutputs render_outputs_;
+        RenderConfig              render_config_;
+        RenderState               render_state_;
+        std::vector<RenderOutput> render_output_list_;
     };
 }  // namespace amit::graphics
 

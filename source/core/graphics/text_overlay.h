@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "color.h"
+#include "core/graphics_common/color.h"
 #include "image_2d.h"
 
 namespace amit::graphics
