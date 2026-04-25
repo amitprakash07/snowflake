@@ -18,12 +18,12 @@ namespace amit::render::cpu
             BoundingBox
         };
 
-        graphics::PixelCoordinate       coordinate;
-        graphics::FloatColor            color;
-        graphics::UVCoordinate          uv = {};
-        geometry::BaryCentricCoordinate barycentric_coordinate;
-        float                           depth = 0.0f;
-        Kind                            fragment_kind;
+        graphics::PixelCoordinate            coordinate;
+        graphics::FloatColor                 color;
+        graphics::UVCoordinate               uv = {};
+        geometry::BaryCentricCoordinate      barycentric_coordinate;
+        float                                depth = 0.0f;
+        Kind                                 fragment_kind;
     };
 
     using FragmentShader = std::function<void(const RasterizedFragment&)>;
@@ -34,12 +34,23 @@ namespace amit::render::cpu
         Rasterizer() = default;
 
         template <amit::graphics::RenderPrimitiveType type>
-        void Rasterize(const graphics::RenderConfig&,
-                       graphics::RenderState&,
-                       graphics::DrawOptions&,
-                       const amit::graphics::RenderPrimitive<type>&,
-                       const FragmentShader&) const
+        void Rasterize(
+            const graphics::RenderConfig&,
+            graphics::RenderState&,
+            graphics::RenderFrameStats&,
+            graphics::DrawOptions&,
+            const amit::graphics::RenderPrimitive<type>&,
+            const FragmentShader&) const
         {
+        }
+
+    private:
+        void RenderFragment(graphics::ScopedDrawCallStats& draw_stats_scope,
+                            const RasterizedFragment&      fragment,
+                            const FragmentShader&          fragment_shader) const
+        {
+            fragment_shader(fragment);
+            draw_stats_scope.IncrementStatCount(graphics::RenderStatCounter::kRasterizedPixelCount);
         }
     };
 
@@ -47,6 +58,7 @@ namespace amit::render::cpu
     void Rasterizer::Rasterize<amit::graphics::RenderPrimitiveType::kTriangle>(
         const graphics::RenderConfig&                                                          render_config,
         graphics::RenderState&                                                                 render_state,
+        graphics::RenderFrameStats&                                                            render_frame_stats,
         graphics::DrawOptions&                                                                 draw_options,
         const amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kTriangle>& triangle,
         const FragmentShader&                                                                  fragment_shader) const;
@@ -55,6 +67,7 @@ namespace amit::render::cpu
     void Rasterizer::Rasterize<amit::graphics::RenderPrimitiveType::kLine>(
         const graphics::RenderConfig&                                                      render_config,
         graphics::RenderState&                                                             render_state,
+        graphics::RenderFrameStats&                                                        render_frame_stats,
         graphics::DrawOptions&                                                             draw_options,
         const amit::graphics::RenderPrimitive<amit::graphics::RenderPrimitiveType::kLine>& line,
         const FragmentShader&                                                              fragment_shader) const;

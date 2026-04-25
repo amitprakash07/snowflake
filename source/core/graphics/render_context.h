@@ -5,12 +5,9 @@
 #include <limits>
 #include <vector>
 
-#include "core/common/perf_stats.h"
-
-#include "viewport.h"
-#include "render_stats.h"
-#include "image_2d.h"
-#include "core/graphics_common/render_primitives.h"
+#include "core/graphics/image_2d.h"
+#include "core/graphics/render_stats.h"
+#include "core/graphics/viewport.h"
 
 namespace amit::graphics
 {
@@ -21,7 +18,7 @@ namespace amit::graphics
         kSolid,
     };
 
-    enum class DrawDebugFlag
+    enum class DrawDebugFlag : std::uint8_t
     {
         kNone,
         kWireframeBoundingBox
@@ -29,18 +26,45 @@ namespace amit::graphics
 
     struct DrawOptions
     {
+        DrawOptions(PrimitiveDrawMode    primitive_draw_mode_in,
+                    DrawDebugFlag        draw_debug_flag_in,
+                    StatsCollectionLevel stats_collection_level_in)
+            : primitive_draw_mode(primitive_draw_mode_in)
+            , draw_debug_flag(draw_debug_flag_in)
+            , stats_collection_level(stats_collection_level_in)
+        {
+        }
+
+        DrawOptions()
+            : primitive_draw_mode(PrimitiveDrawMode::kSolid)
+            , draw_debug_flag(DrawDebugFlag::kNone)
+            , stats_collection_level(StatsCollectionLevel::kNone)
+        {
+        }
+
         PrimitiveDrawMode GetDrawMode() const
         {
             return primitive_draw_mode;
         }
-        DrawDebugFlag     GetDrawDebugFlag() const
+
+        DrawDebugFlag GetDrawDebugFlag() const
         {
             return draw_debug_flag;
         }
 
-        const PrimitiveDrawMode primitive_draw_mode;
-        const DrawDebugFlag     draw_debug_flag;
-        const bool              collect_draw_stats;
+        StatsCollectionLevel GetStatsCollectionLevel() const
+        {
+            return stats_collection_level;
+        }
+
+        bool ShouldCollectDetailedDrawStats() const
+        {
+            return stats_collection_level >= StatsCollectionLevel::kDraw;
+        }
+
+        const PrimitiveDrawMode    primitive_draw_mode;
+        const DrawDebugFlag        draw_debug_flag;
+        const StatsCollectionLevel stats_collection_level;
     };
 
     class RenderConfig
@@ -175,10 +199,21 @@ namespace amit::graphics
             return render_output_list_.at(index);
         }
 
+        RenderFrameStats& GetRenderFrameStats()
+        {
+            return render_frame_stats_;
+        }
+
+        const RenderFrameStats& GetRenderFrameStats() const
+        {
+            return render_frame_stats_;
+        }
+
     private:
         RenderConfig              render_config_;
         RenderState               render_state_;
         std::vector<RenderOutput> render_output_list_;
+        RenderFrameStats          render_frame_stats_;
     };
 }  // namespace amit::graphics
 

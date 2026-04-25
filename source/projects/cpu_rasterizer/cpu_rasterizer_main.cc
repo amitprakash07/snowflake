@@ -36,52 +36,60 @@ int main(int argc, char* argv[])
     std::cout << "Rasterization started\n";
 
     amit::graphics::RenderFrame   render_frame(viewport);
-    amit::graphics::RenderOutput& render_outputs = render_frame.GetRenderOutput();
+    amit::graphics::RenderOutput& render_output = render_frame.GetRenderOutput();
 
     amit::graphics::Image2D<amit::graphics::Rgb8> checker_board =
         amit::graphics::ImageGenerator::GetCheckerBoard({.value = 200}, {.value = 200}, {.value = 8});
     amit::graphics::Texture<amit::graphics::Rgb8> checker_texture(checker_board);
 
-    auto color_shader = [&render_outputs](const amit::render::cpu::RasterizedFragment& raster_fragment) {
+    auto color_shader = [&render_output](const amit::render::cpu::RasterizedFragment& raster_fragment) {
         amit::graphics::ImageCoordinate image_coordinate{raster_fragment.coordinate.x, raster_fragment.coordinate.y};
-        render_outputs.GetColorBuffer().SetImageData(image_coordinate, raster_fragment.color.ToRgb8());
+        render_output.GetColorBuffer().SetImageData(image_coordinate, raster_fragment.color.ToRgb8());
     };
 
-    auto checkerboard_shader = [&render_outputs,
+    auto checkerboard_shader = [&render_output,
                                 &checker_texture](const amit::render::cpu::RasterizedFragment& raster_fragment) {
         amit::graphics::ImageCoordinate image_coordinate{raster_fragment.coordinate.x, raster_fragment.coordinate.y};
 
         if (raster_fragment.fragment_kind == amit::render::cpu::RasterizedFragment::Kind::BoundingBox)
         {
-            render_outputs.GetColorBuffer().SetImageData(image_coordinate, raster_fragment.color.ToRgb8());
+            render_output.GetColorBuffer().SetImageData(image_coordinate, raster_fragment.color.ToRgb8());
             return;
         }
 
-        render_outputs.GetColorBuffer().SetImageData(image_coordinate, checker_texture.Sample(raster_fragment.uv));
+        render_output.GetColorBuffer().SetImageData(image_coordinate, checker_texture.Sample(raster_fragment.uv));
     };
 
-    amit::graphics::DrawOptions draw_context(
-        amit::graphics::PrimitiveDrawMode::kSolid, amit::graphics::DrawDebugFlag::kNone, true);
+    amit::graphics::DrawOptions draw_options(amit::graphics::PrimitiveDrawMode::kSolid,
+                                             amit::graphics::DrawDebugFlag::kNone,
+                                             amit::graphics::StatsCollectionLevel::kDraw);
 
     amit::render::cpu::Rasterizer triangle_rasterizer;
     triangle_rasterizer.Rasterize(render_frame.GetRenderConfig(),
                                   render_frame.GetRenderState(),
-                                  draw_context,
+                                  render_frame.GetRenderFrameStats(),
+                                  draw_options,
                                   screen_space_triangle_2,
                                   checkerboard_shader);
 
     triangle_rasterizer.Rasterize(render_frame.GetRenderConfig(),
                                   render_frame.GetRenderState(),
-                                  draw_context,
+                                  render_frame.GetRenderFrameStats(),
+                                  draw_options,
                                   screen_space_triangle_1,
                                   color_shader);
 
     std::cout << "Rasterization Finished\n";
 
-    std::string stats = amit::StatsCollector::GetInstance().GetAllStatsAsString();
+    std::string overlay_stats = render_frame.GetRenderFrameStats().ToOverlayString();
+    std::string detailed_stats;
+    if (draw_options.ShouldCollectDetailedDrawStats())
+    {
+        detailed_stats = amit::StatsCollector::GetInstance().GetAllStatsAsString();
+    }
 
-    amit::graphics::ColorBuffer& color_buffer = render_outputs.GetColorBuffer();
-    amit::graphics::TextOverlay::Render(stats, 10, 20, amit::graphics::kRgb8ColorWhite, color_buffer);
+    amit::graphics::ColorBuffer& color_buffer = render_output.GetColorBuffer();
+    amit::graphics::TextOverlay::Render(overlay_stats, 10, 20, amit::graphics::kRgb8ColorWhite, color_buffer);
 
     // Save the frame buffer to disk as a PPM image
     amit::image::WriteColorBufferToPPM(color_buffer, "output.ppm");
@@ -96,6 +104,7 @@ int main(int argc, char* argv[])
 
     std::cout << "Color buffer saved to disk\n";
 
-    std::cout << stats;
+    std::cout << overlay_stats;
+    std::cout << detailed_stats;
     return 0;
 }
